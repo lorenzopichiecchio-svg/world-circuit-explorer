@@ -1113,7 +1113,17 @@ myGlobe.onZoom(() => {
     myGlobe.controls().autoRotate = true;
   }, 4000);
 });
-
+// Carica i dati geografici reali (1:1) dei circuiti di F1 in formato GeoJSON
+fetch('https://raw.githubusercontent.com/bacinger/f1-circuits/master/f1-circuits.geojson')
+  .then(res => res.json())
+  .then(geojson => {
+    myGlobe
+      .pathsData(geojson.features)
+      .pathCoordinates(d => d.geometry.coordinates[0]) // Coordinate reali del circuito
+      .pathColor(() => '#e10600')                     // Rosso F1
+      .pathStroke(2.5);                               // Spessore del tracciato
+  })
+  .catch(err => console.error("Errore GeoJSON:", err));
             populateDropdown(activeData);
             populateCalendar(activeData);
             
