@@ -1103,8 +1103,16 @@
                     return el;
                 });
 
-            myGlobe.controls().autoRotate = true;
-            myGlobe.controls().autoRotateSpeed = 0.5;
+           myGlobe.controls().autoRotate = true;
+           myGlobe.controls().autoRotateSpeed = 0.5;
+
+myGlobe.onZoom(() => {
+  myGlobe.controls().autoRotate = false;
+  clearTimeout(window.rotateTimeout);
+  window.rotateTimeout = setTimeout(() => {
+    myGlobe.controls().autoRotate = true;
+  }, 4000);
+});
 
             populateDropdown(activeData);
             populateCalendar(activeData);
@@ -1279,13 +1287,14 @@
             else resetView();
         }
 
-        function resetView() {
-            playAudio('select');
-            document.getElementById('sidebar').classList.add('translate-x-[440px]');
-            document.getElementById('circuitSelect').value = '';
-            document.getElementById('searchInput').value = '';
-            myGlobe.pointOfView({ lat: 20, lng: 0, altitude: 2.5 }, 1500);
-            myGlobe.controls().autoRotate = true;
+       function resetView() {
+    playAudio('select');
+    document.getElementById('sidebar').classList.add('translate-x-[440px]');
+    document.getElementById('circuitSelect').value = '';
+    document.getElementById('searchInput').value = '';
+    const currentAltitude = myGlobe.pointOfView().altitude;
+    myGlobe.pointOfView({ lat: 20, lng: 0, altitude: currentAltitude }, 1500);
+    myGlobe.controls().autoRotate = true;
         }
 
         function openModal(id) {
