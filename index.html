@@ -2,8 +2,8 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>F1 World Circuit Explorer 2026 - Enhanced</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>F1 World Circuit Explorer 2026 - Mobile Enhanced</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='100' fill='%230a0b0e'/><path d='M 120,400 L 360,400 C 420,400 450,360 410,310 L 380,270 C 360,250 360,230 380,210 L 410,180 C 430,160 410,110 360,110 L 260,110 C 220,110 200,130 180,160 L 150,210 C 130,240 110,270 120,310 Z' fill='none' stroke='%23ff1e00' stroke-width='28' stroke-linecap='round' stroke-linejoin='round'/><g transform='translate(210, 205)'><rect x='0' y='0' width='22' height='22' fill='%23fff'/><rect x='22' y='0' width='22' height='22' fill='%23000'/><rect x='0' y='22' width='22' height='22' fill='%23000'/><rect x='22' y='22' width='22' height='22' fill='%23fff'/></g></svg>">
     
     <!-- Tailwind CSS CDN -->
@@ -19,6 +19,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet">
 
     <style>
+        * {
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: #030508;
@@ -66,6 +71,7 @@
 
         .tag-btn {
             transition: all 0.2s ease;
+            white-space: nowrap;
         }
         .tag-btn.active {
             background-color: #E10600;
@@ -73,68 +79,113 @@
             border-color: #E10600;
         }
 
-        ::-webkit-scrollbar { width: 5px; }
+        /* SIDEBAR / BOTTOM SHEET MOBILE RESPONSIVE */
+        #sidebar {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(100%);
+        }
+
+        @media (min-width: 640px) {
+            #sidebar {
+                transform: translateX(460px);
+            }
+        }
+
+        #sidebar.active {
+            transform: translateY(0) !important;
+        }
+
+        @media (min-width: 640px) {
+            #sidebar.active {
+                transform: translateX(0) !important;
+            }
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); }
         ::-webkit-scrollbar-thumb { background: #E10600; border-radius: 3px; }
     </style>
 </head>
 <body class="relative">
 
-    <!-- HEADER SUPERIORE E BARRA FILTRI -->
-    <header class="absolute top-0 left-0 right-0 z-20 p-4 flex flex-col gap-3 glass-panel border-b border-white/10">
-        <div class="flex flex-wrap items-center justify-between gap-4">
-            <div class="flex items-center gap-3 cursor-pointer" onclick="resetView()">
-                <div class="bg-f1-red px-3 py-1 rounded font-black text-xl tracking-tighter italic shadow-lg shadow-red-600/30">F1</div>
+    <!-- HEADER SUPERIORE -->
+    <header class="absolute top-0 left-0 right-0 z-20 p-3 sm:p-4 flex flex-col gap-2.5 glass-panel border-b border-white/10">
+        <div class="flex items-center justify-between gap-2">
+            <!-- LOGO -->
+            <div class="flex items-center gap-2 cursor-pointer shrink-0" onclick="resetView()">
+                <div class="bg-f1-red px-2.5 py-1 rounded font-black text-lg sm:text-xl tracking-tighter italic shadow-lg shadow-red-600/30">F1</div>
                 <div>
-                    <h1 class="font-black tracking-wider text-sm sm:text-base leading-none">WORLD CIRCUIT EXPLORER</h1>
-                    <span class="text-[10px] text-gray-400 font-mono">DATABASE TRACCIATI & TELEMETRIA 2026</span>
+                    <h1 class="font-black tracking-wider text-xs sm:text-base leading-none">WORLD CIRCUIT</h1>
+                    <span class="text-[9px] text-gray-400 font-mono hidden sm:inline-block">DATABASE TRACCIATI 2026</span>
                 </div>
             </div>
 
-            <!-- SEARCH BAR & SELEZIONE -->
-            <div class="flex items-center gap-2 flex-1 max-w-md mx-2">
+            <!-- SEARCH BAR -->
+            <div class="flex items-center gap-2 flex-1 max-w-xs sm:max-w-md mx-1">
                 <div class="relative w-full">
                     <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
-                    <input type="text" id="searchInput" oninput="filterCircuitsBySearch()" placeholder="Cerca pista, nazione o città..." 
-                        class="w-full bg-white/5 border border-white/10 rounded-xl pl-9 pr-4 py-2 text-xs focus:outline-none focus:border-red-500 transition-all text-white">
+                    <input type="text" id="searchInput" oninput="filterCircuitsBySearch()" placeholder="Cerca pista..." 
+                        class="w-full bg-white/5 border border-white/10 rounded-xl pl-8 pr-3 py-1.5 sm:py-2 text-xs focus:outline-none focus:border-red-500 transition-all text-white">
                 </div>
-                <select id="circuitSelect" onchange="onSelectDropdown(this.value)" class="bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-red-500 text-white cursor-pointer">
+                <select id="circuitSelect" onchange="onSelectDropdown(this.value)" class="hidden md:block bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-red-500 text-white cursor-pointer">
                     <option value="">Seleziona Pista...</option>
                 </select>
             </div>
 
-            <!-- PULSANTI HEADER -->
-            <div class="flex items-center gap-2 sm:gap-3">
-                <button onclick="openGuessTrackGame()" class="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-extrabold text-xs px-3 py-2 rounded-xl transition-all flex items-center gap-2 shadow-lg shadow-purple-900/40 border border-purple-400/30">
-                    <i class="fa-solid fa-gamepad"></i> GUESS TRACK
+            <!-- PULSANTI HEADER DESKTOP -->
+            <div class="hidden sm:flex items-center gap-2">
+                <button onclick="openGuessTrackGame()" class="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-extrabold text-xs px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 shadow-lg shadow-purple-900/40 border border-purple-400/30">
+                    <i class="fa-solid fa-gamepad"></i> GUESS
                 </button>
-                <button onclick="openModal('gameModal')" class="bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-extrabold text-xs px-3.5 py-2 rounded-xl transition-all flex items-center gap-2 shadow-lg shadow-red-900/40 border border-red-400/30 animate-pulse">
+                <button onclick="openModal('gameModal')" class="bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-extrabold text-xs px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 shadow-lg shadow-red-900/40 border border-red-400/30">
                     <i class="fa-solid fa-gauge-high"></i> LIGHTS OUT
                 </button>
                 <button onclick="openModal('calendarModal')" class="bg-white/10 hover:bg-white/20 text-white font-semibold text-xs px-3 py-2 rounded-xl transition-all border border-white/10">
-                    <i class="fa-solid fa-list text-red-500"></i> Calendario (<span id="circuitCount">0</span>)
+                    <i class="fa-solid fa-list text-red-500"></i> (<span id="circuitCount">0</span>)
                 </button>
             </div>
         </div>
 
-        <!-- FILTRI RAPIDI A TAG -->
-        <div class="flex items-center gap-2 overflow-x-auto pb-1 text-[11px] font-semibold">
-            <span class="text-gray-400 text-[10px] uppercase font-mono mr-1">Filtra:</span>
-            <button onclick="applyTagFilter('all', this)" class="tag-btn active px-3 py-1 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 text-gray-300">Tutti</button>
-            <button onclick="applyTagFilter('street', this)" class="tag-btn px-3 py-1 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 text-gray-300">Cittadini</button>
-            <button onclick="applyTagFilter('historic', this)" class="tag-btn px-3 py-1 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 text-gray-300">Storici</button>
-            <button onclick="applyTagFilter('fast', this)" class="tag-btn px-3 py-1 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 text-gray-300">Alta Velocità (>340 km/h)</button>
-            <button onclick="applyTagFilter('night', this)" class="tag-btn px-3 py-1 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 text-gray-300">Notturni</button>
-            <button onclick="applyTagFilter('new2026', this)" class="tag-btn px-3 py-1 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 text-gray-300">Novità 2026</button>
+        <!-- FILTRI RAPIDI TAG (SCROLLABLE MOBILE) -->
+        <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5 text-[11px] font-semibold">
+            <span class="text-gray-400 text-[10px] uppercase font-mono mr-1 shrink-0">Filtra:</span>
+            <button onclick="applyTagFilter('all', this)" class="tag-btn active px-3 py-1.5 rounded-lg border border-white/10 bg-white/5 text-gray-300">Tutti</button>
+            <button onclick="applyTagFilter('street', this)" class="tag-btn px-3 py-1.5 rounded-lg border border-white/10 bg-white/5 text-gray-300">Cittadini</button>
+            <button onclick="applyTagFilter('historic', this)" class="tag-btn px-3 py-1.5 rounded-lg border border-white/10 bg-white/5 text-gray-300">Storici</button>
+            <button onclick="applyTagFilter('fast', this)" class="tag-btn px-3 py-1.5 rounded-lg border border-white/10 bg-white/5 text-gray-300">>340 km/h</button>
+            <button onclick="applyTagFilter('night', this)" class="tag-btn px-3 py-1.5 rounded-lg border border-white/10 bg-white/5 text-gray-300">Notturni</button>
+            <button onclick="applyTagFilter('new2026', this)" class="tag-btn px-3 py-1.5 rounded-lg border border-white/10 bg-white/5 text-gray-300">Novità 2026</button>
         </div>
     </header>
 
     <!-- GLOBO 3D CONTAINER -->
     <div id="globeViz"></div>
 
-    <!-- SCHEDA DETTAGLIO CIRCUITO -->
-    <aside id="sidebar" class="absolute top-28 right-4 bottom-4 w-96 glass-panel rounded-2xl p-5 z-20 flex flex-col justify-between transform translate-x-[440px] transition-transform duration-500 ease-out shadow-2xl overflow-y-auto">
+    <!-- BARRA DI NAVIGAZIONE INFERIORE MOBILE (BOTTOM BAR) -->
+    <nav class="sm:hidden fixed bottom-0 left-0 right-0 z-30 glass-panel border-t border-white/10 flex items-center justify-around py-2 px-3">
+        <button onclick="resetView()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white text-[10px] font-semibold">
+            <i class="fa-solid fa-globe text-base text-red-500"></i> Globo
+        </button>
+        <button onclick="openModal('calendarModal')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white text-[10px] font-semibold">
+            <i class="fa-solid fa-calendar-days text-base text-gray-300"></i> Piste
+        </button>
+        <button onclick="openGuessTrackGame()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white text-[10px] font-semibold">
+            <i class="fa-solid fa-gamepad text-base text-purple-400"></i> Guess
+        </button>
+        <button onclick="openModal('gameModal')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white text-[10px] font-semibold">
+            <i class="fa-solid fa-gauge-high text-base text-amber-400"></i> Reflex
+        </button>
+    </nav>
+
+    <!-- SCHEDA DETTAGLIO CIRCUITO (BOTTOM SHEET MOBILE / SIDEBAR DESKTOP) -->
+    <aside id="sidebar" class="fixed bottom-0 sm:bottom-4 left-0 sm:left-auto right-0 sm:right-4 top-auto sm:top-28 w-full sm:w-96 h-[82vh] sm:h-auto glass-panel rounded-t-3xl sm:rounded-2xl p-4 sm:p-5 z-40 flex flex-col justify-between shadow-2xl overflow-y-auto pb-20 sm:pb-5">
         <div>
+            <!-- HANDLE PER TRANSIZIONE / CHIUSURA MOBILE -->
+            <div class="w-12 h-1 bg-white/20 rounded-full mx-auto mb-3 sm:hidden cursor-pointer" onclick="resetView()"></div>
+
             <!-- INTESTAZIONE CIRCUITO -->
             <div class="flex items-start justify-between border-b border-white/10 pb-3 mb-3">
                 <div>
@@ -142,66 +193,62 @@
                         <span id="circuitCountry" class="text-xs font-bold tracking-widest text-red-500 uppercase">ITALIA</span>
                         <span id="circuitCategory" class="text-[9px] bg-white/10 px-2 py-0.5 rounded text-gray-300 border border-white/10 uppercase font-mono">Tempio della Velocità</span>
                     </div>
-                    <h2 id="circuitName" class="text-2xl font-black italic tracking-tight leading-none mt-1">AUTODROMO MONZA</h2>
+                    <h2 id="circuitName" class="text-xl sm:text-2xl font-black italic tracking-tight leading-none mt-1">AUTODROMO MONZA</h2>
                     <p id="circuitCity" class="text-xs text-gray-400 mt-1"><i class="fa-solid fa-location-dot mr-1 text-red-500"></i> Monza</p>
                 </div>
-                <button onclick="resetView()" class="text-gray-400 hover:text-white text-lg p-1">
+                <button onclick="resetView()" class="text-gray-400 hover:text-white text-xl p-1">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
             <!-- TRACCIATO VETTORIALE CON ANIMAZIONE GIRO TELEMETRICO -->
-            <div class="bg-black/90 rounded-xl p-4 border border-white/10 flex flex-col items-center justify-center mb-3 relative min-h-[220px]">
+            <div class="bg-black/90 rounded-xl p-3 border border-white/10 flex flex-col items-center justify-center mb-3 relative min-h-[180px] sm:min-h-[220px]">
                 <div class="absolute top-2 left-2 bg-red-600/30 border border-red-500/40 text-[9px] font-mono text-red-400 px-2 py-0.5 rounded uppercase flex items-center gap-1.5">
-                    <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></span> GIRO TELEMETRICO 1:1
+                    <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></span> GIRO 1:1
                 </div>
-                <button onclick="replayTrackAnimation()" class="absolute top-2 right-2 bg-white/10 hover:bg-white/20 text-white text-[10px] font-mono px-2 py-1 rounded transition-all border border-white/10" title="Rigioca Animazione Giro">
+                <button onclick="replayTrackAnimation()" class="absolute top-2 right-2 bg-white/10 hover:bg-white/20 text-white text-[10px] font-mono px-2 py-1 rounded transition-all border border-white/10">
                     <i class="fa-solid fa-rotate-right mr-1"></i>Replay
                 </button>
-                <div id="svgContainer" class="w-full h-48 flex items-center justify-center p-2"></div>
-                <div class="w-full flex justify-between items-center mt-2 px-1 text-[9px] font-mono text-gray-400 border-t border-white/10 pt-2">
-                    <span class="flex items-center gap-1.5"><span class="w-2.5 h-0.5 bg-red-500 inline-block rounded"></span> Tracciato Reale</span>
-                    <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 inline-block shadow-sm shadow-emerald-400"></span> Start / Finish</span>
-                </div>
+                <div id="svgContainer" class="w-full h-40 sm:h-48 flex items-center justify-center p-2"></div>
             </div>
 
             <!-- METRICHE FONDAMENTALI -->
             <div class="grid grid-cols-3 gap-2 mb-3">
-                <div class="bg-white/5 p-2.5 rounded-xl border border-white/5">
-                    <span class="text-[9px] text-gray-400 uppercase block font-semibold">Lunghezza</span>
+                <div class="bg-white/5 p-2 rounded-xl border border-white/5">
+                    <span class="text-[8px] sm:text-[9px] text-gray-400 uppercase block font-semibold">Lunghezza</span>
                     <span id="statLength" class="text-xs font-bold text-white block mt-0.5">5.793 km</span>
                 </div>
-                <div class="bg-white/5 p-2.5 rounded-xl border border-white/5">
-                    <span class="text-[9px] text-gray-400 uppercase block font-semibold">N° Giri</span>
+                <div class="bg-white/5 p-2 rounded-xl border border-white/5">
+                    <span class="text-[8px] sm:text-[9px] text-gray-400 uppercase block font-semibold">N° Giri</span>
                     <span id="statLaps" class="text-xs font-bold text-white block mt-0.5">53 Giri</span>
                 </div>
-                <div class="bg-white/5 p-2.5 rounded-xl border border-white/5">
-                    <span class="text-[9px] text-gray-400 uppercase block font-semibold">Curve</span>
+                <div class="bg-white/5 p-2 rounded-xl border border-white/5">
+                    <span class="text-[8px] sm:text-[9px] text-gray-400 uppercase block font-semibold">Curve</span>
                     <span id="statTurns" class="text-xs font-bold text-white block mt-0.5">11</span>
                 </div>
-                <div class="bg-white/5 p-2.5 rounded-xl border border-white/5">
-                    <span class="text-[9px] text-gray-400 uppercase block font-semibold">Dislivello</span>
+                <div class="bg-white/5 p-2 rounded-xl border border-white/5">
+                    <span class="text-[8px] sm:text-[9px] text-gray-400 uppercase block font-semibold">Dislivello</span>
                     <span id="statElevation" class="text-xs font-bold text-cyan-400 block mt-0.5">12.8 m</span>
                 </div>
-                <div class="bg-white/5 p-2.5 rounded-xl border border-white/5">
-                    <span class="text-[9px] text-gray-400 uppercase block font-semibold">1° GP Storico</span>
+                <div class="bg-white/5 p-2 rounded-xl border border-white/5">
+                    <span class="text-[8px] sm:text-[9px] text-gray-400 uppercase block font-semibold">1° GP</span>
                     <span id="statFirstGP" class="text-xs font-bold text-amber-400 block mt-0.5">1950</span>
                 </div>
-                <div class="bg-white/5 p-2.5 rounded-xl border border-white/5">
-                    <span class="text-[9px] text-gray-400 uppercase block font-semibold">Zone DRS</span>
+                <div class="bg-white/5 p-2 rounded-xl border border-white/5">
+                    <span class="text-[8px] sm:text-[9px] text-gray-400 uppercase block font-semibold">Zone DRS</span>
                     <span id="statDRS" class="text-xs font-bold text-emerald-400 block mt-0.5">2 Zone</span>
                 </div>
             </div>
 
             <!-- METRICHE PRESTAZIONALI -->
             <div class="grid grid-cols-2 gap-2 mb-3">
-                <div class="bg-white/5 p-2.5 rounded-xl border border-white/5">
-                    <span class="text-[9px] text-gray-400 uppercase block font-semibold">Record sul Giro</span>
+                <div class="bg-white/5 p-2 rounded-xl border border-white/5">
+                    <span class="text-[8px] sm:text-[9px] text-gray-400 uppercase block font-semibold">Record Giro</span>
                     <span id="statRecord" class="text-xs font-bold text-red-400 block mt-0.5">1:21.046</span>
                     <span id="statRecordHolder" class="text-[9px] text-gray-500 block truncate">R. Barrichello</span>
                 </div>
-                <div class="bg-white/5 p-2.5 rounded-xl border border-white/5">
-                    <span class="text-[9px] text-gray-400 uppercase block font-semibold">Velocità Max</span>
+                <div class="bg-white/5 p-2 rounded-xl border border-white/5">
+                    <span class="text-[8px] sm:text-[9px] text-gray-400 uppercase block font-semibold">Velocità Max</span>
                     <span id="statSpeed" class="text-xs font-bold text-emerald-400 block mt-0.5">360 km/h</span>
                     <span id="statSpeedLoc" class="text-[9px] text-gray-500 block truncate">Prima Variante</span>
                 </div>
@@ -218,12 +265,12 @@
             </div>
         </div>
 
-        <!-- PULSANTI -->
+        <!-- PULSANTI SCHEDA -->
         <div class="space-y-2 pt-2 border-t border-white/10">
-            <button onclick="openModal('statsModal')" class="w-full bg-white/10 hover:bg-white/20 text-white font-semibold text-xs py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 border border-white/10">
+            <button onclick="openModal('statsModal')" class="w-full bg-white/10 hover:bg-white/20 text-white font-semibold text-xs py-3 sm:py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 border border-white/10">
                 <i class="fa-solid fa-chart-line text-emerald-400"></i> Scheda Telemetrica Completa
             </button>
-            <button onclick="resetView()" class="w-full bg-f1-red hover:bg-red-700 text-white font-bold text-xs py-2.5 rounded-xl transition-all uppercase tracking-wider shadow-lg shadow-red-900/40">
+            <button onclick="resetView()" class="w-full bg-f1-red hover:bg-red-700 text-white font-bold text-xs py-3 sm:py-2.5 rounded-xl transition-all uppercase tracking-wider shadow-lg shadow-red-900/40">
                 Torna al Globo 3D
             </button>
         </div>
@@ -231,18 +278,18 @@
 
     <!-- MINIGAME REACTION TEST MODAL -->
     <div id="gameModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
-        <div class="glass-panel w-full max-w-xl rounded-2xl p-6 relative flex flex-col items-center text-center border border-red-500/30">
+        <div class="glass-panel w-full max-w-xl rounded-2xl p-5 sm:p-6 relative flex flex-col items-center text-center border border-red-500/30 max-h-[90vh] overflow-y-auto">
             <button onclick="closeModal('gameModal')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
             <span class="text-xs font-mono text-red-500 uppercase tracking-widest font-bold">F1 REACTION TEST</span>
-            <h3 class="text-2xl font-black italic tracking-tight text-white mt-1 mb-2">LIGHTS OUT - REACTION GAME</h3>
-            <p class="text-xs text-gray-400 max-w-md mb-6">
+            <h3 class="text-xl sm:text-2xl font-black italic tracking-tight text-white mt-1 mb-2">LIGHTS OUT - REACTION GAME</h3>
+            <p class="text-xs text-gray-400 max-w-md mb-4 sm:mb-6">
                 Premi <b class="text-white">START</b>, attendi che le 5 luci rosse si accendano e clicca lo schermo non appena <b class="text-red-400">SI SPEGNO</b>!
             </p>
 
-            <div class="bg-black/90 p-5 rounded-2xl border border-white/10 flex items-center justify-center gap-4 mb-6 shadow-2xl">
+            <div class="bg-black/90 p-4 sm:p-5 rounded-2xl border border-white/10 flex items-center justify-center gap-3 sm:gap-4 mb-4 sm:mb-6 shadow-2xl">
                 <div class="f1-light" id="light1"></div>
                 <div class="f1-light" id="light2"></div>
                 <div class="f1-light" id="light3"></div>
@@ -250,13 +297,13 @@
                 <div class="f1-light" id="light5"></div>
             </div>
 
-            <div id="gameTapArea" onclick="handleTapArea()" class="w-full bg-white/5 border-2 border-dashed border-white/20 rounded-xl py-10 flex flex-col items-center justify-center cursor-pointer hover:bg-white/10 transition-all select-none mb-4">
-                <span id="gameStatusText" class="text-base font-bold text-gray-300 uppercase">Premere Start per iniziare</span>
-                <span id="gameSubText" class="text-xs text-gray-500 mt-1">Target Piloti Reali: 0.18s - 0.24s</span>
+            <div id="gameTapArea" onclick="handleTapArea()" class="w-full bg-white/5 border-2 border-dashed border-white/20 rounded-xl py-8 sm:py-10 flex flex-col items-center justify-center cursor-pointer hover:bg-white/10 transition-all select-none mb-4">
+                <span id="gameStatusText" class="text-sm sm:text-base font-bold text-gray-300 uppercase">Premere Start per iniziare</span>
+                <span id="gameSubText" class="text-[10px] sm:text-xs text-gray-500 mt-1">Target Piloti Reali: 0.18s - 0.24s</span>
             </div>
 
             <div class="flex items-center gap-4 w-full justify-center">
-                <button id="startGameBtn" onclick="startGame()" class="bg-f1-red hover:bg-red-700 text-white font-extrabold text-xs px-8 py-3 rounded-xl transition-all shadow-lg shadow-red-900/40 uppercase tracking-wider">
+                <button id="startGameBtn" onclick="startGame()" class="bg-f1-red hover:bg-red-700 text-white font-extrabold text-xs px-8 py-3.5 rounded-xl transition-all shadow-lg shadow-red-900/40 uppercase tracking-wider w-full sm:w-auto">
                     <i class="fa-solid fa-play mr-1"></i> START TEST
                 </button>
             </div>
@@ -265,23 +312,23 @@
 
     <!-- MODAL LISTA CIRCUITI -->
     <div id="calendarModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
-        <div class="glass-panel w-full max-w-lg rounded-2xl p-6 relative max-h-[85vh] flex flex-col">
-            <div class="flex items-center justify-between pb-4 border-b border-white/10 mb-4">
-                <h3 class="text-lg font-black italic flex items-center gap-2">
-                    <i class="fa-solid fa-flag-checkered text-red-500"></i> CALENDARIO & DATABASE F1
+        <div class="glass-panel w-full max-w-lg rounded-2xl p-5 sm:p-6 relative max-h-[80vh] flex flex-col">
+            <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-3">
+                <h3 class="text-base sm:text-lg font-black italic flex items-center gap-2">
+                    <i class="fa-solid fa-flag-checkered text-red-500"></i> CALENDARIO & DATABASE
                 </h3>
                 <button onclick="closeModal('calendarModal')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <div id="calendarList" class="space-y-2 overflow-y-auto pr-1 flex-1"></div>
+            <div id="calendarList" class="space-y-2 overflow-y-auto pr-1 flex-1 no-scrollbar"></div>
         </div>
     </div>
 
     <!-- MODAL TELEMETRIA -->
     <div id="statsModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
-        <div class="glass-panel w-full max-w-md rounded-2xl p-6 relative">
-            <div class="flex items-center justify-between pb-4 border-b border-white/10 mb-4">
+        <div class="glass-panel w-full max-w-md rounded-2xl p-5 sm:p-6 relative max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
                 <div>
-                    <h3 class="text-lg font-black italic flex items-center gap-2">
+                    <h3 class="text-base sm:text-lg font-black italic flex items-center gap-2">
                         <i class="fa-solid fa-chart-line text-emerald-400"></i> TELEMETRIA AVANZATA
                     </h3>
                     <span id="modalTrackName" class="text-xs text-red-500 font-bold uppercase">AUTODROMO MONZA</span>
@@ -292,7 +339,7 @@
             <div class="space-y-4 text-xs">
                 <div>
                     <div class="flex justify-between mb-1">
-                        <span class="text-gray-400">% Piena Potenza (Full Throttle)</span>
+                        <span class="text-gray-400">% Piena Potenza (Throttle)</span>
                         <span id="telemetryThrottle" class="font-bold text-white">83%</span>
                     </div>
                     <div class="w-full bg-white/10 rounded-full h-2">
@@ -332,7 +379,7 @@
 
                 <div class="p-3 bg-white/5 rounded-xl border border-white/5 flex items-center justify-between mt-4">
                     <span class="font-semibold text-gray-300">Cambi di Marcia al Giro:</span>
-                    <span id="telemetryGears" class="font-black text-sm text-white bg-red-600/30 px-3 py-1 rounded border border-red-500/30">40 Cambiate</span>
+                    <span id="telemetryGears" class="font-black text-xs sm:text-sm text-white bg-red-600/30 px-3 py-1 rounded border border-red-500/30">40 Cambiate</span>
                 </div>
             </div>
         </div>
@@ -340,16 +387,16 @@
 
     <!-- MODAL MINIGAME "GUESS THE TRACK" -->
     <div id="guessGameModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-[100] hidden flex items-center justify-center p-4">
-        <div class="glass-panel border border-purple-500/30 rounded-2xl p-6 max-w-lg w-full text-white shadow-2xl relative">
+        <div class="glass-panel border border-purple-500/30 rounded-2xl p-5 sm:p-6 max-w-lg w-full text-white shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <button onclick="closeGuessTrackGame()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
                 <i class="fa-solid fa-xmark text-xl"></i>
             </button>
 
-            <div class="flex justify-between items-center mb-4 pb-3 border-b border-white/10">
-                <h2 class="text-xl font-black italic text-purple-400 flex items-center gap-2">
+            <div class="flex justify-between items-center mb-3 pb-2 border-b border-white/10">
+                <h2 class="text-lg sm:text-xl font-black italic text-purple-400 flex items-center gap-2">
                     <i class="fa-solid fa-gamepad"></i> GUESS THE TRACK
                 </h2>
-                <div class="flex gap-4 text-xs font-semibold">
+                <div class="flex gap-3 text-xs font-semibold">
                     <span title="Streak Giornaliero">🔥 <span id="gameStreak">0</span></span>
                     <span title="Punteggio Massimo">🏆 <span id="gameHighScore">0</span></span>
                 </div>
@@ -360,11 +407,11 @@
                 <div>Punti: <span id="gameScore" class="font-bold text-emerald-400 text-sm">0</span></div>
             </div>
 
-            <div class="bg-black/90 rounded-xl p-4 mb-4 h-48 flex items-center justify-center border border-white/10 relative overflow-hidden">
+            <div class="bg-black/90 rounded-xl p-3 mb-3 h-40 sm:h-48 flex items-center justify-center border border-white/10 relative overflow-hidden">
                 <div id="gameTrackSvg" class="w-full h-full text-red-500 fill-none flex items-center justify-center"></div>
             </div>
 
-            <div id="gameOptions" class="grid grid-cols-2 gap-2 mb-3"></div>
+            <div id="gameOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3"></div>
 
             <div id="gameResultMsg" class="text-center font-bold h-6 text-xs transition-all"></div>
         </div>
@@ -1131,7 +1178,7 @@
                 .htmlElementsData(activeData)
                 .htmlElement(d => {
                     const el = document.createElement('div');
-                    el.className = 'cursor-pointer group relative flex items-center justify-center pointer-events-auto';
+                    el.className = 'cursor-pointer group relative flex items-center justify-center pointer-events-auto p-2';
 
                     let colorClass = 'bg-f1-red';
                     if (d.isHistoric) colorClass = 'bg-amber-500';
@@ -1170,6 +1217,26 @@
             window.addEventListener('resize', () => {
                 myGlobe.width(window.innerWidth).height(window.innerHeight);
             });
+
+            setupMobileSwipeGestures();
+        }
+
+        // GESTIONE GESTURE SWIPE MOBILE SUL BOTTOM SHEET
+        function setupMobileSwipeGestures() {
+            let touchStartY = 0;
+            let touchEndY = 0;
+            const sidebar = document.getElementById('sidebar');
+
+            sidebar.addEventListener('touchstart', e => {
+                touchStartY = e.changedTouches[0].screenY;
+            }, { passive: true });
+
+            sidebar.addEventListener('touchend', e => {
+                touchEndY = e.changedTouches[0].screenY;
+                if (touchEndY - touchStartY > 60) {
+                    resetView();
+                }
+            }, { passive: true });
         }
 
         function populateDropdown(data) {
@@ -1188,7 +1255,7 @@
             list.innerHTML = '';
             data.forEach((c, index) => {
                 const item = document.createElement('div');
-                item.className = 'flex items-center justify-between bg-white/5 hover:bg-white/10 p-3 rounded-xl border border-white/5 cursor-pointer transition-all';
+                item.className = 'flex items-center justify-between bg-white/5 hover:bg-white/10 p-3 rounded-xl border border-white/5 cursor-pointer transition-all active:scale-[0.98]';
                 item.onclick = () => {
                     closeModal('calendarModal');
                     selectCircuit(c.id);
@@ -1236,21 +1303,24 @@
 
             updateTelemetryModal(circuit);
 
-            document.getElementById('sidebar').classList.remove('translate-x-[440px]');
+            document.getElementById('sidebar').classList.add('active');
 
             myGlobe.controls().autoRotate = false;
             
+            const offsetLng = window.innerWidth < 640 ? 0 : 8;
+            const targetAltitude = window.innerWidth < 640 ? 1.0 : 0.6;
+
             myGlobe.pointOfView({
                 lat: circuit.lat,
-                lng: circuit.lng + 8,
+                lng: circuit.lng + offsetLng,
                 altitude: 1.8
             }, 800);
 
             setTimeout(() => {
                 myGlobe.pointOfView({
                     lat: circuit.lat,
-                    lng: circuit.lng,
-                    altitude: 0.6
+                    lng: circuit.lng + offsetLng,
+                    altitude: targetAltitude
                 }, 1200);
             }, 750);
         }
@@ -1330,7 +1400,7 @@
 
         function resetView() {
             playAudio('select');
-            document.getElementById('sidebar').classList.add('translate-x-[440px]');
+            document.getElementById('sidebar').classList.remove('active');
             document.getElementById('circuitSelect').value = '';
             document.getElementById('searchInput').value = '';
             myGlobe.pointOfView({ lat: 20, lng: 0, altitude: 2.2 }, 1500);
@@ -1368,8 +1438,8 @@
             lightStep = 0;
 
             document.getElementById('gameStatusText').textContent = 'ATTENDI SPEGNIMENTO...';
-            document.getElementById('gameStatusText').className = 'text-base font-bold text-amber-400 uppercase';
-            document.getElementById('gameSubText').textContent = 'NON cliccare prima dello spegnimento dei semafori!';
+            document.getElementById('gameStatusText').className = 'text-sm sm:text-base font-bold text-amber-400 uppercase';
+            document.getElementById('gameSubText').textContent = 'NON cliccare prima dello spegnimento!';
             document.getElementById('startGameBtn').classList.add('opacity-50', 'pointer-events-none');
 
             lightInterval = setInterval(() => {
@@ -1388,7 +1458,7 @@
                         gameState = 'READY_TO_TAP';
                         startTime = performance.now();
                         document.getElementById('gameStatusText').textContent = 'CLICCA ORA!';
-                        document.getElementById('gameStatusText').className = 'text-xl font-black text-emerald-400 uppercase animate-bounce';
+                        document.getElementById('gameStatusText').className = 'text-lg sm:text-xl font-black text-emerald-400 uppercase animate-bounce';
                     }, randomDelay);
                 }
             }, 1000);
@@ -1405,7 +1475,7 @@
                 gameState = 'IDLE';
                 
                 document.getElementById('gameStatusText').textContent = 'JUMP START! (PARTENZA ANTICIPATA)';
-                document.getElementById('gameStatusText').className = 'text-base font-bold text-red-500 uppercase';
+                document.getElementById('gameStatusText').className = 'text-sm sm:text-base font-bold text-red-500 uppercase';
                 document.getElementById('gameSubText').textContent = 'Hai cliccato prima dello spegnimento dei semafori.';
                 document.getElementById('startGameBtn').classList.remove('opacity-50', 'pointer-events-none');
             } else if (gameState === 'READY_TO_TAP') {
@@ -1413,12 +1483,12 @@
                 playAudio('select');
                 gameState = 'FINISHED';
 
-                let rating = 'Tempo eccezionale da Pilota F1! 🏎️';
-                if (reactionTime > 260) rating = 'Buona reazione, livello amatoriale! 🏁';
-                if (reactionTime > 350) rating = 'Serve più concentrazione al via! ⏱️';
+                let rating = 'Tempo da Pilota F1! 🏎️';
+                if (reactionTime > 260) rating = 'Buona reazione amatoriale! 🏁';
+                if (reactionTime > 350) rating = 'Serve più concentrazione! ⏱️';
 
                 document.getElementById('gameStatusText').textContent = `REAZIONE: ${reactionTime} ms`;
-                document.getElementById('gameStatusText').className = 'text-2xl font-black text-white uppercase';
+                document.getElementById('gameStatusText').className = 'text-xl sm:text-2xl font-black text-white uppercase';
                 document.getElementById('gameSubText').textContent = rating;
                 document.getElementById('startGameBtn').classList.remove('opacity-50', 'pointer-events-none');
                 
@@ -1477,7 +1547,7 @@
             optionsContainer.innerHTML = '';
             options.forEach(opt => {
                 const btn = document.createElement('button');
-                btn.className = 'bg-white/5 hover:bg-white/15 text-white font-semibold py-2.5 px-3 rounded-xl text-xs transition border border-white/10 truncate';
+                btn.className = 'bg-white/5 hover:bg-white/15 text-white font-semibold py-3 px-3 rounded-xl text-xs transition border border-white/10 truncate active:scale-[0.98]';
                 btn.textContent = opt.name;
                 btn.onclick = () => checkGameAnswer(opt.id);
                 optionsContainer.appendChild(btn);
