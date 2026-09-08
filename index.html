@@ -1074,37 +1074,79 @@
             document.getElementById('circuitCount').textContent = circuitsData.length;
             
             myGlobe = Globe()
+                // 1. Attiva l'auto-rotazione dopo l'inizializzazione
+myGlobe.controls().autoRotate = true;
+myGlobe.controls().autoRotateSpeed = 0.6;
+
+// 2. Seleziona gli elementi del DOM
+const globeContainer = document.getElementById('globeViz');
+const panel = document.getElementById('circuit-panel');
+const closeBtn = document.getElementById('close-panel-btn');
+
+// 3. Funzione per bloccare la rotazione al touch/click
+function stopAutoRotation() {
+  if (myGlobe.controls().autoRotate) {
+    myGlobe.controls().autoRotate = false;
+  }
+}
+
+// Intercetta i gesti su mobile e desktop
+globeContainer.addEventListener('touchstart', stopAutoRotation, { passive: true });
+globeContainer.addEventListener('mousedown', stopAutoRotation);
+
+// 4. Gestione chiusura del nuovo pannello
+closeBtn.addEventListener('click', () => {
+  panel.classList.add('translate-y-full');
+});
                 (container)
                 .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
                 .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
                 .backgroundImageUrl('https://unpkg.com/three-globe/example/img/night-sky.png')
                 .htmlElementsData(activeData)
                 .htmlElement(d => {
-                    const el = document.createElement('div');
-                    el.className = 'cursor-pointer group relative flex items-center justify-center pointer-events-auto';
-                    
-                    let colorClass = 'bg-f1-red';
-                    if (d.isHistoric) colorClass = 'bg-amber-500';
-                    if (d.isNew2026) colorClass = 'bg-cyan-400';
+  const el = document.createElement('div');
+  el.className = 'cursor-pointer group relative flex items-center justify-center pointer-events-auto';
 
-                    el.innerHTML = `
-                        <div class="w-6 h-6 rounded-full ${colorClass} border-2 border-white/80 shadow-lg animate-ping absolute opacity-70"></div>
-                        <div class="w-6 h-6 rounded-full ${colorClass} border-2 border-white shadow-xl flex items-center justify-center text-[10px] font-black text-white transform hover:scale-125 transition-transform z-10">${d.isHistoric ? 'H' : 'F1'}</div>
-                        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 hidden group-hover:flex bg-black/95 text-white text-[11px] font-bold px-3 py-1.5 rounded-xl border border-white/20 whitespace-nowrap z-50 shadow-2xl pointer-events-none">
-                            ${d.name} (${d.country})
-                        </div>
-                    `;
-                    
-                    // SELEZIONE DIRETTA CLICCANDO SUL PALLINO SUL GLOBO
-                    el.onclick = (e) => {
-                        e.stopPropagation();
-                        selectCircuit(d.id);
-                    };
-                    return el;
-                });
+  let colorClass = 'bg-f1-red';
+  if (d.isHistoric) colorClass = 'bg-amber-500';
+  if (d.isNew2026) colorClass = 'bg-cyan-400';
 
-           myGlobe.controls().autoRotate = true;
-           myGlobe.controls().autoRotateSpeed = 0.5;
+  el.innerHTML = `
+    <div class="w-6 h-6 rounded-full ${colorClass} border-2 border-white/80 shadow-lg animate-ping absolute opacity-75"></div>
+    <div class="w-4 h-4 rounded-full ${colorClass} border-2 border-white shadow-md relative z-10"></div>
+  `;
+
+  el.addEventListener('click', () => {
+    document.getElementById('circuit-name').textContent = d.name;
+    
+    panel.classList.remove('translate-y-full');
+    stopAutoRotation();
+  });
+
+.htmlElementsData(activeData)
+  .htmlElement(d => {
+    const el = document.createElement('div');
+    el.className = 'cursor-pointer group relative flex items-center justify-center pointer-events-auto';
+
+    let colorClass = 'bg-f1-red';
+    if (d.isHistoric) colorClass = 'bg-amber-500';
+    if (d.isNew2026) colorClass = 'bg-cyan-400';
+
+    el.innerHTML = `
+      <div class="w-6 h-6 rounded-full ${colorClass} border-2 border-white/80 shadow-lg animate-ping absolute opacity-75"></div>
+      <div class="w-4 h-4 rounded-full ${colorClass} border-2 border-white shadow-md relative z-10"></div>
+    `;
+
+    el.onclick = (e) => {
+      e.stopPropagation();
+      selectCircuit(d.id);
+      
+      panel.classList.remove('translate-y-full');
+      stopAutoRotation();
+    };
+
+    return el;
+  })
 
 myGlobe.onZoom(() => {
   myGlobe.controls().autoRotate = false;
@@ -1397,6 +1439,48 @@ fetch('https://raw.githubusercontent.com/bacinger/f1-circuits/master/f1-circuits
         }
 
         window.onload = initGlobe;
+    <!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>World Circuit Explorer</title>
+  <!-- I tuoi script di Tailwind CSS e Globe.gl -->
+</head>
+<body class="bg-slate-950 text-white overflow-hidden">
+
+  <!-- Container del Globo 3D -->
+  <div id="globeViz" class="w-full h-screen"></div>
+
+  <!-- ========================================================= -->
+  <!-- INCOLLA QUI LO STEP 1 (Il nuovo pannello / Bottom Sheet)  -->
+  <!-- ========================================================= -->
+  <aside id="circuit-panel" 
+    class="fixed z-50 transition-all duration-300 ease-in-out
+           bottom-0 left-0 right-0 max-h-[60vh] rounded-t-2xl bg-slate-900/95 p-5 backdrop-blur-md shadow-2xl border-t border-slate-700 overflow-y-auto translate-y-full
+           md:translate-y-0 md:top-4 md:bottom-auto md:left-auto md:right-4 md:w-96 md:max-h-[calc(100vh-2rem)] md:rounded-2xl md:border">
+    
+    <!-- Handle visivo per mobile -->
+    <div class="w-12 h-1.5 bg-slate-600 rounded-full mx-auto mb-4 md:hidden"></div>
+
+    <!-- Intestazione Pannello -->
+    <div class="flex items-center justify-between mb-4">
+      <h2 id="circuit-name" class="text-xl font-bold text-white">Seleziona un circuito</h2>
+      <button id="close-panel-btn" class="text-slate-400 hover:text-white p-1">
+        ✕
+      </button>
+    </div>
+
+    <!-- Contenuto Dettagli Circuito -->
+    <div id="circuit-details" class="space-y-3 text-slate-300 text-sm">
+      <p class="italic text-slate-500">Clicca su un marker nel globo per vedere i dati del GP.</p>
+    </div>
+  </aside>
+
+  <!-- Il tuo file JavaScript principale -->
+  <script src="app.js"></script>
+</body>
+</html>
     </script>
 </body>
 </html>
