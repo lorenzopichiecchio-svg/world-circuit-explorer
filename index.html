@@ -1161,54 +1161,60 @@
         }
 
         // CAMERA FLYOVER DINAMICA & GIRO TELEMETRICO ANIMATO
-        function selectCircuit(id) {
-            const circuit = circuitsData.find(c => c.id === id);
-            if (!circuit) return;
+       function selectCircuit(id) {
+    const circuit = circuitsData.find(c => c.id === id);
+    if (!circuit) return;
 
-            playAudio('select');
+    playAudio('select');
 
-            document.getElementById('circuitCountry').textContent = circuit.country;
-            document.getElementById('circuitCategory').textContent = circuit.category;
-            document.getElementById('circuitName').textContent = circuit.name;
-            document.getElementById('circuitCity').innerHTML = `<i class="fa-solid fa-location-dot mr-1 text-red-500"></i> ${circuit.city}`;
-            
-            const svgContainer = document.getElementById('svgContainer');
-            svgContainer.innerHTML = circuit.svg;
-            animateTrackPath();
+    // 1. Aggiornamento dati nei pannelli UI
+    document.getElementById('circuitCountry').textContent = circuit.country;
+    document.getElementById('circuitCategory').textContent = circuit.category;
+    document.getElementById('circuitName').textContent = circuit.name;
+    document.getElementById('circuitCity').innerHTML = `<i class="fa-solid fa-location-dot mr-1 text-red-500"></i> ${circuit.city}`;
+    
+    // 2. Rendering vettoriale 1:1 del tracciato
+    const svgContainer = document.getElementById('svgContainer');
+    svgContainer.innerHTML = circuit.svg;
+    animateTrackPath();
 
-            document.getElementById('statLength').textContent = circuit.length;
-            document.getElementById('statLaps').textContent = circuit.laps;
-            document.getElementById('statTurns').textContent = circuit.turns;
-            document.getElementById('statElevation').textContent = circuit.elevation;
-            document.getElementById('statFirstGP').textContent = circuit.firstGP;
-            document.getElementById('statDRS').textContent = circuit.drs;
+    // Aggiornamento metriche
+    document.getElementById('statLength').textContent = circuit.length;
+    document.getElementById('statLaps').textContent = circuit.laps;
+    document.getElementById('statTurns').textContent = circuit.turns;
+    document.getElementById('statElevation').textContent = circuit.elevation;
+    document.getElementById('statFirstGP').textContent = circuit.firstGP;
+    document.getElementById('statDRS').textContent = circuit.drs;
+    document.getElementById('statRecord').textContent = circuit.record;
+    document.getElementById('statRecordHolder').textContent = circuit.holder;
+    document.getElementById('statSpeed').textContent = circuit.speed;
+    document.getElementById('statSpeedLoc').textContent = circuit.speedLoc;
+    document.getElementById('circuitFact').textContent = circuit.fact;
 
-            document.getElementById('statRecord').textContent = circuit.record;
-            document.getElementById('statRecordHolder').textContent = circuit.holder;
-            document.getElementById('statSpeed').textContent = circuit.speed;
-            document.getElementById('statSpeedLoc').textContent = circuit.speedLoc;
-            document.getElementById('circuitFact').textContent = circuit.fact;
+    updateTelemetryModal(circuit);
 
-            updateTelemetryModal(circuit);
+    // Mostra la scheda laterale
+    document.getElementById('sidebar').classList.remove('translate-x-[440px]');
 
-            document.getElementById('sidebar').classList.remove('translate-x-[440px]');
+    // 3. LOGICA FLY-TO CAMERA (Globo 3D)
+    myGlobe.controls().autoRotate = false;
+    
+    // Primo passaggio: Approccio sul punto GPS
+    myGlobe.pointOfView({
+        lat: circuit.lat,
+        lng: circuit.lng + 8,
+        altitude: 1.8
+    }, 800);
 
-            myGlobe.controls().autoRotate = false;
-            
-            myGlobe.pointOfView({
-                lat: circuit.lat,
-                lng: circuit.lng + 12,
-                altitude: 1.8
-            }, 800);
-
-            setTimeout(() => {
-                myGlobe.pointOfView({
-                    lat: circuit.lat,
-                    lng: circuit.lng,
-                    altitude: 1.15
-                }, 1000);
-            }, 750);
-        }
+    // Secondo passaggio: Zoom ravvicinato 1:1 (Fly-To finale)
+    setTimeout(() => {
+        myGlobe.pointOfView({
+            lat: circuit.lat,
+            lng: circuit.lng,
+            altitude: 0.6
+        }, 1200);
+    }, 750);
+}
 
         function animateTrackPath() {
             const svg = document.querySelector('#svgContainer svg');
