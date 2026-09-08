@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>F1 World Circuit Explorer 2026 - Enhanced</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='100' fill='%230a0b0e'/><path d='M 120,400 L 360,400 C 420,400 450,360 410,310 L 380,270 C 360,250 360,230 380,210 L 410,180 C 430,160 410,110 360,110 L 260,110 C 220,110 200,130 180,160 L 150,210 C 130,240 110,270 120,310 Z' fill='none' stroke='%23ff1e00' stroke-width='28' stroke-linecap='round' stroke-linejoin='round'/><g transform='translate(210, 205)'><rect x='0' y='0' width='22' height='22' fill='%23fff'/><rect x='22' y='0' width='22' height='22' fill='%23000'/><rect x='0' y='22' width='22' height='22' fill='%23000'/><rect x='22' y='22' width='22' height='22' fill='%23fff'/></g></svg>">
+    
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -1068,104 +1070,53 @@
         let myGlobe;
         let activeData = [...circuitsData];
 
-        // INIZIALIZZAZIONE GLOBO 3D CON SUPPORTO PER CLICK SEGNALINI
+        // INIZIALIZZAZIONE GLOBO 3D
         function initGlobe() {
             const container = document.getElementById('globeViz');
             document.getElementById('circuitCount').textContent = circuitsData.length;
             
-            myGlobe = Globe()
-                // 1. Attiva l'auto-rotazione dopo l'inizializzazione
-myGlobe.controls().autoRotate = true;
-myGlobe.controls().autoRotateSpeed = 0.6;
-
-// 2. Seleziona gli elementi del DOM
-const globeContainer = document.getElementById('globeViz');
-const panel = document.getElementById('circuit-panel');
-const closeBtn = document.getElementById('close-panel-btn');
-
-// 3. Funzione per bloccare la rotazione al touch/click
-function stopAutoRotation() {
-  if (myGlobe.controls().autoRotate) {
-    myGlobe.controls().autoRotate = false;
-  }
-}
-
-// Intercetta i gesti su mobile e desktop
-globeContainer.addEventListener('touchstart', stopAutoRotation, { passive: true });
-globeContainer.addEventListener('mousedown', stopAutoRotation);
-
-// 4. Gestione chiusura del nuovo pannello
-closeBtn.addEventListener('click', () => {
-  panel.classList.add('translate-y-full');
-});
-                (container)
+            myGlobe = Globe()(container)
                 .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
                 .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
                 .backgroundImageUrl('https://unpkg.com/three-globe/example/img/night-sky.png')
                 .htmlElementsData(activeData)
                 .htmlElement(d => {
-  const el = document.createElement('div');
-  el.className = 'cursor-pointer group relative flex items-center justify-center pointer-events-auto';
+                    const el = document.createElement('div');
+                    el.className = 'cursor-pointer group relative flex items-center justify-center pointer-events-auto';
 
-  let colorClass = 'bg-f1-red';
-  if (d.isHistoric) colorClass = 'bg-amber-500';
-  if (d.isNew2026) colorClass = 'bg-cyan-400';
+                    let colorClass = 'bg-f1-red';
+                    if (d.isHistoric) colorClass = 'bg-amber-500';
+                    if (d.isNew2026) colorClass = 'bg-cyan-400';
 
-  el.innerHTML = `
-    <div class="w-6 h-6 rounded-full ${colorClass} border-2 border-white/80 shadow-lg animate-ping absolute opacity-75"></div>
-    <div class="w-4 h-4 rounded-full ${colorClass} border-2 border-white shadow-md relative z-10"></div>
-  `;
+                    el.innerHTML = `
+                        <div class="w-6 h-6 rounded-full ${colorClass} border-2 border-white/80 shadow-lg animate-ping absolute opacity-75"></div>
+                        <div class="w-4 h-4 rounded-full ${colorClass} border-2 border-white shadow-md relative z-10"></div>
+                    `;
 
-  el.addEventListener('click', () => {
-    document.getElementById('circuit-name').textContent = d.name;
-    
-    panel.classList.remove('translate-y-full');
-    stopAutoRotation();
-  });
+                    el.onclick = (e) => {
+                        e.stopPropagation();
+                        selectCircuit(d.id);
+                    };
 
-.htmlElementsData(activeData)
-  .htmlElement(d => {
-    const el = document.createElement('div');
-    el.className = 'cursor-pointer group relative flex items-center justify-center pointer-events-auto';
+                    return el;
+                });
 
-    let colorClass = 'bg-f1-red';
-    if (d.isHistoric) colorClass = 'bg-amber-500';
-    if (d.isNew2026) colorClass = 'bg-cyan-400';
+            // Attiva la rotazione automatica del globo
+            myGlobe.controls().autoRotate = true;
+            myGlobe.controls().autoRotateSpeed = 0.6;
 
-    el.innerHTML = `
-      <div class="w-6 h-6 rounded-full ${colorClass} border-2 border-white/80 shadow-lg animate-ping absolute opacity-75"></div>
-      <div class="w-4 h-4 rounded-full ${colorClass} border-2 border-white shadow-md relative z-10"></div>
-    `;
+            // Caricamento tracciati su Mappa tramite GeoJSON
+            fetch('https://raw.githubusercontent.com/bacinger/f1-circuits/master/f1-circuits.geojson')
+                .then(res => res.json())
+                .then(geojson => {
+                    myGlobe
+                        .pathsData(geojson.features)
+                        .pathCoordinates(d => d.geometry.coordinates[0])
+                        .pathColor(() => '#e10600')
+                        .pathStroke(2.5);
+                })
+                .catch(err => console.error("Errore GeoJSON:", err));
 
-    el.onclick = (e) => {
-      e.stopPropagation();
-      selectCircuit(d.id);
-      
-      panel.classList.remove('translate-y-full');
-      stopAutoRotation();
-    };
-
-    return el;
-  })
-
-myGlobe.onZoom(() => {
-  myGlobe.controls().autoRotate = false;
-  clearTimeout(window.rotateTimeout);
-  window.rotateTimeout = setTimeout(() => {
-    myGlobe.controls().autoRotate = true;
-  }, 4000);
-});
-// Carica i dati geografici reali (1:1) dei circuiti di F1 in formato GeoJSON
-fetch('https://raw.githubusercontent.com/bacinger/f1-circuits/master/f1-circuits.geojson')
-  .then(res => res.json())
-  .then(geojson => {
-    myGlobe
-      .pathsData(geojson.features)
-      .pathCoordinates(d => d.geometry.coordinates[0]) // Coordinate reali del circuito
-      .pathColor(() => '#e10600')                     // Rosso F1
-      .pathStroke(2.5);                               // Spessore del tracciato
-  })
-  .catch(err => console.error("Errore GeoJSON:", err));
             populateDropdown(activeData);
             populateCalendar(activeData);
             
@@ -1221,7 +1172,6 @@ fetch('https://raw.githubusercontent.com/bacinger/f1-circuits/master/f1-circuits
             document.getElementById('circuitName').textContent = circuit.name;
             document.getElementById('circuitCity').innerHTML = `<i class="fa-solid fa-location-dot mr-1 text-red-500"></i> ${circuit.city}`;
             
-            // CARICAMENTO & ANIMAZIONE VETTORIALE GIRO TELEMETRICO
             const svgContainer = document.getElementById('svgContainer');
             svgContainer.innerHTML = circuit.svg;
             animateTrackPath();
@@ -1243,17 +1193,14 @@ fetch('https://raw.githubusercontent.com/bacinger/f1-circuits/master/f1-circuits
 
             document.getElementById('sidebar').classList.remove('translate-x-[440px]');
 
-            // CAMERA "FLYOVER" DINAMICA CON MOVIMENTO AD ORBITA
             myGlobe.controls().autoRotate = false;
             
-            // FASE 1: Avvicinamento con offset orbita
             myGlobe.pointOfView({
                 lat: circuit.lat,
                 lng: circuit.lng + 12,
                 altitude: 1.8
             }, 800);
 
-            // FASE 2: Stabilizzazione sul tracciato
             setTimeout(() => {
                 myGlobe.pointOfView({
                     lat: circuit.lat,
@@ -1263,7 +1210,6 @@ fetch('https://raw.githubusercontent.com/bacinger/f1-circuits/master/f1-circuits
             }, 750);
         }
 
-        // ANIMAZIONE GIRO TELEMETRICO (DRAWING PATH)
         function animateTrackPath() {
             const svg = document.querySelector('#svgContainer svg');
             if (!svg) return;
@@ -1275,7 +1221,6 @@ fetch('https://raw.githubusercontent.com/bacinger/f1-circuits/master/f1-circuits
             path.style.strokeDasharray = `${length} ${length}`;
             path.style.strokeDashoffset = length;
             
-            // Reflow
             path.getBoundingClientRect();
 
             path.style.transition = 'stroke-dashoffset 2s ease-in-out';
@@ -1287,7 +1232,6 @@ fetch('https://raw.githubusercontent.com/bacinger/f1-circuits/master/f1-circuits
             animateTrackPath();
         }
 
-        // FILTRI RAPIDI A TAG MIGLIORATI
         function applyTagFilter(filterType, btnEl) {
             playAudio('select');
             
@@ -1339,14 +1283,14 @@ fetch('https://raw.githubusercontent.com/bacinger/f1-circuits/master/f1-circuits
             else resetView();
         }
 
-       function resetView() {
-    playAudio('select');
-    document.getElementById('sidebar').classList.add('translate-x-[440px]');
-    document.getElementById('circuitSelect').value = '';
-    document.getElementById('searchInput').value = '';
-    const currentAltitude = myGlobe.pointOfView().altitude;
-    myGlobe.pointOfView({ lat: 20, lng: 0, altitude: currentAltitude }, 1500);
-    myGlobe.controls().autoRotate = true;
+        function resetView() {
+            playAudio('select');
+            document.getElementById('sidebar').classList.add('translate-x-[440px]');
+            document.getElementById('circuitSelect').value = '';
+            document.getElementById('searchInput').value = '';
+            const currentAltitude = myGlobe.pointOfView().altitude;
+            myGlobe.pointOfView({ lat: 20, lng: 0, altitude: currentAltitude }, 1500);
+            myGlobe.controls().autoRotate = true;
         }
 
         function openModal(id) {
@@ -1439,48 +1383,6 @@ fetch('https://raw.githubusercontent.com/bacinger/f1-circuits/master/f1-circuits
         }
 
         window.onload = initGlobe;
-    <!DOCTYPE html>
-<html lang="it">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>World Circuit Explorer</title>
-  <!-- I tuoi script di Tailwind CSS e Globe.gl -->
-</head>
-<body class="bg-slate-950 text-white overflow-hidden">
-
-  <!-- Container del Globo 3D -->
-  <div id="globeViz" class="w-full h-screen"></div>
-
-  <!-- ========================================================= -->
-  <!-- INCOLLA QUI LO STEP 1 (Il nuovo pannello / Bottom Sheet)  -->
-  <!-- ========================================================= -->
-  <aside id="circuit-panel" 
-    class="fixed z-50 transition-all duration-300 ease-in-out
-           bottom-0 left-0 right-0 max-h-[60vh] rounded-t-2xl bg-slate-900/95 p-5 backdrop-blur-md shadow-2xl border-t border-slate-700 overflow-y-auto translate-y-full
-           md:translate-y-0 md:top-4 md:bottom-auto md:left-auto md:right-4 md:w-96 md:max-h-[calc(100vh-2rem)] md:rounded-2xl md:border">
-    
-    <!-- Handle visivo per mobile -->
-    <div class="w-12 h-1.5 bg-slate-600 rounded-full mx-auto mb-4 md:hidden"></div>
-
-    <!-- Intestazione Pannello -->
-    <div class="flex items-center justify-between mb-4">
-      <h2 id="circuit-name" class="text-xl font-bold text-white">Seleziona un circuito</h2>
-      <button id="close-panel-btn" class="text-slate-400 hover:text-white p-1">
-        ✕
-      </button>
-    </div>
-
-    <!-- Contenuto Dettagli Circuito -->
-    <div id="circuit-details" class="space-y-3 text-slate-300 text-sm">
-      <p class="italic text-slate-500">Clicca su un marker nel globo per vedere i dati del GP.</p>
-    </div>
-  </aside>
-
-  <!-- Il tuo file JavaScript principale -->
-  <script src="app.js"></script>
-</body>
-</html>
     </script>
 </body>
 </html>
