@@ -104,7 +104,10 @@
             </div>
 
             <!-- PULSANTI HEADER -->
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button onclick="openGuessTrackGame()" class="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-extrabold text-xs px-3 py-2 rounded-xl transition-all flex items-center gap-2 shadow-lg shadow-purple-900/40 border border-purple-400/30">
+                    <i class="fa-solid fa-gamepad"></i> GUESS TRACK
+                </button>
                 <button onclick="openModal('gameModal')" class="bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-extrabold text-xs px-3.5 py-2 rounded-xl transition-all flex items-center gap-2 shadow-lg shadow-red-900/40 border border-red-400/30 animate-pulse">
                     <i class="fa-solid fa-gauge-high"></i> LIGHTS OUT
                 </button>
@@ -114,7 +117,7 @@
             </div>
         </div>
 
-        <!-- FILTRI RAPIDI A TAG MIGLIORATI -->
+        <!-- FILTRI RAPIDI A TAG -->
         <div class="flex items-center gap-2 overflow-x-auto pb-1 text-[11px] font-semibold">
             <span class="text-gray-400 text-[10px] uppercase font-mono mr-1">Filtra:</span>
             <button onclick="applyTagFilter('all', this)" class="tag-btn active px-3 py-1 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 text-gray-300">Tutti</button>
@@ -155,9 +158,7 @@
                 <button onclick="replayTrackAnimation()" class="absolute top-2 right-2 bg-white/10 hover:bg-white/20 text-white text-[10px] font-mono px-2 py-1 rounded transition-all border border-white/10" title="Rigioca Animazione Giro">
                     <i class="fa-solid fa-rotate-right mr-1"></i>Replay
                 </button>
-                <div id="svgContainer" class="w-full h-48 flex items-center justify-center p-2">
-                    <!-- SVG caricato dinamicamente -->
-                </div>
+                <div id="svgContainer" class="w-full h-48 flex items-center justify-center p-2"></div>
                 <div class="w-full flex justify-between items-center mt-2 px-1 text-[9px] font-mono text-gray-400 border-t border-white/10 pt-2">
                     <span class="flex items-center gap-1.5"><span class="w-2.5 h-0.5 bg-red-500 inline-block rounded"></span> Tracciato Reale</span>
                     <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 inline-block shadow-sm shadow-emerald-400"></span> Start / Finish</span>
@@ -228,7 +229,7 @@
         </div>
     </aside>
 
-    <!-- MINIGAME MODAL -->
+    <!-- MINIGAME REACTION TEST MODAL -->
     <div id="gameModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
         <div class="glass-panel w-full max-w-xl rounded-2xl p-6 relative flex flex-col items-center text-center border border-red-500/30">
             <button onclick="closeModal('gameModal')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">
@@ -337,6 +338,38 @@
         </div>
     </div>
 
+    <!-- MODAL MINIGAME "GUESS THE TRACK" -->
+    <div id="guessGameModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-[100] hidden flex items-center justify-center p-4">
+        <div class="glass-panel border border-purple-500/30 rounded-2xl p-6 max-w-lg w-full text-white shadow-2xl relative">
+            <button onclick="closeGuessTrackGame()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <div class="flex justify-between items-center mb-4 pb-3 border-b border-white/10">
+                <h2 class="text-xl font-black italic text-purple-400 flex items-center gap-2">
+                    <i class="fa-solid fa-gamepad"></i> GUESS THE TRACK
+                </h2>
+                <div class="flex gap-4 text-xs font-semibold">
+                    <span title="Streak Giornaliero">🔥 <span id="gameStreak">0</span></span>
+                    <span title="Punteggio Massimo">🏆 <span id="gameHighScore">0</span></span>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center mb-3 text-xs text-gray-400 font-mono">
+                <div>Tempo: <span id="gameTimer" class="font-bold text-red-400 text-sm">15</span>s</div>
+                <div>Punti: <span id="gameScore" class="font-bold text-emerald-400 text-sm">0</span></div>
+            </div>
+
+            <div class="bg-black/90 rounded-xl p-4 mb-4 h-48 flex items-center justify-center border border-white/10 relative overflow-hidden">
+                <div id="gameTrackSvg" class="w-full h-full text-red-500 fill-none flex items-center justify-center"></div>
+            </div>
+
+            <div id="gameOptions" class="grid grid-cols-2 gap-2 mb-3"></div>
+
+            <div id="gameResultMsg" class="text-center font-bold h-6 text-xs transition-all"></div>
+        </div>
+    </div>
+
     <!-- SCRIPT LOGICA E DATASET COMPLETO -->
     <script>
         // SINTETIZZATORE AUDIO NATIVO (WEB AUDIO API)
@@ -386,6 +419,22 @@
                 gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
                 osc.start(now);
                 osc.stop(now + 0.3);
+            } else if (type === 'correct') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(523.25, now);
+                osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.15);
+                gain.gain.setValueAtTime(0.08, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+                osc.start(now);
+                osc.stop(now + 0.15);
+            } else if (type === 'wrong') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(220, now);
+                osc.frequency.exponentialRampToValueAtTime(110, now + 0.2);
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+                osc.start(now);
+                osc.stop(now + 0.2);
             }
         }
 
@@ -1101,11 +1150,9 @@
                     return el;
                 });
 
-            // Attiva la rotazione automatica del globo
             myGlobe.controls().autoRotate = true;
             myGlobe.controls().autoRotateSpeed = 0.6;
 
-            // Caricamento tracciati su Mappa tramite GeoJSON
             fetch('https://raw.githubusercontent.com/bacinger/f1-circuits/master/f1-circuits.geojson')
                 .then(res => res.json())
                 .then(geojson => {
@@ -1160,61 +1207,53 @@
             });
         }
 
-        // CAMERA FLYOVER DINAMICA & GIRO TELEMETRICO ANIMATO
-       function selectCircuit(id) {
-    const circuit = circuitsData.find(c => c.id === id);
-    if (!circuit) return;
+        function selectCircuit(id) {
+            const circuit = circuitsData.find(c => c.id === id);
+            if (!circuit) return;
 
-    playAudio('select');
+            playAudio('select');
 
-    // 1. Aggiornamento dati nei pannelli UI
-    document.getElementById('circuitCountry').textContent = circuit.country;
-    document.getElementById('circuitCategory').textContent = circuit.category;
-    document.getElementById('circuitName').textContent = circuit.name;
-    document.getElementById('circuitCity').innerHTML = `<i class="fa-solid fa-location-dot mr-1 text-red-500"></i> ${circuit.city}`;
-    
-    // 2. Rendering vettoriale 1:1 del tracciato
-    const svgContainer = document.getElementById('svgContainer');
-    svgContainer.innerHTML = circuit.svg;
-    animateTrackPath();
+            document.getElementById('circuitCountry').textContent = circuit.country;
+            document.getElementById('circuitCategory').textContent = circuit.category;
+            document.getElementById('circuitName').textContent = circuit.name;
+            document.getElementById('circuitCity').innerHTML = `<i class="fa-solid fa-location-dot mr-1 text-red-500"></i> ${circuit.city}`;
+            
+            const svgContainer = document.getElementById('svgContainer');
+            svgContainer.innerHTML = circuit.svg;
+            animateTrackPath();
 
-    // Aggiornamento metriche
-    document.getElementById('statLength').textContent = circuit.length;
-    document.getElementById('statLaps').textContent = circuit.laps;
-    document.getElementById('statTurns').textContent = circuit.turns;
-    document.getElementById('statElevation').textContent = circuit.elevation;
-    document.getElementById('statFirstGP').textContent = circuit.firstGP;
-    document.getElementById('statDRS').textContent = circuit.drs;
-    document.getElementById('statRecord').textContent = circuit.record;
-    document.getElementById('statRecordHolder').textContent = circuit.holder;
-    document.getElementById('statSpeed').textContent = circuit.speed;
-    document.getElementById('statSpeedLoc').textContent = circuit.speedLoc;
-    document.getElementById('circuitFact').textContent = circuit.fact;
+            document.getElementById('statLength').textContent = circuit.length;
+            document.getElementById('statLaps').textContent = circuit.laps;
+            document.getElementById('statTurns').textContent = circuit.turns;
+            document.getElementById('statElevation').textContent = circuit.elevation;
+            document.getElementById('statFirstGP').textContent = circuit.firstGP;
+            document.getElementById('statDRS').textContent = circuit.drs;
+            document.getElementById('statRecord').textContent = circuit.record;
+            document.getElementById('statRecordHolder').textContent = circuit.holder;
+            document.getElementById('statSpeed').textContent = circuit.speed;
+            document.getElementById('statSpeedLoc').textContent = circuit.speedLoc;
+            document.getElementById('circuitFact').textContent = circuit.fact;
 
-    updateTelemetryModal(circuit);
+            updateTelemetryModal(circuit);
 
-    // Mostra la scheda laterale
-    document.getElementById('sidebar').classList.remove('translate-x-[440px]');
+            document.getElementById('sidebar').classList.remove('translate-x-[440px]');
 
-    // 3. LOGICA FLY-TO CAMERA (Globo 3D)
-    myGlobe.controls().autoRotate = false;
-    
-    // Primo passaggio: Approccio sul punto GPS
-    myGlobe.pointOfView({
-        lat: circuit.lat,
-        lng: circuit.lng + 8,
-        altitude: 1.8
-    }, 800);
+            myGlobe.controls().autoRotate = false;
+            
+            myGlobe.pointOfView({
+                lat: circuit.lat,
+                lng: circuit.lng + 8,
+                altitude: 1.8
+            }, 800);
 
-    // Secondo passaggio: Zoom ravvicinato 1:1 (Fly-To finale)
-    setTimeout(() => {
-        myGlobe.pointOfView({
-            lat: circuit.lat,
-            lng: circuit.lng,
-            altitude: 0.6
-        }, 1200);
-    }, 750);
-}
+            setTimeout(() => {
+                myGlobe.pointOfView({
+                    lat: circuit.lat,
+                    lng: circuit.lng,
+                    altitude: 0.6
+                }, 1200);
+            }, 750);
+        }
 
         function animateTrackPath() {
             const svg = document.querySelector('#svgContainer svg');
@@ -1294,8 +1333,7 @@
             document.getElementById('sidebar').classList.add('translate-x-[440px]');
             document.getElementById('circuitSelect').value = '';
             document.getElementById('searchInput').value = '';
-            const currentAltitude = myGlobe.pointOfView().altitude;
-            myGlobe.pointOfView({ lat: 20, lng: 0, altitude: currentAltitude }, 1500);
+            myGlobe.pointOfView({ lat: 20, lng: 0, altitude: 2.2 }, 1500);
             myGlobe.controls().autoRotate = true;
         }
 
@@ -1309,7 +1347,7 @@
             document.getElementById(id).classList.add('hidden');
         }
 
-        // MINIGAME REAZIONE CON AUDIO NATIVO
+        // MINIGAME REAZIONE LIGHTS OUT
         let gameState = 'IDLE';
         let lightStep = 0;
         let lightInterval = null;
@@ -1388,196 +1426,143 @@
             }
         }
 
-        window.onload = initGlobe;
-    <!-- PULSANTE PER APRIRE IL GIOCO (Aggiungilo alla tua barra di navigazione o UI) -->
-<button onclick="openGuessTrackGame()" class="fixed top-4 left-4 z-50 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg flex items-center gap-2">
-    <i class="fa-solid fa-gamepad"></i> Guess the Track
-</button>
+        // MINIGAME GUESS THE TRACK
+        let gameTimerInterval = null;
+        let gameTimeLeft = 15;
+        let gameCurrentScore = 0;
+        let currentTargetCircuit = null;
 
-<!-- MODAL MINIGAME "GUESS THE TRACK" -->
-<div id="guessGameModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] hidden flex items-center justify-center p-4">
-    <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 max-w-lg w-full text-white shadow-2xl relative">
-        <!-- Tasto Chiusura -->
-        <button onclick="closeGuessTrackGame()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
-            <i class="fa-solid fa-xmark text-xl"></i>
-        </button>
-
-        <!-- Intestazione e Statistiche LocalStorage -->
-        <div class="flex justify-between items-center mb-4 pb-3 border-b border-gray-800">
-            <h2 class="text-xl font-bold text-red-500 flex items-center gap-2">
-                <i class="fa-solid fa-flag-checkered"></i> Guess the Track
-            </h2>
-            <div class="flex gap-4 text-sm font-semibold">
-                <span title="Streak Giornaliero">🔥 <span id="gameStreak">0</span></span>
-                <span title="Punteggio Massimo">🏆 <span id="gameHighScore">0</span></span>
-            </div>
-        </div>
-
-        <!-- Timer e Punteggio Corrente -->
-        <div class="flex justify-between items-center mb-4 text-sm text-gray-400">
-            <div>Tempo: <span id="gameTimer" class="font-mono text-red-400 font-bold">15</span>s</div>
-            <div>Punti: <span id="gameScore" class="font-bold text-white">0</span></div>
-        </div>
-
-        <!-- Silhouette del Circuito -->
-        <div class="bg-gray-950 rounded-xl p-6 mb-6 h-48 flex items-center justify-center border border-gray-800">
-            <div id="gameTrackSvg" class="w-full h-full text-red-500 fill-current"></div>
-        </div>
-
-        <!-- Opzioni a scelta multipla -->
-        <div id="gameOptions" class="grid grid-cols-2 gap-3 mb-4">
-            <!-- I bottoni delle opzioni verranno generati via JavaScript -->
-        </div>
-
-        <!-- Messaggio di Risultato -->
-        <div id="gameResultMsg" class="text-center font-bold h-6 text-sm"></div>
-    </div>
-</div>
-        // ==========================================
-// FASE 3: GAMIFICATION - GUESS THE TRACK
-// ==========================================
-
-let gameTimerInterval = null;
-let gameTimeLeft = 15;
-let gameCurrentScore = 0;
-let currentTargetCircuit = null;
-
-// Carica statistiche da LocalStorage all'avvio
-function loadGameStats() {
-    const highScore = localStorage.getItem('gtt_highScore') || 0;
-    const streak = localStorage.getItem('gtt_streak') || 0;
-    
-    document.getElementById('gameHighScore').textContent = highScore;
-    document.getElementById('gameStreak').textContent = streak;
-}
-
-function openGuessTrackGame() {
-    loadGameStats();
-    gameCurrentScore = 0;
-    document.getElementById('gameScore').textContent = gameCurrentScore;
-    document.getElementById('guessGameModal').classList.remove('hidden');
-    nextGameRound();
-}
-
-function closeGuessTrackGame() {
-    clearInterval(gameTimerInterval);
-    document.getElementById('guessGameModal').classList.add('hidden');
-}
-
-function nextGameRound() {
-    clearInterval(gameTimerInterval);
-    document.getElementById('gameResultMsg').textContent = '';
-
-    // Scegli un circuito casuale come risposta corretta
-    const randomIndex = Math.floor(Math.random() * circuitsData.length);
-    currentTargetCircuit = circuitsData[randomIndex];
-
-    // Mostra solo la silhouette SVG
-    document.getElementById('gameTrackSvg').innerHTML = currentTargetCircuit.svg;
-
-    // Prepara 4 opzioni (1 corretta + 3 errate)
-    let options = [currentTargetCircuit];
-    while (options.length < 4 && options.length < circuitsData.length) {
-        const rand = circuitsData[Math.floor(Math.random() * circuitsData.length)];
-        if (!options.some(opt => opt.id === rand.id)) {
-            options.push(rand);
+        function loadGameStats() {
+            const highScore = localStorage.getItem('gtt_highScore') || 0;
+            const streak = localStorage.getItem('gtt_streak') || 0;
+            
+            document.getElementById('gameHighScore').textContent = highScore;
+            document.getElementById('gameStreak').textContent = streak;
         }
-    }
-    // Mescola le opzioni
-    options.sort(() => Math.random() - 0.5);
 
-    // Renderizza i pulsanti
-    const optionsContainer = document.getElementById('gameOptions');
-    optionsContainer.innerHTML = '';
-    options.forEach(opt => {
-        const btn = document.createElement('button');
-        btn.className = 'bg-gray-800 hover:bg-gray-700 text-white font-semibold py-2 px-3 rounded-lg text-sm transition border border-gray-700 truncate';
-        btn.textContent = opt.name;
-        btn.onclick = () => checkGameAnswer(opt.id);
-        optionsContainer.appendChild(btn);
-    });
+        function openGuessTrackGame() {
+            playAudio('select');
+            loadGameStats();
+            gameCurrentScore = 0;
+            document.getElementById('gameScore').textContent = gameCurrentScore;
+            document.getElementById('guessGameModal').classList.remove('hidden');
+            nextGameRound();
+        }
 
-    // Avvia il Timer (15 secondi per round)
-    gameTimeLeft = 15;
-    document.getElementById('gameTimer').textContent = gameTimeLeft;
-    gameTimerInterval = setInterval(() => {
-        gameTimeLeft--;
-        document.getElementById('gameTimer').textContent = gameTimeLeft;
-        if (gameTimeLeft <= 0) {
+        function closeGuessTrackGame() {
+            playAudio('select');
             clearInterval(gameTimerInterval);
-            handleGameAnswer(false, "Tempo scaduto!");
-        }
-    }, 1000);
-}
-
-function checkGameAnswer(selectedId) {
-    clearInterval(gameTimerInterval);
-    if (selectedId === currentTargetCircuit.id) {
-        handleGameAnswer(true, "Esatto! +10 Punti");
-    } else {
-        handleGameAnswer(false, `Sbagliato! Era ${currentTargetCircuit.name}`);
-    }
-}
-
-function handleGameAnswer(isCorrect, message) {
-    const msgEl = document.getElementById('gameResultMsg');
-    
-    if (isCorrect) {
-        msgEl.className = 'text-center font-bold h-6 text-sm text-green-400';
-        msgEl.textContent = message;
-        gameCurrentScore += 10;
-        document.getElementById('gameScore').textContent = gameCurrentScore;
-
-        // Aggiorna Record personale in LocalStorage se superato
-        const currentHighScore = parseInt(localStorage.getItem('gtt_highScore') || '0', 10);
-        if (gameCurrentScore > currentHighScore) {
-            localStorage.setItem('gtt_highScore', gameCurrentScore);
-            document.getElementById('gameHighScore').textContent = gameCurrentScore;
+            document.getElementById('guessGameModal').classList.add('hidden');
         }
 
-        // Passa al prossimo round dopo 1 secondo
-        setTimeout(nextGameRound, 1200);
-    } else {
-        msgEl.className = 'text-center font-bold h-6 text-sm text-red-400';
-        msgEl.textContent = message;
+        function nextGameRound() {
+            clearInterval(gameTimerInterval);
+            document.getElementById('gameResultMsg').textContent = '';
 
-        // Aggiorna lo Streak giornaliero
-        updateDailyStreak();
+            const randomIndex = Math.floor(Math.random() * circuitsData.length);
+            currentTargetCircuit = circuitsData[randomIndex];
 
-        // Disabilita i pulsanti
-        const buttons = document.querySelectorAll('#gameOptions button');
-        buttons.forEach(b => b.disabled = true);
+            document.getElementById('gameTrackSvg').innerHTML = currentTargetCircuit.svg;
 
-        // Riavvia il gioco dopo 2 secondi
-        setTimeout(() => {
-            alert(`Game Over! Punteggio finale: ${gameCurrentScore}`);
-            openGuessTrackGame();
-        }, 2000);
-    }
-}
+            let options = [currentTargetCircuit];
+            while (options.length < 4 && options.length < circuitsData.length) {
+                const rand = circuitsData[Math.floor(Math.random() * circuitsData.length)];
+                if (!options.some(opt => opt.id === rand.id)) {
+                    options.push(rand);
+                }
+            }
+            options.sort(() => Math.random() - 0.5);
 
-function updateDailyStreak() {
-    const lastPlayed = localStorage.getItem('gtt_lastPlayedDate');
-    const today = new Date().toDateString();
-    let streak = parseInt(localStorage.getItem('gtt_streak') || '0', 10);
+            const optionsContainer = document.getElementById('gameOptions');
+            optionsContainer.innerHTML = '';
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'bg-white/5 hover:bg-white/15 text-white font-semibold py-2.5 px-3 rounded-xl text-xs transition border border-white/10 truncate';
+                btn.textContent = opt.name;
+                btn.onclick = () => checkGameAnswer(opt.id);
+                optionsContainer.appendChild(btn);
+            });
 
-    if (lastPlayed !== today) {
-        const yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        
-        if (lastPlayed === yesterday.toDateString()) {
-            streak++;
-        } else {
-            streak = 1; // Resetta o inizia nuovo streak
+            gameTimeLeft = 15;
+            document.getElementById('gameTimer').textContent = gameTimeLeft;
+            gameTimerInterval = setInterval(() => {
+                gameTimeLeft--;
+                document.getElementById('gameTimer').textContent = gameTimeLeft;
+                if (gameTimeLeft <= 0) {
+                    clearInterval(gameTimerInterval);
+                    playAudio('wrong');
+                    handleGameAnswer(false, "Tempo scaduto!");
+                }
+            }, 1000);
         }
-        localStorage.setItem('gtt_streak', streak);
-        localStorage.setItem('gtt_lastPlayedDate', today);
-        document.getElementById('gameStreak').textContent = streak;
-    }
-}
 
-// Inizializza i dati all'avvio della pagina
-document.addEventListener('DOMContentLoaded', loadGameStats);
+        function checkGameAnswer(selectedId) {
+            clearInterval(gameTimerInterval);
+            if (selectedId === currentTargetCircuit.id) {
+                playAudio('correct');
+                handleGameAnswer(true, "Esatto! +10 Punti");
+            } else {
+                playAudio('wrong');
+                handleGameAnswer(false, `Sbagliato! Era ${currentTargetCircuit.name}`);
+            }
+        }
+
+        function handleGameAnswer(isCorrect, message) {
+            const msgEl = document.getElementById('gameResultMsg');
+            
+            if (isCorrect) {
+                msgEl.className = 'text-center font-bold h-6 text-xs text-emerald-400';
+                msgEl.textContent = message;
+                gameCurrentScore += 10;
+                document.getElementById('gameScore').textContent = gameCurrentScore;
+
+                const currentHighScore = parseInt(localStorage.getItem('gtt_highScore') || '0', 10);
+                if (gameCurrentScore > currentHighScore) {
+                    localStorage.setItem('gtt_highScore', gameCurrentScore);
+                    document.getElementById('gameHighScore').textContent = gameCurrentScore;
+                }
+
+                setTimeout(nextGameRound, 1200);
+            } else {
+                msgEl.className = 'text-center font-bold h-6 text-xs text-red-500';
+                msgEl.textContent = message;
+
+                updateDailyStreak();
+
+                const buttons = document.querySelectorAll('#gameOptions button');
+                buttons.forEach(b => b.disabled = true);
+
+                setTimeout(() => {
+                    alert(`Game Over! Punteggio finale: ${gameCurrentScore}`);
+                    openGuessTrackGame();
+                }, 2000);
+            }
+        }
+
+        function updateDailyStreak() {
+            const lastPlayed = localStorage.getItem('gtt_lastPlayedDate');
+            const today = new Date().toDateString();
+            let streak = parseInt(localStorage.getItem('gtt_streak') || '0', 10);
+
+            if (lastPlayed !== today) {
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+                
+                if (lastPlayed === yesterday.toDateString()) {
+                    streak++;
+                } else {
+                    streak = 1;
+                }
+                localStorage.setItem('gtt_streak', streak);
+                localStorage.setItem('gtt_lastPlayedDate', today);
+                document.getElementById('gameStreak').textContent = streak;
+            }
+        }
+
+        window.onload = function() {
+            initGlobe();
+            loadGameStats();
+        };
     </script>
 </body>
 </html>
