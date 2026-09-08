@@ -1389,6 +1389,195 @@
         }
 
         window.onload = initGlobe;
+    <!-- PULSANTE PER APRIRE IL GIOCO (Aggiungilo alla tua barra di navigazione o UI) -->
+<button onclick="openGuessTrackGame()" class="fixed top-4 left-4 z-50 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg flex items-center gap-2">
+    <i class="fa-solid fa-gamepad"></i> Guess the Track
+</button>
+
+<!-- MODAL MINIGAME "GUESS THE TRACK" -->
+<div id="guessGameModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] hidden flex items-center justify-center p-4">
+    <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 max-w-lg w-full text-white shadow-2xl relative">
+        <!-- Tasto Chiusura -->
+        <button onclick="closeGuessTrackGame()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+            <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+
+        <!-- Intestazione e Statistiche LocalStorage -->
+        <div class="flex justify-between items-center mb-4 pb-3 border-b border-gray-800">
+            <h2 class="text-xl font-bold text-red-500 flex items-center gap-2">
+                <i class="fa-solid fa-flag-checkered"></i> Guess the Track
+            </h2>
+            <div class="flex gap-4 text-sm font-semibold">
+                <span title="Streak Giornaliero">🔥 <span id="gameStreak">0</span></span>
+                <span title="Punteggio Massimo">🏆 <span id="gameHighScore">0</span></span>
+            </div>
+        </div>
+
+        <!-- Timer e Punteggio Corrente -->
+        <div class="flex justify-between items-center mb-4 text-sm text-gray-400">
+            <div>Tempo: <span id="gameTimer" class="font-mono text-red-400 font-bold">15</span>s</div>
+            <div>Punti: <span id="gameScore" class="font-bold text-white">0</span></div>
+        </div>
+
+        <!-- Silhouette del Circuito -->
+        <div class="bg-gray-950 rounded-xl p-6 mb-6 h-48 flex items-center justify-center border border-gray-800">
+            <div id="gameTrackSvg" class="w-full h-full text-red-500 fill-current"></div>
+        </div>
+
+        <!-- Opzioni a scelta multipla -->
+        <div id="gameOptions" class="grid grid-cols-2 gap-3 mb-4">
+            <!-- I bottoni delle opzioni verranno generati via JavaScript -->
+        </div>
+
+        <!-- Messaggio di Risultato -->
+        <div id="gameResultMsg" class="text-center font-bold h-6 text-sm"></div>
+    </div>
+</div>
+        // ==========================================
+// FASE 3: GAMIFICATION - GUESS THE TRACK
+// ==========================================
+
+let gameTimerInterval = null;
+let gameTimeLeft = 15;
+let gameCurrentScore = 0;
+let currentTargetCircuit = null;
+
+// Carica statistiche da LocalStorage all'avvio
+function loadGameStats() {
+    const highScore = localStorage.getItem('gtt_highScore') || 0;
+    const streak = localStorage.getItem('gtt_streak') || 0;
+    
+    document.getElementById('gameHighScore').textContent = highScore;
+    document.getElementById('gameStreak').textContent = streak;
+}
+
+function openGuessTrackGame() {
+    loadGameStats();
+    gameCurrentScore = 0;
+    document.getElementById('gameScore').textContent = gameCurrentScore;
+    document.getElementById('guessGameModal').classList.remove('hidden');
+    nextGameRound();
+}
+
+function closeGuessTrackGame() {
+    clearInterval(gameTimerInterval);
+    document.getElementById('guessGameModal').classList.add('hidden');
+}
+
+function nextGameRound() {
+    clearInterval(gameTimerInterval);
+    document.getElementById('gameResultMsg').textContent = '';
+
+    // Scegli un circuito casuale come risposta corretta
+    const randomIndex = Math.floor(Math.random() * circuitsData.length);
+    currentTargetCircuit = circuitsData[randomIndex];
+
+    // Mostra solo la silhouette SVG
+    document.getElementById('gameTrackSvg').innerHTML = currentTargetCircuit.svg;
+
+    // Prepara 4 opzioni (1 corretta + 3 errate)
+    let options = [currentTargetCircuit];
+    while (options.length < 4 && options.length < circuitsData.length) {
+        const rand = circuitsData[Math.floor(Math.random() * circuitsData.length)];
+        if (!options.some(opt => opt.id === rand.id)) {
+            options.push(rand);
+        }
+    }
+    // Mescola le opzioni
+    options.sort(() => Math.random() - 0.5);
+
+    // Renderizza i pulsanti
+    const optionsContainer = document.getElementById('gameOptions');
+    optionsContainer.innerHTML = '';
+    options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'bg-gray-800 hover:bg-gray-700 text-white font-semibold py-2 px-3 rounded-lg text-sm transition border border-gray-700 truncate';
+        btn.textContent = opt.name;
+        btn.onclick = () => checkGameAnswer(opt.id);
+        optionsContainer.appendChild(btn);
+    });
+
+    // Avvia il Timer (15 secondi per round)
+    gameTimeLeft = 15;
+    document.getElementById('gameTimer').textContent = gameTimeLeft;
+    gameTimerInterval = setInterval(() => {
+        gameTimeLeft--;
+        document.getElementById('gameTimer').textContent = gameTimeLeft;
+        if (gameTimeLeft <= 0) {
+            clearInterval(gameTimerInterval);
+            handleGameAnswer(false, "Tempo scaduto!");
+        }
+    }, 1000);
+}
+
+function checkGameAnswer(selectedId) {
+    clearInterval(gameTimerInterval);
+    if (selectedId === currentTargetCircuit.id) {
+        handleGameAnswer(true, "Esatto! +10 Punti");
+    } else {
+        handleGameAnswer(false, `Sbagliato! Era ${currentTargetCircuit.name}`);
+    }
+}
+
+function handleGameAnswer(isCorrect, message) {
+    const msgEl = document.getElementById('gameResultMsg');
+    
+    if (isCorrect) {
+        msgEl.className = 'text-center font-bold h-6 text-sm text-green-400';
+        msgEl.textContent = message;
+        gameCurrentScore += 10;
+        document.getElementById('gameScore').textContent = gameCurrentScore;
+
+        // Aggiorna Record personale in LocalStorage se superato
+        const currentHighScore = parseInt(localStorage.getItem('gtt_highScore') || '0', 10);
+        if (gameCurrentScore > currentHighScore) {
+            localStorage.setItem('gtt_highScore', gameCurrentScore);
+            document.getElementById('gameHighScore').textContent = gameCurrentScore;
+        }
+
+        // Passa al prossimo round dopo 1 secondo
+        setTimeout(nextGameRound, 1200);
+    } else {
+        msgEl.className = 'text-center font-bold h-6 text-sm text-red-400';
+        msgEl.textContent = message;
+
+        // Aggiorna lo Streak giornaliero
+        updateDailyStreak();
+
+        // Disabilita i pulsanti
+        const buttons = document.querySelectorAll('#gameOptions button');
+        buttons.forEach(b => b.disabled = true);
+
+        // Riavvia il gioco dopo 2 secondi
+        setTimeout(() => {
+            alert(`Game Over! Punteggio finale: ${gameCurrentScore}`);
+            openGuessTrackGame();
+        }, 2000);
+    }
+}
+
+function updateDailyStreak() {
+    const lastPlayed = localStorage.getItem('gtt_lastPlayedDate');
+    const today = new Date().toDateString();
+    let streak = parseInt(localStorage.getItem('gtt_streak') || '0', 10);
+
+    if (lastPlayed !== today) {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        
+        if (lastPlayed === yesterday.toDateString()) {
+            streak++;
+        } else {
+            streak = 1; // Resetta o inizia nuovo streak
+        }
+        localStorage.setItem('gtt_streak', streak);
+        localStorage.setItem('gtt_lastPlayedDate', today);
+        document.getElementById('gameStreak').textContent = streak;
+    }
+}
+
+// Inizializza i dati all'avvio della pagina
+document.addEventListener('DOMContentLoaded', loadGameStats);
     </script>
 </body>
 </html>
