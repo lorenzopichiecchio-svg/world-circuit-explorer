@@ -216,11 +216,6 @@
                     <i class="fa-solid fa-gauge-high"></i> Reflex
                 </button>
 
-                <!-- TEST SUITE -->
-                <button onclick="openModal('testModal')" class="bg-cyan-950/80 hover:bg-cyan-900 text-cyan-300 font-bold text-xs px-2.5 py-2 rounded-xl transition-all flex items-center gap-1.5 border border-cyan-500/40">
-                    <i class="fa-solid fa-vial"></i>
-                </button>
-
                 <!-- CONTATORE & LISTA PISTE -->
                 <button onclick="openModal('calendarModal')" class="bg-white/10 hover:bg-white/20 text-white font-semibold text-xs px-3 py-2 rounded-xl transition-all border border-white/10 flex items-center gap-1.5">
                     <i class="fa-solid fa-calendar-days text-red-500"></i> (<span id="circuitCount">0</span>)
@@ -247,8 +242,8 @@
     <!-- ========================================== -->
     <div id="globeViz"></div>
 
-    <!-- WIDGET METEO GLOBALE IN BASSO A SINISTRA -->
-    <div class="hidden md:flex fixed bottom-5 left-5 z-20 glass-panel rounded-2xl p-3 border border-white/10 flex-col gap-1 text-xs max-w-[220px]">
+    <!-- WIDGET METEO GLOBALE IN BASSO A SINISTRA (Visibile solo a circuito selezionato) -->
+    <div id="weatherWidget" class="hidden fixed bottom-5 left-5 z-20 glass-panel rounded-2xl p-3 border border-white/10 flex-col gap-1 text-xs max-w-[220px]">
         <div class="flex items-center justify-between border-b border-white/10 pb-1.5">
             <span class="text-[10px] font-mono text-gray-400 uppercase font-bold flex items-center gap-1.5">
                 <i class="fa-solid fa-cloud-sun-rain text-cyan-400"></i> METEO TRACCIATO
@@ -257,15 +252,15 @@
         </div>
         <div class="flex items-center justify-between mt-1">
             <span class="text-gray-400 text-[11px]">Aria / Asfalto:</span>
-            <span id="widgetTempText" class="font-bold text-white font-mono">24°C / 38°C</span>
+            <span id="widgetTempText" class="font-bold text-white font-mono">--°C / --°C</span>
         </div>
         <div class="flex items-center justify-between">
             <span class="text-gray-400 text-[11px]">Vento:</span>
-            <span id="widgetWindText" class="font-bold text-gray-300 font-mono">12 km/h SO</span>
+            <span id="widgetWindText" class="font-bold text-gray-300 font-mono">-- km/h</span>
         </div>
         <div class="flex items-center justify-between">
             <span class="text-gray-400 text-[11px]">Rischio Pioggia:</span>
-            <span id="widgetRainText" class="font-bold text-cyan-400 font-mono">15%</span>
+            <span id="widgetRainText" class="font-bold text-cyan-400 font-mono">--%</span>
         </div>
     </div>
 
@@ -655,76 +650,6 @@
             <div id="gameOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3"></div>
 
             <div id="gameResultMsg" class="text-center font-bold h-6 text-xs transition-all font-mono"></div>
-        </div>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- MODAL 7: TEST SUITE DIAGNOSTICA            -->
-    <!-- ========================================== -->
-    <div id="testModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-[110] hidden flex items-center justify-center p-4">
-        <div class="glass-panel border border-cyan-500/40 rounded-3xl p-5 sm:p-6 max-w-2xl w-full text-white shadow-2xl relative max-h-[90vh] overflow-y-auto">
-            <button onclick="closeModal('testModal')" class="absolute top-4 right-4 text-gray-400 hover:text-white">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
-
-            <div class="flex items-center gap-3 mb-4 pb-2 border-b border-white/10">
-                <i class="fa-solid fa-vial-circle-check text-cyan-400 text-2xl"></i>
-                <div>
-                    <h2 class="text-lg sm:text-xl font-black italic text-cyan-400 font-orbitron">VISUAL & INTERACTIVE TEST SUITE</h2>
-                    <p class="text-[10px] text-gray-400 font-mono">Diagnostica automatica di rendering Canvas, OpenF1 e Web Audio API</p>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-                <div class="bg-white/5 p-3 rounded-2xl border border-white/10 flex flex-col justify-between">
-                    <div>
-                        <h4 class="text-xs font-bold text-white mb-1"><i class="fa-solid fa-bezier-curve text-cyan-400 mr-1"></i> Spline Canvas Render</h4>
-                        <p class="text-[10px] text-gray-400">Verifica l'algoritmo di smussamento spline dei punti del tracciato.</p>
-                    </div>
-                    <button onclick="runSplineTest()" class="mt-3 bg-cyan-600/30 hover:bg-cyan-600/50 text-cyan-300 font-semibold text-xs py-1.5 px-3 rounded-xl border border-cyan-500/40">
-                        Esegui Test Spline
-                    </button>
-                </div>
-
-                <div class="bg-white/5 p-3 rounded-2xl border border-white/10 flex flex-col justify-between">
-                    <div>
-                        <h4 class="text-xs font-bold text-white mb-1"><i class="fa-solid fa-network-wired text-amber-400 mr-1"></i> OpenF1 API Connessione</h4>
-                        <p class="text-[10px] text-gray-400">Verifica endpoint live e calcola latenza di risposta.</p>
-                    </div>
-                    <button onclick="testOpenF1Api()" class="mt-3 bg-amber-600/30 hover:bg-amber-600/50 text-amber-300 font-semibold text-xs py-1.5 px-3 rounded-xl border border-amber-500/40">
-                        Testa API Live
-                    </button>
-                </div>
-
-                <div class="bg-white/5 p-3 rounded-2xl border border-white/10 flex flex-col justify-between">
-                    <div>
-                        <h4 class="text-xs font-bold text-white mb-1"><i class="fa-solid fa-volume-high text-emerald-400 mr-1"></i> Sintetizzatore Sonoro</h4>
-                        <p class="text-[10px] text-gray-400">Riproduce la frequenza sonora di tutti i campioni Audio API.</p>
-                    </div>
-                    <button onclick="testAudioSequence()" class="mt-3 bg-emerald-600/30 hover:bg-emerald-600/50 text-emerald-300 font-semibold text-xs py-1.5 px-3 rounded-xl border border-emerald-500/40">
-                        Riproduci Audio
-                    </button>
-                </div>
-
-                <div class="bg-white/5 p-3 rounded-2xl border border-white/10 flex flex-col justify-between">
-                    <div>
-                        <h4 class="text-xs font-bold text-white mb-1"><i class="fa-solid fa-database text-purple-400 mr-1"></i> Sanity Check Dataset</h4>
-                        <p class="text-[10px] text-gray-400">Scansiona tutti i 24 tracciati per validità SVG, geo-coordinate e dati.</p>
-                    </div>
-                    <button onclick="runDatasetSanityCheck()" class="mt-3 bg-purple-600/30 hover:bg-purple-600/50 text-purple-300 font-semibold text-xs py-1.5 px-3 rounded-xl border border-purple-500/40">
-                        Controlla Dataset
-                    </button>
-                </div>
-            </div>
-
-            <!-- CONSOLE LOG OUTPUT -->
-            <div class="bg-black/90 p-3 rounded-2xl border border-white/10">
-                <div class="flex justify-between items-center mb-1">
-                    <span class="text-[10px] font-mono text-gray-400 uppercase">Console Log Diagnostico:</span>
-                    <button onclick="clearTestLog()" class="text-[10px] text-gray-500 hover:text-white">Pulisci</button>
-                </div>
-                <pre id="testLogConsole" class="text-[11px] font-mono text-emerald-400 h-28 overflow-y-auto no-scrollbar whitespace-pre-wrap">Pronto per la diagnostica...</pre>
-            </div>
         </div>
     </div>
 
@@ -1594,14 +1519,12 @@
             window.addEventListener('resize', () => {
                 myGlobe.width(window.innerWidth).height(window.innerHeight);
             });
-
-            setupMobileGestures();
         }
 
         /* ===================================================
          * 4. GESTIONE SELEZIONE TRACCIATO & DISPLAY DATA
          * =================================================== */
-        async function selectCircuit(id) {
+        function selectCircuit(id) {
             const circuit = circuitsData.find(c => c.id === id);
             if (!circuit) return;
 
@@ -1612,24 +1535,11 @@
             document.getElementById('circuitName').textContent = circuit.name;
             document.getElementById('circuitCity').innerHTML = `<i class="fa-solid fa-location-dot text-red-500"></i> ${circuit.city}, ${circuit.country}`;
             
-            // Gestione rendering SVG + Canvas Spline
+            // Rendering SVG
             const svgContainer = document.getElementById('svgContainer');
-            const trackCanvas = document.getElementById('trackCanvas');
-            const renderLabel = document.getElementById('renderModeLabel');
-
-            svgContainer.innerHTML = circuit.svg;
+            if (svgContainer) svgContainer.innerHTML = circuit.svg;
             
-            if (circuit.sessionKey) {
-                renderLabel.textContent = 'OPENF1 TELEMETRIA REALE';
-                trackCanvas.classList.remove('hidden');
-                caricaEDisegnaPista(circuit.sessionKey);
-            } else {
-                renderLabel.textContent = 'GIRO VETTORIALE 1:1';
-                trackCanvas.classList.add('hidden');
-                animateTrackPath();
-            }
-
-            // Popola Metriche
+            // Dati Metriche
             document.getElementById('statLength').textContent = circuit.length;
             document.getElementById('statLaps').textContent = circuit.laps;
             document.getElementById('statTurns').textContent = circuit.turns;
@@ -1642,493 +1552,435 @@
             document.getElementById('statSpeedLoc').textContent = circuit.speedLoc;
             document.getElementById('circuitFact').textContent = circuit.fact;
 
-            // Telemetria Modal
-            document.getElementById('modalTrackName').textContent = circuit.name.toUpperCase();
-            document.getElementById('telemetryThrottle').textContent = circuit.telemetry.throttle + '%';
-            document.getElementById('barThrottle').style.width = circuit.telemetry.throttle + '%';
-            
-            const dfText = circuit.telemetry.downforce > 75 ? 'Molto Alto' : circuit.telemetry.downforce > 50 ? 'Medio-Alto' : 'Basso';
-            document.getElementById('telemetryDownforce').textContent = dfText;
-            document.getElementById('barDownforce').style.width = circuit.telemetry.downforce + '%';
-            
-            document.getElementById('telemetryBrakes').textContent = circuit.telemetry.brakes + '%';
-            document.getElementById('barBrakes').style.width = circuit.telemetry.brakes + '%';
-            
-            document.getElementById('telemetryTyres').textContent = circuit.telemetry.tyres + '%';
-            document.getElementById('barTyres').style.width = circuit.telemetry.tyres + '%';
-            
-            document.getElementById('telemetryGears').textContent = circuit.telemetry.gears + ' Cambiate';
+            // Dati Telemetria Modal
+            if (circuit.telemetry) {
+                document.getElementById('modalTrackName').textContent = circuit.name;
+                document.getElementById('telemetryThrottle').textContent = circuit.telemetry.throttle + '%';
+                document.getElementById('barThrottle').style.width = circuit.telemetry.throttle + '%';
+                
+                let dfText = 'Medio';
+                if (circuit.telemetry.downforce > 80) dfText = 'Molto Alto';
+                else if (circuit.telemetry.downforce > 60) dfText = 'Alto';
+                else if (circuit.telemetry.downforce < 40) dfText = 'Basso / Molto Basso';
+                document.getElementById('telemetryDownforce').textContent = dfText;
+                document.getElementById('barDownforce').style.width = circuit.telemetry.downforce + '%';
 
-            // Meteo Widget
-            const rainPct = parseInt(circuit.weather.rain);
-            document.getElementById('widgetWeatherBadge').textContent = rainPct > 30 ? 'BAGNATI' : 'ASCIUTTO';
-            document.getElementById('widgetWeatherBadge').className = rainPct > 30 
-                ? 'text-[9px] bg-cyan-500/20 text-cyan-400 font-mono px-1.5 py-0.5 rounded border border-cyan-500/30'
-                : 'text-[9px] bg-emerald-500/20 text-emerald-400 font-mono px-1.5 py-0.5 rounded border border-emerald-500/30';
-            document.getElementById('widgetTempText').textContent = `${circuit.weather.temp} / ${circuit.weather.trackTemp}`;
-            document.getElementById('widgetWindText').textContent = circuit.weather.wind;
-            document.getElementById('widgetRainText').textContent = circuit.weather.rain;
+                let brkText = 'Medio';
+                if (circuit.telemetry.brakes > 80) brkText = 'Molto Alto';
+                else if (circuit.telemetry.brakes > 65) brkText = 'Alto';
+                document.getElementById('telemetryBrakes').textContent = brkText;
+                document.getElementById('barBrakes').style.width = circuit.telemetry.brakes + '%';
 
-            // Spostamento Globo 3D
-            myGlobe.pointOfView({ lat: circuit.lat, lng: circuit.lng, altitude: 1.8 }, 1500);
+                let tyreText = 'Medio';
+                if (circuit.telemetry.tyres > 80) tyreText = 'Alto / Estremo';
+                else if (circuit.telemetry.tyres < 50) tyreText = 'Basso';
+                document.getElementById('telemetryTyres').textContent = tyreText;
+                document.getElementById('barTyres').style.width = circuit.telemetry.tyres + '%';
+
+                document.getElementById('telemetryGears').textContent = circuit.telemetry.gears + ' Cambiate';
+            }
+
+            // Aggiorna ed Attiva Widget Meteo per il circuito selezionato
+            if (circuit.weather) {
+                const rainVal = parseInt(circuit.weather.rain);
+                document.getElementById('widgetWeatherBadge').textContent = rainVal > 30 ? 'PIOGGIA' : 'ASCIUTTO';
+                document.getElementById('widgetWeatherBadge').className = rainVal > 30 ? 
+                    "text-[9px] bg-cyan-500/20 text-cyan-400 font-mono px-1.5 py-0.5 rounded border border-cyan-500/30" : 
+                    "text-[9px] bg-emerald-500/20 text-emerald-400 font-mono px-1.5 py-0.5 rounded border border-emerald-500/30";
+                
+                document.getElementById('widgetTempText').textContent = circuit.weather.temp + ' / ' + circuit.weather.trackTemp;
+                document.getElementById('widgetWindText').textContent = circuit.weather.wind;
+                document.getElementById('widgetRainText').textContent = circuit.weather.rain;
+                
+                const weatherWidget = document.getElementById('weatherWidget');
+                if (weatherWidget) {
+                    weatherWidget.classList.remove('hidden');
+                    weatherWidget.classList.add('flex');
+                }
+            }
+
+            // Centra il globo sul circuito
+            if (myGlobe) {
+                myGlobe.pointOfView({ lat: circuit.lat, lng: circuit.lng, altitude: 1.5 }, 1500);
+            }
+
+            // Mostra sidebar
             document.getElementById('sidebar').classList.add('active');
         }
 
         function resetView() {
-            playAudio('select');
+            if (myGlobe) {
+                myGlobe.pointOfView({ lat: 20, lng: 0, altitude: 2.5 }, 1500);
+            }
             document.getElementById('sidebar').classList.remove('active');
-            myGlobe.pointOfView({ lat: 20, lng: 0, altitude: 2.5 }, 1200);
+            
+            // Nasconde il widget meteo quando la vista viene resettata
+            const weatherWidget = document.getElementById('weatherWidget');
+            if (weatherWidget) {
+                weatherWidget.classList.add('hidden');
+                weatherWidget.classList.remove('flex');
+            }
         }
 
         /* ===================================================
-         * 5. FILTRI E RICERCA TRACCIATI
+         * 5. POPOLAMENTO UI & FILTRI
          * =================================================== */
+        function populateDropdowns() {
+            const select = document.getElementById('circuitSelect');
+            const simSelect = document.getElementById('simCircuitSelect');
+            const compA = document.getElementById('compareSelectA');
+            const compB = document.getElementById('compareSelectB');
+
+            let options = '<option value="">Seleziona Pista...</option>';
+            let compOptions = '';
+
+            circuitsData.forEach(c => {
+                options += `<option value="${c.id}">${c.name} (${c.country})</option>`;
+                compOptions += `<option value="${c.id}">${c.name} (${c.country})</option>`;
+            });
+
+            if (select) select.innerHTML = options;
+            if (simSelect) simSelect.innerHTML = compOptions;
+            if (compA) compA.innerHTML = compOptions;
+            if (compB) compB.innerHTML = compOptions;
+
+            if (compB && circuitsData.length > 1) {
+                compB.value = circuitsData[1].id;
+            }
+        }
+
+        function populateCalendar(data) {
+            const list = document.getElementById('calendarList');
+            if (!list) return;
+
+            let html = '';
+            data.forEach((c, idx) => {
+                let tag = c.isStreet ? 'Cittadino' : (c.isHistoric ? 'Storico' : 'Permanente');
+                if (c.isNew2026) tag = 'Nuovo 2026';
+
+                html += `
+                    <div onclick="selectCircuit('${c.id}'); closeModal('calendarModal');" class="glass-card p-3 rounded-2xl flex items-center justify-between cursor-pointer hover:border-red-500 transition-all">
+                        <div class="flex items-center gap-3">
+                            <span class="font-mono text-xs font-bold text-red-500 w-6">#${idx + 1}</span>
+                            <div>
+                                <h4 class="font-bold text-xs text-white">${c.name}</h4>
+                                <p class="text-[10px] text-gray-400 font-medium">${c.city}, ${c.country} • <span class="text-cyan-400">${c.length}</span></p>
+                            </div>
+                        </div>
+                        <span class="text-[9px] bg-white/10 text-gray-300 font-mono px-2 py-1 rounded-lg border border-white/10 uppercase font-bold">${tag}</span>
+                    </div>
+                `;
+            });
+            list.innerHTML = html;
+        }
+
         function filterCircuitsBySearch() {
-            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const query = document.getElementById('searchInput').value.toLowerCase();
             activeData = circuitsData.filter(c => 
                 c.name.toLowerCase().includes(query) ||
                 c.country.toLowerCase().includes(query) ||
                 c.city.toLowerCase().includes(query)
             );
-            myGlobe.htmlElementsData(activeData);
-            populateCalendar(activeData);
-        }
-
-        function applyTagFilter(tag, btn) {
-            playAudio('select');
-            document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-
-            if (tag === 'all') activeData = [...circuitsData];
-            else if (tag === 'street') activeData = circuitsData.filter(c => c.isStreet);
-            else if (tag === 'historic') activeData = circuitsData.filter(c => c.isHistoric);
-            else if (tag === 'fast') activeData = circuitsData.filter(c => c.speedKm >= 340);
-            else if (tag === 'night') activeData = circuitsData.filter(c => c.isNight);
-            else if (tag === 'new2026') activeData = circuitsData.filter(c => c.isNew2026);
-
-            myGlobe.htmlElementsData(activeData);
-            populateCalendar(activeData);
-        }
-
-        function populateDropdowns() {
-            const circuitSelect = document.getElementById('circuitSelect');
-            const compareSelectA = document.getElementById('compareSelectA');
-            const compareSelectB = document.getElementById('compareSelectB');
-            const simCircuitSelect = document.getElementById('simCircuitSelect');
-
-            let htmlOptions = '<option value="">Seleziona Pista...</option>';
-            circuitsData.forEach(c => {
-                htmlOptions += `<option value="${c.id}">${c.name} (${c.country})</option>`;
-            });
-
-            circuitSelect.innerHTML = htmlOptions;
-            compareSelectA.innerHTML = htmlOptions;
-            compareSelectB.innerHTML = htmlOptions;
-            simCircuitSelect.innerHTML = htmlOptions;
-
-            if (circuitsData.length > 1) {
-                compareSelectA.value = circuitsData[16].id; // Monza
-                compareSelectB.value = circuitsData[14].id; // Spa
-                simCircuitSelect.value = circuitsData[16].id;
+            if (myGlobe) {
+                myGlobe.htmlElementsData(activeData);
             }
+            populateCalendar(activeData);
         }
 
         function onSelectDropdown(id) {
             if (id) selectCircuit(id);
         }
 
-        function populateCalendar(data) {
-            const listContainer = document.getElementById('calendarList');
-            if (data.length === 0) {
-                listContainer.innerHTML = '<div class="text-center text-gray-500 py-8">Nessun tracciato trovato.</div>';
-                return;
+        function applyTagFilter(tag, btn) {
+            document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+
+            if (tag === 'all') {
+                activeData = [...circuitsData];
+            } else if (tag === 'street') {
+                activeData = circuitsData.filter(c => c.isStreet);
+            } else if (tag === 'historic') {
+                activeData = circuitsData.filter(c => c.isHistoric);
+            } else if (tag === 'fast') {
+                activeData = circuitsData.filter(c => c.speedKm >= 340);
+            } else if (tag === 'night') {
+                activeData = circuitsData.filter(c => c.isNight);
+            } else if (tag === 'new2026') {
+                activeData = circuitsData.filter(c => c.isNew2026);
             }
 
-            listContainer.innerHTML = data.map((c, index) => `
-                <div onclick="selectCircuit('${c.id}'); closeModal('calendarModal');" class="glass-card p-3 rounded-2xl flex items-center justify-between cursor-pointer hover:border-red-500 transition-all">
-                    <div class="flex items-center gap-3">
-                        <span class="font-mono text-xs font-bold text-red-500 w-6">#${index + 1}</span>
-                        <div>
-                            <h4 class="font-bold text-sm text-white">${c.name}</h4>
-                            <span class="text-xs text-gray-400"><i class="fa-solid fa-location-dot text-red-500 mr-1"></i>${c.city}, ${c.country}</span>
-                        </div>
-                    </div>
-                    <div class="text-right font-mono text-xs">
-                        <span class="block font-bold text-white">${c.length}</span>
-                        <span class="text-emerald-400 text-[10px]">${c.turns}</span>
-                    </div>
-                </div>
-            `).join('');
+            if (myGlobe) {
+                myGlobe.htmlElementsData(activeData);
+            }
+            populateCalendar(activeData);
         }
 
-        /* ===================================================
-         * 6. MODALI E UTILITY
-         * =================================================== */
         function openModal(id) {
             playAudio('select');
-            document.getElementById(id).classList.remove('hidden');
+            const modal = document.getElementById(id);
+            if (modal) modal.classList.remove('hidden');
+
             if (id === 'compareModal') renderComparison();
             if (id === 'simulatorModal') calculateSimulatedStrategy();
         }
 
         function closeModal(id) {
-            playAudio('select');
-            document.getElementById(id).classList.add('hidden');
+            const modal = document.getElementById(id);
+            if (modal) modal.classList.add('hidden');
         }
 
         function quickPrepareCompare() {
+            const currentName = document.getElementById('circuitName').textContent;
+            const currentObj = circuitsData.find(c => c.name.toUpperCase() === currentName.toUpperCase());
+            if (currentObj) {
+                const compA = document.getElementById('compareSelectA');
+                if (compA) compA.value = currentObj.id;
+            }
             openModal('compareModal');
         }
 
-        /* ===================================================
-         * 7. STRUMENTO DI CONFRONTO A FRONTE
-         * =================================================== */
         function renderComparison() {
             const idA = document.getElementById('compareSelectA').value;
             const idB = document.getElementById('compareSelectB').value;
-            const res = document.getElementById('compareResults');
 
-            const itemA = circuitsData.find(c => c.id === idA);
-            const itemB = circuitsData.find(c => c.id === idB);
+            const cA = circuitsData.find(c => c.id === idA) || circuitsData[0];
+            const cB = circuitsData.find(c => c.id === idB) || circuitsData[1];
 
-            if (!itemA || !itemB) {
-                res.innerHTML = '<div class="text-center text-gray-400 py-6">Seleziona due tracciati da confrontare.</div>';
-                return;
-            }
+            const results = document.getElementById('compareResults');
+            if (!results) return;
 
-            res.innerHTML = `
-                <div class="grid grid-cols-3 gap-2 bg-white/5 p-3 rounded-2xl border border-white/10 font-mono text-xs text-center font-bold">
-                    <div class="text-red-400 truncate">${itemA.name}</div>
-                    <div class="text-gray-400 uppercase text-[10px] self-center">PARAMETRO</div>
-                    <div class="text-cyan-400 truncate">${itemB.name}</div>
-                </div>
-                ${compareRow('Lunghezza', itemA.length, itemB.length)}
-                ${compareRow('N° Giri', itemA.laps, itemB.laps)}
-                ${compareRow('Curve Totali', itemA.turns, itemB.turns)}
-                ${compareRow('Velocità Massima', itemA.speed, itemB.speed)}
-                ${compareRow('Record Giro', itemA.record, itemB.record)}
-                ${compareRow('Zone DRS', itemA.drs, itemB.drs)}
-                ${compareRow('Full Throttle', itemA.telemetry.throttle + '%', itemB.telemetry.throttle + '%')}
-            `;
-        }
+            const fields = [
+                { label: 'Nazione / Città', valA: `${cA.country} (${cA.city})`, valB: `${cB.country} (${cB.city})` },
+                { label: 'Lunghezza', valA: cA.length, valB: cB.length },
+                { label: 'Giri di Gara', valA: cA.laps, valB: cB.laps },
+                { label: 'Numero Curve', valA: cA.turns, valB: cB.turns },
+                { label: 'Velocità Max', valA: cA.speed, valB: cB.speed },
+                { label: 'Zone DRS', valA: cA.drs, valB: cB.drs },
+                { label: 'Record Giro', valA: cA.record, valB: cB.record },
+                { label: 'Acceleratore Pieno', valA: (cA.telemetry?.throttle || '-') + '%', valB: (cB.telemetry?.throttle || '-') + '%' }
+            ];
 
-        function compareRow(label, valA, valB) {
-            return `
-                <div class="grid grid-cols-3 gap-2 p-2.5 rounded-xl glass-card text-xs text-center items-center">
-                    <span class="font-mono font-bold text-white">${valA}</span>
-                    <span class="text-[10px] text-gray-400 font-mono uppercase">${label}</span>
-                    <span class="font-mono font-bold text-white">${valB}</span>
+            let html = `
+                <div class="grid grid-cols-3 gap-2 bg-white/10 p-3 rounded-2xl font-bold text-center border border-white/10 text-xs">
+                    <div class="text-red-400 font-orbitron truncate">${cA.name}</div>
+                    <div class="text-gray-400 font-mono">VS</div>
+                    <div class="text-cyan-400 font-orbitron truncate">${cB.name}</div>
                 </div>
             `;
+
+            fields.forEach(f => {
+                html += `
+                    <div class="grid grid-cols-3 gap-2 bg-white/5 p-2.5 rounded-xl text-center text-xs border border-white/5 items-center">
+                        <div class="font-mono text-white font-semibold">${f.valA}</div>
+                        <div class="text-gray-400 font-bold text-[10px] uppercase font-mono">${f.label}</div>
+                        <div class="font-mono text-white font-semibold">${f.valB}</div>
+                    </div>
+                `;
+            });
+
+            results.innerHTML = html;
         }
 
         /* ===================================================
-         * 8. SIMULATORE PASSO GARA
+         * 6. SIMULATORE STRATEGIA
          * =================================================== */
-        let currentSimTyre = 'Soft';
+        let simTyreMode = 'Medium';
 
         function setSimTyre(type, btn) {
-            playAudio('select');
-            currentSimTyre = type;
-            document.querySelectorAll('.sim-tyre-btn').forEach(b => b.classList.remove('ring-2', 'ring-red-500'));
-            btn.classList.add('ring-2', 'ring-red-500');
+            simTyreMode = type;
+            document.querySelectorAll('.sim-tyre-btn').forEach(b => {
+                b.classList.remove('border-red-500', 'border-amber-500', 'border-white');
+                b.classList.add('border-white/20');
+            });
+            if (btn) btn.classList.add('border-white');
             calculateSimulatedStrategy();
         }
 
         function calculateSimulatedStrategy() {
-            const id = document.getElementById('simCircuitSelect').value;
-            const fuel = parseInt(document.getElementById('simFuelRange').value);
+            const circuitId = document.getElementById('simCircuitSelect').value || circuitsData[0].id;
+            const circuit = circuitsData.find(c => c.id === circuitId) || circuitsData[0];
+            const fuel = parseFloat(document.getElementById('simFuelRange').value);
             const engineMode = parseFloat(document.getElementById('simEngineMode').value);
+
             document.getElementById('simFuelVal').textContent = `${fuel} kg`;
 
-            const circuit = circuitsData.find(c => c.id === id) || circuitsData[0];
-            
-            let baseLapTime = 80.0; 
+            let baseSec = 80.0;
             if (circuit.record && circuit.record.includes(':')) {
                 const parts = circuit.record.split(':');
-                baseLapTime = parseFloat(parts[0]) * 60 + parseFloat(parts[1]);
+                baseSec = parseFloat(parts[0]) * 60 + parseFloat(parts[1]);
             }
 
-            let tyrePenalty = currentSimTyre === 'Soft' ? -0.6 : currentSimTyre === 'Medium' ? 0.0 : 0.8;
-            let fuelPenalty = fuel * 0.035;
-            let simulatedTimeSeconds = (baseLapTime + tyrePenalty + fuelPenalty) * (2.0 - engineMode);
+            let tyreFactor = simTyreMode === 'Soft' ? -0.6 : (simTyreMode === 'Hard' ? +0.8 : 0.0);
+            let fuelFactor = (fuel / 110) * 2.2;
+            let totalTimeSec = (baseSec + tyreFactor + fuelFactor) / engineMode;
 
-            const mins = Math.floor(simulatedTimeSeconds / 60);
-            const secs = (simulatedTimeSeconds % 60).toFixed(3);
-            const timeStr = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+            let mins = Math.floor(totalTimeSec / 60);
+            let secs = (totalTimeSec % 60).toFixed(3);
+            if (secs < 10) secs = '0' + secs;
 
-            let degSec = currentSimTyre === 'Soft' ? 0.12 : currentSimTyre === 'Medium' ? 0.07 : 0.04;
-            degSec *= (circuit.telemetry.tyres / 50);
+            let deg = simTyreMode === 'Soft' ? '+0.120s / giro' : (simTyreMode === 'Hard' ? '+0.045s / giro' : '+0.080s / giro');
+            let pit = simTyreMode === 'Soft' ? 'Giro 15 (Soft ➔ Hard)' : (simTyreMode === 'Hard' ? 'Giro 32 (Hard ➔ Medium)' : 'Giro 22 (Medium ➔ Hard)');
 
-            let recommendedPit = currentSimTyre === 'Soft' ? 'Giro 15-18 (Soft ➔ Hard)' : currentSimTyre === 'Medium' ? 'Giro 22-26 (Medium ➔ Hard)' : 'Giro 35-40 (Hard ➔ Medium)';
-
-            document.getElementById('simResultLaptime').textContent = timeStr;
-            document.getElementById('simResultDegradation').textContent = `+${degSec.toFixed(3)}s / giro`;
-            document.getElementById('simResultPitStrategy').textContent = recommendedPit;
+            document.getElementById('simResultLaptime').textContent = `${mins}:${secs}`;
+            document.getElementById('simResultDegradation').textContent = deg;
+            document.getElementById('simResultPitStrategy').textContent = pit;
         }
 
         /* ===================================================
-         * 9. MINIGAME: LIGHTS OUT (REACTION TEST)
+         * 7. MINIGAME REFLEX (LIGHTS OUT)
          * =================================================== */
-        let gameTimer = null;
+        let lightTimer = null;
         let startTime = 0;
-        let gameState = 'IDLE';
+        let gameState = 'idle';
 
         function startGame() {
-            playAudio('select');
-            gameState = 'WAITING';
-            document.getElementById('gameStatusText').textContent = 'ATTENDI IL ROSSO...';
-            document.getElementById('gameSubText').textContent = 'Non cliccare finché le luci non si spengono!';
-            document.getElementById('startGameBtn').disabled = true;
+            resetLights();
+            gameState = 'waiting';
+            document.getElementById('gameStatusText').textContent = 'ATTENDI IL VERDE...';
+            document.getElementById('gameStatusText').className = 'text-sm sm:text-base font-bold text-amber-400 uppercase font-orbitron';
+            document.getElementById('gameSubText').textContent = 'Pronto a cliccare!';
 
-            for (let i = 1; i <= 5; i++) {
-                document.getElementById(`light${i}`).classList.remove('active');
-            }
-
-            let step = 1;
-            gameTimer = setInterval(() => {
-                if (step <= 5) {
-                    document.getElementById(`light${step}`).classList.add('active');
+            let currentLight = 1;
+            lightTimer = setInterval(() => {
+                if (currentLight <= 5) {
+                    document.getElementById(`light${currentLight}`).classList.add('active');
                     playAudio('lightOn');
-                    step++;
+                    currentLight++;
                 } else {
-                    clearInterval(gameTimer);
-                    const randomDelay = Math.floor(Math.random() * 2500) + 1200;
-                    gameTimer = setTimeout(() => {
-                        for (let i = 1; i <= 5; i++) {
-                            document.getElementById(`light${i}`).classList.remove('active');
-                        }
+                    clearInterval(lightTimer);
+                    let randomDelay = 1000 + Math.random() * 2500;
+                    lightTimer = setTimeout(() => {
+                        resetLights();
                         playAudio('lightsOut');
                         startTime = Date.now();
-                        gameState = 'READY';
-                        document.getElementById('gameStatusText').textContent = 'ORA! CLICCA!';
+                        gameState = 'ready';
+                        document.getElementById('gameStatusText').textContent = 'VIA! CLICCA ORA!';
+                        document.getElementById('gameStatusText').className = 'text-base sm:text-lg font-black text-emerald-400 uppercase font-orbitron animate-bounce';
                     }, randomDelay);
                 }
             }, 1000);
         }
 
         function handleTapArea() {
-            if (gameState === 'WAITING') {
-                clearTimeout(gameTimer);
-                clearInterval(gameTimer);
+            if (gameState === 'waiting') {
+                clearTimeout(lightTimer);
+                clearInterval(lightTimer);
+                resetLights();
                 playAudio('jumpStart');
-                gameState = 'IDLE';
+                gameState = 'idle';
                 document.getElementById('gameStatusText').textContent = 'PARTENZA ANTICIPATA! (FALSE START)';
-                document.getElementById('gameSubText').textContent = 'Hai cliccato prima che le luci si spegnessero.';
-                document.getElementById('startGameBtn').disabled = false;
-            } else if (gameState === 'READY') {
-                const reactionTime = ((Date.now() - startTime) / 1000).toFixed(3);
+                document.getElementById('gameStatusText').className = 'text-sm sm:text-base font-bold text-red-500 uppercase font-orbitron';
+                document.getElementById('gameSubText').textContent = 'Hai cliccato prima dello spegnimento!';
+            } else if (gameState === 'ready') {
+                let reactionTime = ((Date.now() - startTime) / 1000).toFixed(3);
+                gameState = 'idle';
                 playAudio('correct');
-                gameState = 'IDLE';
-                document.getElementById('gameStatusText').textContent = `${reactionTime} SECONDI!`;
-                
-                let rating = 'Tempo da Pilota F1 Profi!';
-                if (reactionTime > 0.3) rating = 'Buon riflesso, ma c\'è margine di miglioramento!';
-                if (reactionTime > 0.4) rating = 'Reazione lenta! Serve allenamento.';
-                
-                document.getElementById('gameSubText').textContent = rating;
-                document.getElementById('startGameBtn').disabled = false;
+                document.getElementById('gameStatusText').textContent = `TEMPO: ${reactionTime}s`;
+                document.getElementById('gameStatusText').className = 'text-xl sm:text-2xl font-black text-white font-orbitron';
+                document.getElementById('gameSubText').textContent = reactionTime < 0.22 ? '⚡ Riflessi da Pilota F1!' : 'Buona reazione!';
+            }
+        }
+
+        function resetLights() {
+            for (let i = 1; i <= 5; i++) {
+                const el = document.getElementById(`light${i}`);
+                if (el) el.classList.remove('active');
             }
         }
 
         /* ===================================================
-         * 10. MINIGAME: GUESS THE TRACK
+         * 8. MINIGAME GUESS THE TRACK
          * =================================================== */
-        let guessCurrentTrack = null;
         let guessScore = 0;
         let guessStreak = 0;
         let guessHighScore = 0;
         let guessTimerVal = 15;
-        let guessInterval = null;
+        let guessTimerInterval = null;
+        let currentGuessCircuit = null;
 
         function openGuessTrackGame() {
-            playAudio('select');
-            document.getElementById('guessGameModal').classList.remove('hidden');
-            nextGuessRound();
+            openModal('guessGameModal');
+            startGuessGame();
         }
 
         function closeGuessTrackGame() {
-            playAudio('select');
-            clearInterval(guessInterval);
-            document.getElementById('guessGameModal').classList.add('hidden');
+            clearInterval(guessTimerInterval);
+            closeModal('guessGameModal');
         }
 
-        function nextGuessRound() {
-            clearInterval(guessInterval);
+        function startGuessGame() {
+            clearInterval(guessTimerInterval);
             document.getElementById('gameResultMsg').textContent = '';
+            
+            const randomCircuit = circuitsData[Math.floor(Math.random() * circuitsData.length)];
+            currentGuessCircuit = randomCircuit;
 
-            guessCurrentTrack = circuitsData[Math.floor(Math.random() * circuitsData.length)];
-            document.getElementById('gameTrackSvg').innerHTML = guessCurrentTrack.svg;
+            document.getElementById('gameTrackSvg').innerHTML = randomCircuit.svg;
 
-            // Opzioni
-            let choices = [guessCurrentTrack];
+            let choices = [randomCircuit];
             while (choices.length < 4) {
-                const rand = circuitsData[Math.floor(Math.random() * circuitsData.length)];
-                if (!choices.find(c => c.id === rand.id)) choices.push(rand);
+                let r = circuitsData[Math.floor(Math.random() * circuitsData.length)];
+                if (!choices.includes(r)) choices.push(r);
             }
             choices.sort(() => Math.random() - 0.5);
 
-            const optionsContainer = document.getElementById('gameOptions');
-            optionsContainer.innerHTML = choices.map(c => `
-                <button onclick="checkGuessAnswer('${c.id}')" class="bg-white/10 hover:bg-purple-600/40 border border-white/10 rounded-xl p-3 text-xs font-bold text-white transition-all text-left truncate">
-                    ${c.name} (${c.country})
-                </button>
-            `).join('');
+            let optionsHtml = '';
+            choices.forEach(c => {
+                optionsHtml += `
+                    <button onclick="checkGuessAnswer('${c.id}')" class="bg-white/10 hover:bg-purple-600/50 border border-white/20 hover:border-purple-400 p-2.5 rounded-xl font-bold text-xs transition-all font-mono">
+                        ${c.name}
+                    </button>
+                `;
+            });
+            document.getElementById('gameOptions').innerHTML = optionsHtml;
 
             guessTimerVal = 15;
             document.getElementById('gameTimer').textContent = guessTimerVal;
-            guessInterval = setInterval(() => {
+            guessTimerInterval = setInterval(() => {
                 guessTimerVal--;
                 document.getElementById('gameTimer').textContent = guessTimerVal;
                 if (guessTimerVal <= 0) {
-                    clearInterval(guessInterval);
-                    handleGuessTimeout();
+                    clearInterval(guessTimerInterval);
+                    playAudio('wrong');
+                    guessStreak = 0;
+                    document.getElementById('gameStreak').textContent = guessStreak;
+                    document.getElementById('gameResultMsg').textContent = `Tempo Scaduto! Era ${randomCircuit.name}`;
+                    document.getElementById('gameResultMsg').className = 'text-center font-bold h-6 text-xs transition-all font-mono text-red-400';
+                    setTimeout(startGuessGame, 2000);
                 }
             }, 1000);
         }
 
-        function checkGuessAnswer(selectedId) {
-            clearInterval(guessInterval);
-            const msg = document.getElementById('gameResultMsg');
-            if (selectedId === guessCurrentTrack.id) {
+        function checkGuessAnswer(id) {
+            clearInterval(guessTimerInterval);
+            if (id === currentGuessCircuit.id) {
                 playAudio('correct');
-                guessScore += 100 + guessTimerVal * 10;
+                guessScore += 10 + guessTimerVal;
                 guessStreak++;
                 if (guessStreak > guessHighScore) guessHighScore = guessStreak;
-                msg.textContent = 'CORRETTO! +100 PTS';
-                msg.className = 'text-center font-bold h-6 text-xs transition-all font-mono text-emerald-400';
+                
+                document.getElementById('gameScore').textContent = guessScore;
+                document.getElementById('gameStreak').textContent = guessStreak;
+                document.getElementById('gameHighScore').textContent = guessHighScore;
+
+                document.getElementById('gameResultMsg').textContent = 'CORRETTO! +10 Punti';
+                document.getElementById('gameResultMsg').className = 'text-center font-bold h-6 text-xs transition-all font-mono text-emerald-400';
+                setTimeout(startGuessGame, 1200);
             } else {
                 playAudio('wrong');
                 guessStreak = 0;
-                msg.textContent = `ERRATO! Era: ${guessCurrentTrack.name}`;
-                msg.className = 'text-center font-bold h-6 text-xs transition-all font-mono text-red-400';
+                document.getElementById('gameStreak').textContent = guessStreak;
+                document.getElementById('gameResultMsg').textContent = `Sbagliato! Era ${currentGuessCircuit.name}`;
+                document.getElementById('gameResultMsg').className = 'text-center font-bold h-6 text-xs transition-all font-mono text-red-400';
+                setTimeout(startGuessGame, 2000);
             }
-
-            document.getElementById('gameScore').textContent = guessScore;
-            document.getElementById('gameStreak').textContent = guessStreak;
-            document.getElementById('gameHighScore').textContent = guessHighScore;
-
-            setTimeout(nextGuessRound, 1800);
-        }
-
-        function handleGuessTimeout() {
-            playAudio('wrong');
-            guessStreak = 0;
-            const msg = document.getElementById('gameResultMsg');
-            msg.textContent = `TEMPO SCADUTO! Era: ${guessCurrentTrack.name}`;
-            msg.className = 'text-center font-bold h-6 text-xs transition-all font-mono text-amber-400';
-            
-            document.getElementById('gameStreak').textContent = 0;
-            setTimeout(nextGuessRound, 1800);
-        }
-
-        /* ===================================================
-         * 11. DIAGNOSTICA TEST SUITE
-         * =================================================== */
-        function logTest(msg) {
-            const consoleEl = document.getElementById('testLogConsole');
-            consoleEl.textContent += `\n[${new Date().toLocaleTimeString()}] ${msg}`;
-            consoleEl.scrollTop = consoleEl.scrollHeight;
-        }
-
-        function clearTestLog() {
-            document.getElementById('testLogConsole').textContent = 'Console pulita.';
-        }
-
-        function runSplineTest() {
-            logTest('Avvio test algoritmi di curvatura Spline...');
-            setTimeout(() => {
-                logTest('✓ Rendering Spline completato con successo (60 FPS).');
-            }, 300);
-        }
-
-        function testOpenF1Api() {
-            logTest('Connessione all\'endpoint OpenF1 in corso...');
-            fetch('https://api.openf1.org/v1/sessions?session_key=9158')
-                .then(res => res.json())
-                .then(data => {
-                    logTest(`✓ Risposta ricevuta da OpenF1 API! S sessioni modificate: ${data.length}`);
-                })
-                .catch(err => {
-                    logTest(`✗ Errore API OpenF1: ${err.message}`);
-                });
-        }
-
-        function testAudioSequence() {
-            logTest('Riproduzione sequenza sonora sintetizzatore...');
-            playAudio('select');
-            setTimeout(() => playAudio('lightOn'), 200);
-            setTimeout(() => playAudio('lightsOut'), 400);
-            setTimeout(() => playAudio('correct'), 700);
-            setTimeout(() => logTest('✓ Sequenza audio completata.'), 800);
-        }
-
-        function runDatasetSanityCheck() {
-            logTest(`Inizio Sanity Check del Dataset (${circuitsData.length} Tracciati)...`);
-            let countValid = 0;
-            circuitsData.forEach(c => {
-                if (c.id && c.lat && c.lng && c.svg) countValid++;
-            });
-            logTest(`✓ Validati ${countValid}/${circuitsData.length} tracciati con successo.`);
-        }
-
-        /* ===================================================
-         * 12. RENDERING CANVAS SPLINE TELEMETRIA & ANIMAZIONI
-         * =================================================== */
-        function caricaEDisegnaPista(sessionKey) {
-            const canvas = document.getElementById('trackCanvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = canvas.parentElement.clientWidth || 300;
-            canvas.height = canvas.parentElement.clientHeight || 200;
-
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.strokeStyle = '#E10600';
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-            
-            // Simula disegno spline dinamico telemetrico
-            const cx = canvas.width / 2;
-            const cy = canvas.height / 2;
-            const r = Math.min(cx, cy) - 20;
-
-            for (let i = 0; i <= 360; i += 10) {
-                const rad = (i * Math.PI) / 180;
-                const offset = Math.sin(rad * 4) * 20;
-                const x = cx + (r + offset) * Math.cos(rad);
-                const y = cy + (r + offset) * Math.sin(rad);
-                if (i === 0) ctx.moveTo(x, y);
-                else ctx.lineTo(x, y);
-            }
-            ctx.closePath();
-            ctx.stroke();
-        }
-
-        function animateTrackPath() {
-            const path = document.querySelector('#svgContainer svg path');
-            if (!path) return;
-            const length = path.getTotalLength();
-            path.style.strokeDasharray = length;
-            path.style.strokeDashoffset = length;
-            path.getBoundingClientRect();
-            path.style.transition = 'stroke-dashoffset 2s ease-in-out';
-            path.style.strokeDashoffset = '0';
         }
 
         function replayTrackAnimation() {
             playAudio('select');
-            animateTrackPath();
         }
 
-        function setupMobileGestures() {
-            // Gestione opzionale gestures touch swipe
-        }
-
-        /* ===================================================
-         * 13. AVVIO APPLICAZIONE AL CARICAMENTO
-         * =================================================== */
-        window.addEventListener('DOMContentLoaded', () => {
-            initGlobe();
-        });
+        window.onload = initGlobe;
     </script>
 </body>
 </html>
