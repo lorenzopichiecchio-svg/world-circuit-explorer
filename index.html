@@ -1800,6 +1800,75 @@
         window.onload = () => {
             initGlobe();
         };
+        <script>
+    // Database storico completo e circuiti estesi 2026 (24 gare)
+    const historicalF1Database = {
+        "2026": { championDriver: "TBD", championConstructor: "TBD", totalRaces: 24, regulations: "Active 2026 Power Unit & Active Aerodynamics" },
+        "2025": { championDriver: "Max Verstappen", championConstructor: "McLaren", totalRaces: 24, regulations: "Ground Effect Evolution" },
+        "2024": { championDriver: "Max Verstappen", championConstructor: "McLaren", totalRaces: 24, regulations: "Ground Effect Era" },
+        "2023": { championDriver: "Max Verstappen", championConstructor: "Red Bull Racing", totalRaces: 22, regulations: "Ground Effect Era" },
+        "2022": { championDriver: "Max Verstappen", championConstructor: "Red Bull Racing", totalRaces: 22, regulations: "New Ground Effect Regs" },
+        "2021": { championDriver: "Max Verstappen", championConstructor: "Mercedes", totalRaces: 22, regulations: "Hybrid V6 Turbo Era" },
+        "2020": { championDriver: "Lewis Hamilton", championConstructor: "Mercedes", totalRaces: 17, regulations: "COVID-19 Condensed Calendar" },
+        "2019": { championDriver: "Lewis Hamilton", championConstructor: "Mercedes", totalRaces: 21, regulations: "Hybrid V6 Turbo Era" },
+        "2018": { championDriver: "Lewis Hamilton", championConstructor: "Mercedes", totalRaces: 21, regulations: "Halo Introduction" },
+        "2017": { championDriver: "Lewis Hamilton", championConstructor: "Mercedes", totalRaces: 20, regulations: "Wider Cars & Tyres" },
+        "2016": { championDriver: "Nico Rosberg", championConstructor: "Mercedes", totalRaces: 21, regulations: "Hybrid V6 Turbo Era" },
+        "2015": { championDriver: "Lewis Hamilton", championConstructor: "Mercedes", totalRaces: 19, regulations: "Hybrid V6 Turbo Era" },
+        "2014": { championDriver: "Lewis Hamilton", championConstructor: "Mercedes", totalRaces: 19, regulations: "Introduction of V6 Turbo Hybrids" },
+        "2013": { championDriver: "Sebastian Vettel", championConstructor: "Red Bull Racing", totalRaces: 19, regulations: "V8 Atmospheric Final Year" },
+        "2012": { championDriver: "Sebastian Vettel", championConstructor: "Red Bull Racing", totalRaces: 20, regulations: "V8 Atmospheric Era" },
+        "2011": { championDriver: "Sebastian Vettel", championConstructor: "Red Bull Racing", totalRaces: 19, regulations: "Blown Diffusers & DRS" },
+        "2010": { championDriver: "Sebastian Vettel", championConstructor: "Red Bull Racing", totalRaces: 19, regulations: "Refueling Ban" },
+        "2009": { championDriver: "Jenson Button", championConstructor: "Brawn GP", totalRaces: 17, regulations: "Double Diffuser Revolution" },
+        "2008": { championDriver: "Lewis Hamilton", championConstructor: "Ferrari", totalRaces: 18, regulations: "Standard ECU Introduction" },
+        "2007": { championDriver: "Kimi Räikkönen", championConstructor: "Ferrari", totalRaces: 17, regulations: "Bridgestone Spec Tyres" },
+        "2006": { championDriver: "Fernando Alonso", championConstructor: "Renault", totalRaces: 18, regulations: "V8 Engine Introduction" },
+        "2005": { championDriver: "Fernando Alonso", championConstructor: "Renault", totalRaces: 19, regulations: "V10 Engine Final Phase" },
+        "2004": { championDriver: "Michael Schumacher", championConstructor: "Ferrari", totalRaces: 18, regulations: "V10 High RPM Era" },
+        "2003": { championDriver: "Michael Schumacher", championConstructor: "Ferrari", totalRaces: 16, regulations: "One-Lap Qualifying Era" },
+        "2002": { championDriver: "Michael Schumacher", championConstructor: "Ferrari", totalRaces: 17, regulations: "V10 Dominance" },
+        "2001": { championDriver: "Michael Schumacher", championConstructor: "Ferrari", totalRaces: 17, regulations: "Traction Control Reintroduced" },
+        "2000": { championDriver: "Michael Schumacher", championConstructor: "Ferrari", totalRaces: 17, regulations: "Turn of the Millennium" }
+    };
+
+    const extraCircuits2026 = [
+        { id: 'suzuka', name: 'Suzuka International Racing Course', country: 'Giappone', city: 'Suzuka', lat: 34.8431, lng: 136.541, length: '5.807 km', turns: 18, speed: '320 km/h', speedKm: 320, record: '1:30.983 (L. Hamilton, 2019)', drs: 2, isStreet: false, isHistoric: true, isNight: false, isNew2026: false, laps: 53, svg: '<svg viewBox="0 0 100 100" class="w-28 h-28 stroke-red-500 fill-none stroke-[3]"><path d="M20 50 Q50 20 80 50 Q50 80 20 50 Z"/></svg>' },
+        { id: 'shanghai', name: 'Shanghai International Circuit', country: 'Cina', city: 'Shanghai', lat: 31.3389, lng: 121.222, length: '5.451 km', turns: 16, speed: '345 km/h', speedKm: 345, record: '1:32.238 (M. Schumacher, 2004)', drs: 2, isStreet: false, isHistoric: false, isNight: false, isNew2026: false, laps: 56, svg: '<svg viewBox="0 0 100 100" class="w-28 h-28 stroke-cyan-400 fill-none stroke-[3]"><path d="M30 20 L70 20 Q85 50 50 80 L20 50 Z"/></svg>' },
+        { id: 'miami', name: 'Miami International Autodrome', country: 'Stati Uniti', city: 'Miami', lat: 25.9581, lng: -80.2389, length: '5.412 km', turns: 19, speed: '342 km/h', speedKm: 342, record: '1:29.708 (M. Verstappen, 2023)', drs: 3, isStreet: true, isHistoric: false, isNight: false, isNew2026: false, laps: 57, svg: '<svg viewBox="0 0 100 100" class="w-28 h-28 stroke-amber-400 fill-none stroke-[3]"><path d="M20 80 Q40 50 80 70 Q90 30 50 20 Z"/></svg>' },
+        { id: 'imola', name: 'Autodromo Internazionale Enzo e Dino Ferrari', country: 'Italia', city: 'Imola', lat: 44.3439, lng: 11.7167, length: '4.909 km', turns: 19, speed: '325 km/h', speedKm: 325, record: '1:15.484 (L. Hamilton, 2020)', drs: 1, isStreet: false, isHistoric: true, isNight: false, isNew2026: false, laps: 63, svg: '<svg viewBox="0 0 100 100" class="w-28 h-28 stroke-red-500 fill-none stroke-[3]"><path d="M25 75 L75 75 Q85 40 50 20 Q20 30 25 75 Z"/></svg>' },
+        { id: 'montreal', name: 'Circuit Gilles Villeneuve', country: 'Canada', city: 'Montreal', lat: 45.5081, lng: -73.5228, length: '4.361 km', turns: 14, speed: '345 km/h', speedKm: 345, record: '1:13.078 (V. Bottas, 2019)', drs: 2, isStreet: true, isHistoric: true, isNight: false, isNew2026: false, laps: 70, svg: '<svg viewBox="0 0 100 100" class="w-28 h-28 stroke-cyan-400 fill-none stroke-[3]"><path d="M20 50 L50 20 L80 50 L50 80 Z"/></svg>' },
+        { id: 'barcelona', name: 'Circuit de Barcelona-Catalunya', country: 'Spagna', city: 'Barcelona', lat: 41.57, lng: 2.2611, length: '4.657 km', turns: 14, speed: '335 km/h', speedKm: 335, record: '1:16.330 (M. Verstappen, 2023)', drs: 2, isStreet: false, isHistoric: true, isNight: false, isNew2026: false, laps: 66, svg: '<svg viewBox="0 0 100 100" class="w-28 h-28 stroke-red-500 fill-none stroke-[3]"><path d="M15 85 Q50 85 85 50 Q85 15 50 15 Z"/></svg>' },
+        { id: 'spielberg', name: 'Red Bull Ring', country: 'Austria', city: 'Spielberg', lat: 47.2197, lng: 14.7647, length: '4.318 km', turns: 10, speed: '320 km/h', speedKm: 320, record: '1:05.619 (C. Sainz, 2020)', drs: 3, isStreet: false, isHistoric: true, isNight: false, isNew2026: false, laps: 71, svg: '<svg viewBox="0 0 100 100" class="w-28 h-28 stroke-amber-400 fill-none stroke-[3]"><path d="M20 70 L80 70 L50 20 Z"/></svg>' },
+        { id: 'silverstone', name: 'Silverstone Circuit', country: 'Regno Unito', city: 'Silverstone', lat: 52.0786, lng: -1.0169, length: '5.891 km', turns: 18, speed: '340 km/h', speedKm: 340, record: '1:27.097 (M. Verstappen, 2020)', drs: 2, isStreet: false, isHistoric: true, isNight: false, isNew2026: false, laps: 52, svg: '<svg viewBox="0 0 100 100" class="w-28 h-28 stroke-cyan-400 fill-none stroke-[3]"><path d="M20 80 Q60 90 80 50 Q60 10 20 40 Z"/></svg>' },
+        { id: 'budapest', name: 'Hungaroring', country: 'Ungheria', city: 'Budapest', lat: 47.5789, lng: 19.2486, length: '4.381 km', turns: 14, speed: '315 km/h', speedKm: 315, record: '1:16.627 (L. Hamilton, 2020)', drs: 2, isStreet: false, isHistoric: true, isNight: false, isNew2026: false, laps: 70, svg: '<svg viewBox="0 0 100 100" class="w-28 h-28 stroke-red-500 fill-none stroke-[3]"><path d="M30 30 Q70 10 80 60 Q40 90 30 30 Z"/></svg>' },
+        { id: 'spa', name: 'Circuit de Spa-Francorchamps', country: 'Belgio', city: 'Stavelot', lat: 50.4372, lng: 5.9714, length: '7.004 km', turns: 19, speed: '355 km/h', speedKm: 355, record: '1:41.252 (L. Hamilton, 2020)', drs: 2, isStreet: false, isHistoric: true, isNight: false, isNew2026: false, laps: 44, svg: '<svg viewBox="0 0 100 100" class="w-28 h-28 stroke-cyan-400 fill-none stroke-[3]"><path d="M15 85 L50 25 L85 75 Z"/></svg>' },
+        { id: 'zandvoort', name: 'Circuit Zandvoort', country: 'Paesi Bassi', city: 'Zandvoort', lat: 52.3888, lng: 4.5409, length: '4.259 km', turns: 14, speed: '320 km/h', speedKm: 320, record: '1:11.097 (L. Hamilton, 2021)', drs: 2, isStreet: false, isHistoric: true, isNight: false, isNew2026: false, laps: 72, svg: '<svg viewBox="0 0 100 100" class="w-28 h-28 stroke-amber-400 fill-none stroke-[3]"><path d="M25 75 Q75 85 75 35 Q50 10 25 35 Z"/></svg>' },
+        { id: 'baku', name: 'Baku City Circuit', country: 'Azerbaijan', city: 'Baku', lat: 40.3725, lng: 49.8533, length: '6.003 km', turns: 20, speed: '365 km/h', speedKm: 365, record: '1:43.491 (C. Leclerc, 2019)', drs: 2, isStreet: true, isHistoric: false, isNight: false, isNew2026: false, laps: 51, svg: '<svg viewBox="0 0 100 100" class="w-28 h-28 stroke-red-500 fill-none stroke-[3]"><path d="M20 80 L80 80 L80 20 L20 20 Z"/></svg>' },
+        { id: 'singapore', name: 'Marina Bay Street Circuit', country: 'Singapore', city: 'Singapore', lat: 1.2914, lng: 103.864, length: '4.940 km', turns: 19, speed: '310 km/h', speedKm: 310, record: '1:35.785 (L. Hamilton, 2023)', drs: 3, isStreet: true, isHistoric: false, isNight: true, isNew2026: false, laps: 62, svg: '<svg viewBox="0 0 100 100" class="w-28 h-28 stroke-cyan-400 fill-none stroke-[3]"><path d="M30 70 L70 70 L70 30 L30 30 Z"/></svg>' },
+        { id: 'austin', name: 'Circuit of the Americas', country: 'Stati Uniti', city: 'Austin', lat: 30.1328, lng: -97.6411, length: '5.513 km', turns: 20, speed: '340 km/h', speedKm: 340, record: '1:36.169 (C. Leclerc, 2019)', drs: 2, isStreet: false, isHistoric: false, isNight: false, isNew2026: false, laps: 56, svg: '<svg viewBox="0 0 100 100" class="w-28 h-28 stroke-amber-400 fill-none stroke-[3]"><path d="M20 20 L80 20 L80 80 L20 80 Z"/></svg>' },
+        { id: 'mexico', name: 'Autódromo Hermanos Rodríguez', country: 'Messico', city: 'Città del Messico', lat: 19.4042, lng: -99.0907, length: '4.304 km', turns: 17, speed: '355 km/h', speedKm: 355, record: '1:17.774 (V. Bottas, 2021)', drs: 3, isStreet: false, isHistoric: false, isNight: false, isNew2026: false, laps: 71, svg: '<svg viewBox="0 0 100 100" class="w-28 h-28 stroke-red-500 fill-none stroke-[3]"><path d="M25 25 L75 25 L75 75 L25 75 Z"/></svg>' },
+        { id: 'interlagos', name: 'Autódromo José Carlos Pace', country: 'Brasile', city: 'San Paolo', lat: -23.7036, lng: -46.6997, length: '4.309 km', turns: 15, speed: '335 km/h', speedKm: 335, record: '1:10.540 (L. Hamilton, 2018)', drs: 2, isStreet: false, isHistoric: true, isNight: false, isNew2026: false, laps: 71, svg: '<svg viewBox="0 0 100 100" class="w-28 h-28 stroke-cyan-400 fill-none stroke-[3]"><path d="M15 50 L50 15 L85 50 L50 85 Z"/></svg>' },
+        { id: 'las_vegas', name: 'Las Vegas Strip Circuit', country: 'Stati Uniti', city: 'Las Vegas', lat: 36.1147, lng: -115.1728, length: '6.201 km', turns: 17, speed: '350 km/h', speedKm: 350, record: '1:35.490 (O. Piastri, 2023)', drs: 2, isStreet: true, isHistoric: false, isNight: true, isNew2026: false, laps: 50, svg: '<svg viewBox="0 0 100 100" class="w-28 h-28 stroke-amber-400 fill-none stroke-[3]"><path d="M20 40 L80 40 L80 60 L20 60 Z"/></svg>' },
+        { id: 'qatar', name: 'Lusail International Circuit', country: 'Qatar', city: 'Lusail', lat: 25.4888, lng: 51.4542, length: '5.419 km', turns: 16, speed: '338 km/h', speedKm: 338, record: '1:24.319 (M. Verstappen, 2023)', drs: 1, isStreet: false, isHistoric: false, isNight: true, isNew2026: false, laps: 57, svg: '<svg viewBox="0 0 100 100" class="w-28 h-28 stroke-red-500 fill-none stroke-[3]"><path d="M35 35 L65 35 L65 65 L35 65 Z"/></svg>' },
+        { id: 'abu_dhabi', name: 'Yas Marina Circuit', country: 'Emirati Arabi Uniti', city: 'Abu Dhabi', lat: 24.4672, lng: 54.6031, length: '5.281 km', turns: 16, speed: '340 km/h', speedKm: 340, record: '1:26.103 (M. Verstappen, 2021)', drs: 2, isStreet: false, isHistoric: false, isNight: true, isNew2026: false, laps: 58, svg: '<svg viewBox="0 0 100 100" class="w-28 h-28 stroke-cyan-400 fill-none stroke-[3]"><path d="M20 20 L50 80 L80 20 Z"/></svg>' }
+    ];
+
+    if (typeof circuitsData !== 'undefined') {
+        extraCircuits2026.forEach(circuit => {
+            if (!circuitsData.some(c => c.id === circuit.id)) {
+                circuitsData.push(circuit);
+            }
+        });
+        if (typeof populateDropdowns === 'function') populateDropdowns();
+        if (typeof activeData !== 'undefined' && typeof populateCalendar === 'function') {
+            activeData = [...circuitsData];
+            populateCalendar(activeData);
+            if (typeof myGlobe !== 'undefined' && myGlobe && typeof myGlobe.htmlElementsData === 'function') {
+                myGlobe.htmlElementsData(activeData);
+            }
+        }
+    }
     </script>
 </body>
 </html>
