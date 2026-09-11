@@ -170,6 +170,13 @@
         @keyframes drawTrack {
             to { stroke-dashoffset: 0; }
         }
+
+        .track-svg-img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 8px rgba(225, 6, 0, 0.4));
+        }
     </style>
 </head>
 <body class="relative bg-black text-white antialiased overflow-hidden select-none">
@@ -231,7 +238,7 @@
                 </button>
 
                 <button onclick="openModal('calendarModal')" class="bg-white/10 hover:bg-white/20 text-white font-semibold text-xs px-3 py-2 rounded-xl transition-all border border-white/10 flex items-center gap-1.5">
-                    <i class="fa-solid fa-calendar-days text-red-500"></i> (<span id="circuitCount">25</span>)
+                    <i class="fa-solid fa-calendar-days text-red-500"></i> (<span id="circuitCount">23</span>)
                 </button>
             </div>
         </div>
@@ -241,7 +248,7 @@
             <span class="text-gray-400 text-[10px] uppercase font-mono mr-1 shrink-0 flex items-center gap-1">
                 <i class="fa-solid fa-filter text-red-500"></i> Filtra:
             </span>
-            <button onclick="applyTagFilter('all', this)" class="tag-btn active px-3 py-1.5 rounded-xl border border-white/10 bg-white/5 text-gray-300">Tutti i GP (25)</button>
+            <button onclick="applyTagFilter('all', this)" class="tag-btn active px-3 py-1.5 rounded-xl border border-white/10 bg-white/5 text-gray-300">Tutti i GP (<span id="tagAllCount">23</span>)</button>
             <button onclick="applyTagFilter('street', this)" class="tag-btn px-3 py-1.5 rounded-xl border border-white/10 bg-white/5 text-gray-300"><i class="fa-solid fa-city mr-1 text-amber-400"></i> Cittadini</button>
             <button onclick="applyTagFilter('historic', this)" class="tag-btn px-3 py-1.5 rounded-xl border border-white/10 bg-white/5 text-gray-300"><i class="fa-solid fa-landmark mr-1 text-yellow-500"></i> Storici</button>
             <button onclick="applyTagFilter('fast', this)" class="tag-btn px-3 py-1.5 rounded-xl border border-white/10 bg-white/5 text-gray-300"><i class="fa-solid fa-bolt mr-1 text-emerald-400"></i> High Speed (&gt;340 km/h)</button>
@@ -317,7 +324,7 @@
             <div class="bg-black/90 rounded-2xl p-3 border border-white/10 flex flex-col items-center justify-center mb-3 relative min-h-[200px] shadow-inner overflow-hidden">
                 <div class="absolute top-2.5 left-2.5 bg-red-600/30 border border-red-500/40 text-[9px] font-mono text-red-400 px-2 py-0.5 rounded uppercase flex items-center gap-1.5 z-10 backdrop-blur-md">
                     <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></span> 
-                    <span id="renderModeLabel">LAYOUT VETTORIALE 1:1</span>
+                    <span id="renderModeLabel">LAYOUT VETTORIALE DETTAGLIATO</span>
                 </div>
                 
                 <button onclick="replayTrackAnimation()" class="absolute top-2.5 right-2.5 bg-white/10 hover:bg-white/20 text-white text-[10px] font-mono px-2.5 py-1 rounded-lg transition-all border border-white/10 z-10 flex items-center gap-1">
@@ -455,7 +462,7 @@
         <div class="glass-panel w-full max-w-2xl rounded-3xl p-5 sm:p-6 relative max-h-[85vh] flex flex-col border border-white/15">
             <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-3">
                 <h3 class="text-base sm:text-xl font-black italic flex items-center gap-2 font-orbitron text-white">
-                    <i class="fa-solid fa-flag-checkered text-red-500"></i> CALENDARIO F1 2026 (<span id="calendarTotalCount">25</span> TRACCIATI)
+                    <i class="fa-solid fa-flag-checkered text-red-500"></i> CALENDARIO F1 2026 (<span id="calendarTotalCount">23</span> TRACCIATI)
                 </h3>
                 <button onclick="closeModal('calendarModal')" class="text-gray-400 hover:text-white p-1"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
@@ -784,8 +791,107 @@
             } catch(e) { console.warn("Audio error:", e); }
         }
 
-        /* 3. DATASET COMPLETO 25 CIRCUITI CON SVG 1:1 CORRETTI */
+        /* 3. DATASET CIRCUITI CON INTEGRAZIONE URL SVG DETTAGLIATI */
         const circuitsData = [
+            {
+                id: 'austin', name: 'Circuit of the Americas', country: 'Stati Uniti', city: 'Austin',
+                category: 'Permanente Moderno', isStreet: false, isHistoric: false, isNight: false, isNew2026: false,
+                speedKm: 332, lat: 30.1328, lng: -97.6411, length: '5.513 km', laps: '56 Giri', turns: '20 (11S / 9D)', elevation: '41.0 m',
+                firstGP: '2012', drs: '2 Zone', record: '1:36.169', holder: 'C. Leclerc (2019)', speed: '332 km/h', speedLoc: 'Rettilineo Opposto',
+                fact: 'Ripida salita verso Curva 1 cieca e primo settore ispirato alle curve più belle di Silverstone e Suzuka.',
+                telemetry: { throttle: 63, downforce: 85, brakes: 75, tyres: 88, gears: '56' },
+                weather: { temp: '28°C', trackTemp: '40°C', wind: '12 km/h SE', rain: '10%' },
+                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/austin-1.svg',
+                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 55,185 L 290,185 L 330,120 L 250,55 L 155,85 L 100,40 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="100" cy="185" r="5" fill="#10B981"/></svg>`
+            },
+            {
+                id: 'baku', name: 'Baku City Circuit', country: 'Azerbaigian', city: 'Baku',
+                category: 'Cittadino Ad Estremi', isStreet: true, isHistoric: false, isNight: false, isNew2026: false,
+                speedKm: 355, lat: 40.3725, lng: 49.8533, length: '6.003 km', laps: '51 Giri', turns: '20 (8S / 12D)', elevation: '-24.0 m',
+                firstGP: '2016', drs: '2 Zone', record: '1:43.009', holder: 'C. Leclerc (2019)', speed: '355 km/h', speedLoc: 'Rettilineo Lungomare (2.2 km)',
+                fact: 'Combina il rettilineo più lungo dell\'anno con la strettissima sezione del Castello (7.6 metri di larghezza).',
+                telemetry: { throttle: 56, downforce: 35, brakes: 90, tyres: 60, gears: '64' },
+                weather: { temp: '25°C', trackTemp: '36°C', wind: '20 km/h NE', rain: '0%' },
+                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/baku-1.svg',
+                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 45,185 L 335,185 L 315,130 L 230,130 L 210,75 L 125,75 L 80,130 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="90" cy="185" r="5" fill="#10B981"/></svg>`
+            },
+            {
+                id: 'barcelona', name: 'Circuit de Barcelona-Catalunya', country: 'Spagna', city: 'Montmeló',
+                category: 'Permanente Aerodinamico', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
+                speedKm: 335, lat: 41.5700, lng: 2.2611, length: '4.657 km', laps: '66 Giri', turns: '14 (6S / 8D)', elevation: '29.0 m',
+                firstGP: '1991', drs: '2 Zone', record: '1:16.330', holder: 'M. Verstappen (2023)', speed: '335 km/h', speedLoc: 'Rettilineo Principale',
+                fact: 'Banco di prova per le vetture. Curva 3 in appoggio ad alta velocità ed equilibrata distribuzione dei carichi.',
+                telemetry: { throttle: 68, downforce: 85, brakes: 70, tyres: 90, gears: '44' },
+                weather: { temp: '25°C', trackTemp: '42°C', wind: '11 km/h E', rain: '5%' },
+                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/catalunya-6.svg',
+                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 45,185 L 305,185 L 345,140 L 280,75 L 185,105 L 120,50 L 65,110 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="85" cy="185" r="5" fill="#10B981"/></svg>`
+            },
+            {
+                id: 'hungaroring', name: 'Hungaroring', country: 'Ungheria', city: 'Mogyoród',
+                category: 'Guida Tecnica & Stretta', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
+                speedKm: 318, lat: 47.5830, lng: 19.2486, length: '4.381 km', laps: '70 Giri', turns: '14 (6S / 8D)', elevation: '34.7 m',
+                firstGP: '1986', drs: '2 Zone', record: '1:16.627', holder: 'L. Hamilton (2020)', speed: '318 km/h', speedLoc: 'Rettilineo Principale',
+                fact: 'Tracciato tortuoso soprannominato Monaco senza muri. Le qualifiche sono fondamentali.',
+                telemetry: { throttle: 55, downforce: 95, brakes: 80, tyres: 85, gears: '50' },
+                weather: { temp: '31°C', trackTemp: '48°C', wind: '6 km/h NE', rain: '10%' },
+                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/hungaroring-3.svg',
+                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 75,185 L 295,185 L 325,140 L 250,70 L 165,95 L 95,60 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="105" cy="185" r="5" fill="#10B981"/></svg>`
+            },
+            {
+                id: 'interlagos', name: 'Autódromo José Carlos Pace', country: 'Brasile', city: 'San Paolo',
+                category: 'Storico Antiorario', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
+                speedKm: 330, lat: -23.7036, lng: -46.6997, length: '4.309 km', laps: '71 Giri', turns: '15 (9S / 6D)', elevation: '43.0 m',
+                firstGP: '1973', drs: '2 Zone', record: '1:10.540', holder: 'V. Bottas (2018)', speed: '330 km/h', speedLoc: 'Reta Oposta',
+                fact: 'Famoso tracciato in senso antiorario con la leggendaria S do Senna e meteo altamente imprevedibile.',
+                telemetry: { throttle: 64, downforce: 80, brakes: 65, tyres: 75, gears: '42' },
+                weather: { temp: '24°C', trackTemp: '35°C', wind: '15 km/h S', rain: '45%' },
+                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/interlagos-2.svg',
+                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 60,190 L 270,190 L 320,135 L 240,60 L 140,85 L 90,45 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="100" cy="190" r="5" fill="#10B981"/></svg>`
+            },
+            {
+                id: 'lasvegas', name: 'Las Vegas Strip Circuit', country: 'Stati Uniti', city: 'Las Vegas',
+                category: 'Cittadino Notturno Veloce', isStreet: true, isHistoric: false, isNight: true, isNew2026: false,
+                speedKm: 350, lat: 36.1147, lng: -115.1728, length: '6.201 km', laps: '50 Giri', turns: '17 (11S / 6D)', elevation: '4.0 m',
+                firstGP: '2023', drs: '2 Zone', record: '1:35.490', holder: 'O. Piastri (2023)', speed: '350 km/h', speedLoc: 'Las Vegas Boulevard (1.9 km)',
+                fact: 'Sfreccia sulla Strip tra i casinò illuminati. Temperature molto basse e rettilineo lunghissimo.',
+                telemetry: { throttle: 78, downforce: 25, brakes: 88, tyres: 50, gears: '50' },
+                weather: { temp: '14°C', trackTemp: '16°C', wind: '7 km/h N', rain: '0%' },
+                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/las-vegas-1.svg',
+                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 50,180 L 340,180 L 320,120 L 220,120 L 200,60 L 90,60 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="90" cy="180" r="5" fill="#10B981"/></svg>`
+            },
+            {
+                id: 'lusail', name: 'Lusail International Circuit', country: 'Qatar', city: 'Lusail',
+                category: 'Permanente Notturno Veloce', isStreet: false, isHistoric: false, isNight: true, isNew2026: false,
+                speedKm: 338, lat: 25.4900, lng: 51.4542, length: '5.419 km', laps: '57 Giri', turns: '16 (6S / 10D)', elevation: '3.0 m',
+                firstGP: '2021', drs: '1 Zona', record: '1:24.319', holder: 'M. Verstappen (2023)', speed: '338 km/h', speedLoc: 'Rettilineo Principale (1 km)',
+                fact: 'Tracciato scorrevole con curve veloci in sequenza che sollecitano pesantemente le gomme fisicamente.',
+                telemetry: { throttle: 72, downforce: 85, brakes: 60, tyres: 95, gears: '48' },
+                weather: { temp: '26°C', trackTemp: '30°C', wind: '16 km/h E', rain: '0%' },
+                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/lusail-1.svg',
+                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 60,185 L 310,185 L 340,135 L 270,65 L 160,85 L 100,45 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="100" cy="185" r="5" fill="#10B981"/></svg>`
+            },
+            {
+                id: 'madrid', name: 'Circuito IFEMA Madrid', country: 'Spagna', city: 'Madrid',
+                category: 'Ibrido Citta / Fiera (Nuovo)', isStreet: true, isHistoric: false, isNight: false, isNew2026: true,
+                speedKm: 335, lat: 40.4670, lng: -3.6170, length: '5.470 km', laps: '55 Giri', turns: '20 (9S / 11D)', elevation: '10.0 m',
+                firstGP: '2026', drs: '3 Zone', record: 'In Attesa', holder: 'Novità 2026', speed: '335 km/h', speedLoc: 'Tratto Valdebebas',
+                fact: 'Nuovo tracciato cittadino attorno ad IFEMA e Valdebebas con una curva parabolica fortemente inclinata.',
+                telemetry: { throttle: 70, downforce: 75, brakes: 85, tyres: 70, gears: '52' },
+                weather: { temp: '26°C', trackTemp: '39°C', wind: '7 km/h N', rain: '0%' },
+                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/madring-1.svg',
+                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 45,175 L 165,175 L 205,205 L 325,205 L 355,150 L 300,105 L 345,50 L 225,50 L 175,95 L 95,50 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="85" cy="175" r="5" fill="#10B981"/></svg>`
+            },
+            {
+                id: 'singapore', name: 'Marina Bay Street Circuit', country: 'Singapore', city: 'Singapore',
+                category: 'Cittadino Notturno Estremo', isStreet: true, isHistoric: false, isNight: true, isNew2026: false,
+                speedKm: 310, lat: 1.2915, lng: 103.8640, length: '4.940 km', laps: '62 Giri', turns: '19 (10S / 9D)', elevation: '2.0 m',
+                firstGP: '2008', drs: '4 Zone', record: '1:35.867', holder: 'L. Hamilton (2023)', speed: '310 km/h', speedLoc: 'Raffles Boulevard',
+                fact: 'Gara notturna tra le più probanti per la salute fisica dei piloti con caldo umido soffocante.',
+                telemetry: { throttle: 48, downforce: 95, brakes: 92, tyres: 80, gears: '70' },
+                weather: { temp: '31°C', trackTemp: '37°C', wind: '5 km/h S', rain: '40%' },
+                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/marina-bay-4.svg',
+                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 55,175 L 250,175 L 290,205 L 350,150 L 300,85 L 185,65 L 100,110 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="90" cy="175" r="5" fill="#10B981"/></svg>`
+            },
             {
                 id: 'melbourne', name: 'Albert Park Circuit', country: 'Australia', city: 'Melbourne',
                 category: 'Semi-Cittadino Veloce', isStreet: true, isHistoric: true, isNight: false, isNew2026: false,
@@ -794,47 +900,19 @@
                 fact: 'Tracciato cittadino attorno al lago di Albert Park. Caratterizzato da chicane veloci e ben 4 zone DRS.',
                 telemetry: { throttle: 72, downforce: 75, brakes: 70, tyres: 60, gears: '52' },
                 weather: { temp: '22°C', trackTemp: '34°C', wind: '14 km/h S', rain: '10%' },
+                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/melbourne-2.svg',
                 svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 70,190 C 110,195 180,185 240,190 C 290,195 340,165 350,125 C 360,90 330,55 280,50 L 210,50 C 180,50 150,70 120,90 L 80,115 C 55,135 45,175 70,190 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="100" cy="191" r="5" fill="#10B981"/></svg>`
             },
             {
-                id: 'shanghai', name: 'Shanghai International Circuit', country: 'Cina', city: 'Shanghai',
-                category: 'Permanente Tecnico', isStreet: false, isHistoric: false, isNight: false, isNew2026: false,
-                speedKm: 340, lat: 31.3389, lng: 121.2200, length: '5.451 km', laps: '56 Giri', turns: '16 (9S / 7D)', elevation: '7.4 m',
-                firstGP: '2004', drs: '2 Zone', record: '1:32.238', holder: 'M. Schumacher (2004)', speed: '340 km/h', speedLoc: 'Back Straight (1.2 km)',
-                fact: 'Disegnato a forma del carattere cinese "Shang" (上). Noto per la Curva 1 a chiocciola e il lungo rettilineo.',
-                telemetry: { throttle: 65, downforce: 80, brakes: 75, tyres: 85, gears: '54' },
-                weather: { temp: '19°C', trackTemp: '28°C', wind: '8 km/h NE', rain: '20%' },
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 60,200 L 230,200 C 265,200 280,175 265,140 C 245,95 200,95 180,125 C 160,155 120,125 145,85 L 290,85 L 345,45 C 365,25 330,25 310,45 L 220,120 L 80,120 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="95" cy="200" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'suzuka', name: 'Suzuka Racing Course', country: 'Giappone', city: 'Suzuka',
-                category: 'Tecnico a Figura di 8', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
-                speedKm: 325, lat: 34.8431, lng: 136.5410, length: '5.807 km', laps: '53 Giri', turns: '18 (8S / 10D)', elevation: '40.4 m',
-                firstGP: '1987', drs: '1 Zona', record: '1:30.983', holder: 'L. Hamilton (2019)', speed: '325 km/h', speedLoc: 'Curva 130R',
-                fact: 'Unico circuito conformato ad "8" con un ponte di intersezione. Amato dai piloti per le Esse e la 130R.',
-                telemetry: { throttle: 70, downforce: 90, brakes: 55, tyres: 95, gears: '46' },
-                weather: { temp: '18°C', trackTemp: '26°C', wind: '15 km/h E', rain: '30%' },
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 55,195 C 90,195 105,140 145,115 C 170,95 210,95 235,120 C 260,145 300,195 340,195 C 375,195 380,140 345,105 L 305,70 L 240,40 L 145,40 C 95,40 45,95 55,195 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="85" cy="195" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'sakhir', name: 'Bahrain International Circuit', country: 'Bahrein', city: 'Sakhir',
-                category: 'Permanente Notturno', isStreet: false, isHistoric: false, isNight: true, isNew2026: false,
-                speedKm: 335, lat: 26.0325, lng: 50.5106, length: '5.412 km', laps: '57 Giri', turns: '15 (6S / 9D)', elevation: '6.2 m',
-                firstGP: '2004', drs: '3 Zone', record: '1:31.447', holder: 'P. de la Rosa (2005)', speed: '335 km/h', speedLoc: 'Rettilineo Principale',
-                fact: 'Disputato sotto i riflettori nel deserto. Offre altissimo degrado delle gomme e frenate violente.',
-                telemetry: { throttle: 64, downforce: 70, brakes: 88, tyres: 90, gears: '56' },
-                weather: { temp: '27°C', trackTemp: '32°C', wind: '18 km/h NO', rain: '0%' },
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 50,195 L 270,195 L 290,160 L 225,125 L 335,100 L 350,55 L 245,35 L 180,70 L 135,45 L 75,90 L 110,135 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="90" cy="195" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'jeddah', name: 'Jeddah Corniche Circuit', country: 'Arabia Saudita', city: 'Jeddah',
-                category: 'Cittadino Super Veloce', isStreet: true, isHistoric: false, isNight: true, isNew2026: false,
-                speedKm: 348, lat: 21.6319, lng: 39.1044, length: '6.174 km', laps: '50 Giri', turns: '27 (16S / 11D)', elevation: '1.5 m',
-                firstGP: '2021', drs: '3 Zone', record: '1:30.734', holder: 'L. Hamilton (2021)', speed: '348 km/h', speedLoc: 'Rettilineo DRS 3',
-                fact: 'Il circuito cittadino più veloce del calendario con media oltre 250 km/h radente ai muretti.',
-                telemetry: { throttle: 79, downforce: 45, brakes: 65, tyres: 70, gears: '62' },
-                weather: { temp: '29°C', trackTemp: '35°C', wind: '12 km/h N', rain: '0%' },
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 160,25 L 240,25 C 260,25 270,45 250,70 L 210,120 L 250,170 C 270,200 250,225 220,225 L 180,225 C 150,225 130,200 150,170 L 190,120 L 150,70 C 130,45 140,25 160,25 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="200" cy="225" r="5" fill="#10B981"/></svg>`
+                id: 'mexico', name: 'Autódromo Hermanos Rodríguez', country: 'Messico', city: 'Città del Messico',
+                category: 'Alta Quota Tecnico', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
+                speedKm: 352, lat: 19.4042, lng: -99.0907, length: '4.304 km', laps: '71 Giri', turns: '17 (7S / 10D)', elevation: '2229.0 m',
+                firstGP: '1963', drs: '3 Zone', record: '1:17.774', holder: 'V. Bottas (2021)', speed: '352 km/h', speedLoc: 'Rettilineo Principale',
+                fact: 'Situato a 2.200m d\'altitudine con aria rarefatta. Passaggio unico nello stadio del Foro Sol.',
+                telemetry: { throttle: 60, downforce: 100, brakes: 85, tyres: 55, gears: '48' },
+                weather: { temp: '22°C', trackTemp: '42°C', wind: '9 km/h NE', rain: '15%' },
+                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/mexico-city-3.svg',
+                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 50,180 L 330,180 L 350,135 L 260,135 L 240,75 L 140,75 L 90,125 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="90" cy="180" r="5" fill="#10B981"/></svg>`
             },
             {
                 id: 'miami', name: 'Miami International Autodrome', country: 'Stati Uniti', city: 'Miami',
@@ -844,17 +922,8 @@
                 fact: 'Disegnato attorno all\'Hard Rock Stadium. Ha una chicane lentissima e lunghi allunghi ad alta velocità.',
                 telemetry: { throttle: 68, downforce: 65, brakes: 80, tyres: 75, gears: '58' },
                 weather: { temp: '30°C', trackTemp: '45°C', wind: '16 km/h SE', rain: '25%' },
+                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/miami-1.svg',
                 svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 45,170 L 330,170 L 360,125 L 290,75 L 185,95 L 120,50 L 65,85 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="85" cy="170" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'imola', name: 'Autodromo Enzo e Dino Ferrari', country: 'Italia', city: 'Imola',
-                category: 'Storico Tecnico', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
-                speedKm: 328, lat: 44.3439, lng: 11.7167, length: '4.909 km', laps: '63 Giri', turns: '19 (10S / 9D)', elevation: '35.1 m',
-                firstGP: '1980', drs: '1 Zona', record: '1:15.484', holder: 'L. Hamilton (2020)', speed: '328 km/h', speedLoc: 'Rettilineo Rivazza-Tamburello',
-                fact: 'Pista old-school in senso antiorario con pochissima via di fuga. Celebre per le Acque Minerali e la Piratella.',
-                telemetry: { throttle: 71, downforce: 85, brakes: 75, tyres: 80, gears: '48' },
-                weather: { temp: '21°C', trackTemp: '30°C', wind: '10 km/h E', rain: '15%' },
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 55,185 L 250,185 L 305,140 L 335,75 L 230,50 L 155,95 L 90,85 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="90" cy="185" r="5" fill="#10B981"/></svg>`
             },
             {
                 id: 'monaco', name: 'Circuit de Monaco', country: 'Monaco', city: 'Monte Carlo',
@@ -864,6 +933,7 @@
                 fact: 'Il circuito più leggendario ed esigente per la concentrazione. Margine zero, Loews e iconico tunnel.',
                 telemetry: { throttle: 45, downforce: 100, brakes: 95, tyres: 30, gears: '50' },
                 weather: { temp: '23°C', trackTemp: '36°C', wind: '9 km/h S', rain: '10%' },
+                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/monaco-6.svg',
                 svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 110,195 L 250,195 C 285,195 305,170 280,135 L 225,105 L 290,60 L 225,35 L 140,70 L 75,125 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="130" cy="195" r="5" fill="#10B981"/></svg>`
             },
             {
@@ -874,77 +944,8 @@
                 fact: 'Sull\'Isola Notre-Dame. Noto per il famoso "Muro dei Campioni" e staccate violentissime.',
                 telemetry: { throttle: 60, downforce: 40, brakes: 95, tyres: 65, gears: '56' },
                 weather: { temp: '20°C', trackTemp: '31°C', wind: '13 km/h SO', rain: '20%' },
+                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/montreal-6.svg',
                 svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 50,175 L 330,175 L 350,130 L 290,85 L 120,85 L 75,130 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="95" cy="175" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'barcelona', name: 'Circuit de Barcelona-Catalunya', country: 'Spagna', city: 'Montmeló',
-                category: 'Permanente Aerodinamico', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
-                speedKm: 335, lat: 41.5700, lng: 2.2611, length: '4.657 km', laps: '66 Giri', turns: '14 (6S / 8D)', elevation: '29.0 m',
-                firstGP: '1991', drs: '2 Zone', record: '1:16.330', holder: 'M. Verstappen (2023)', speed: '335 km/h', speedLoc: 'Rettilineo Principale',
-                fact: 'Banco di prova per le vetture. Curva 3 in appoggio ad alta velocità ed equilibrata distribuzione dei carichi.',
-                telemetry: { throttle: 68, downforce: 85, brakes: 70, tyres: 90, gears: '44' },
-                weather: { temp: '25°C', trackTemp: '42°C', wind: '11 km/h E', rain: '5%' },
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 45,185 L 305,185 L 345,140 L 280,75 L 185,105 L 120,50 L 65,110 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="85" cy="185" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'madrid', name: 'Circuito IFEMA Madrid', country: 'Spagna', city: 'Madrid',
-                category: 'Ibrido Citta / Fiera (Nuovo)', isStreet: true, isHistoric: false, isNight: false, isNew2026: true,
-                speedKm: 335, lat: 40.4670, lng: -3.6170, length: '5.470 km', laps: '55 Giri', turns: '20 (9S / 11D)', elevation: '10.0 m',
-                firstGP: '2026', drs: '3 Zone', record: 'In Attesa', holder: 'Novità 2026', speed: '335 km/h', speedLoc: 'Tratto Valdebebas',
-                fact: 'Nuovo tracciato cittadino attorno ad IFEMA e Valdebebas con una curva parabolica fortemente inclinata.',
-                telemetry: { throttle: 70, downforce: 75, brakes: 85, tyres: 70, gears: '52' },
-                weather: { temp: '26°C', trackTemp: '39°C', wind: '7 km/h N', rain: '0%' },
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 45,175 L 165,175 L 205,205 L 325,205 L 355,150 L 300,105 L 345,50 L 225,50 L 175,95 L 95,50 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="85" cy="175" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'redbullring', name: 'Red Bull Ring', country: 'Austria', city: 'Spielberg',
-                category: 'Storico Collinare Veloce', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
-                speedKm: 328, lat: 47.2197, lng: 14.7647, length: '4.318 km', laps: '71 Giri', turns: '10 (3S / 7D)', elevation: '63.5 m',
-                firstGP: '1970', drs: '3 Zone', record: '1:05.619', holder: 'C. Sainz (2020)', speed: '328 km/h', speedLoc: 'Salita Curva 3',
-                fact: 'Giro più breve della stagione. Salite ripide, 3 zone DRS e molte opportunità di sorpasso.',
-                telemetry: { throttle: 77, downforce: 60, brakes: 80, tyres: 65, gears: '36' },
-                weather: { temp: '20°C', trackTemp: '32°C', wind: '11 km/h SO', rain: '25%' },
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 90,185 L 310,185 L 335,120 L 205,50 L 115,105 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="115" cy="185" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'silverstone', name: 'Silverstone Circuit', country: 'Regno Unito', city: 'Silverstone',
-                category: 'Tempio delle Curve Veloci', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
-                speedKm: 340, lat: 52.0786, lng: -1.0169, length: '5.891 km', laps: '52 Giri', turns: '18 (8S / 10D)', elevation: '11.3 m',
-                firstGP: '1950', drs: '2 Zone', record: '1:27.097', holder: 'M. Verstappen (2020)', speed: '340 km/h', speedLoc: 'Hangar Straight',
-                fact: 'Casa del primo GP F1 della storia. Sequenza leggendaria Maggotts-Becketts-Chapel.',
-                telemetry: { throttle: 78, downforce: 85, brakes: 50, tyres: 95, gears: '42' },
-                weather: { temp: '17°C', trackTemp: '24°C', wind: '22 km/h O', rain: '40%' },
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 55,175 L 205,175 L 270,195 L 350,140 L 290,60 L 205,85 L 105,40 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="95" cy="175" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'hungaroring', name: 'Hungaroring', country: 'Ungheria', city: 'Mogyoród',
-                category: 'Guida Tecnica & Stretta', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
-                speedKm: 318, lat: 47.5830, lng: 19.2486, length: '4.381 km', laps: '70 Giri', turns: '14 (6S / 8D)', elevation: '34.7 m',
-                firstGP: '1986', drs: '2 Zone', record: '1:16.627', holder: 'L. Hamilton (2020)', speed: '318 km/h', speedLoc: 'Rettilineo Principale',
-                fact: 'Tracciato tortuoso soprannominato Monaco senza muri. Le qualifiche sono fondamentali.',
-                telemetry: { throttle: 55, downforce: 95, brakes: 80, tyres: 85, gears: '50' },
-                weather: { temp: '31°C', trackTemp: '48°C', wind: '6 km/h NE', rain: '10%' },
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 75,185 L 295,185 L 325,140 L 250,70 L 165,95 L 95,60 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="105" cy="185" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'spa', name: 'Circuit de Spa-Francorchamps', country: 'Belgio', city: 'Stavelot',
-                category: 'Storico ad Alto Dislivello', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
-                speedKm: 345, lat: 50.4372, lng: 5.9714, length: '7.004 km', laps: '44 Giri', turns: '19 (9S / 10D)', elevation: '102.2 m',
-                firstGP: '1950', drs: '2 Zone', record: '1:46.286', holder: 'V. Bottas (2018)', speed: '345 km/h', speedLoc: 'Rettilineo Kemmel',
-                fact: 'Il circuito più lungo del calendario nelle Ardenne. Famosa compressione Eau Rouge-Raidillon.',
-                telemetry: { throttle: 70, downforce: 60, brakes: 65, tyres: 90, gears: '48' },
-                weather: { temp: '16°C', trackTemp: '22°C', wind: '14 km/h NO', rain: '60%' },
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 45,180 L 105,180 L 115,200 L 135,160 L 240,155 L 280,185 L 310,185 L 330,160 L 370,120 C 390,90 360,45 320,35 L 270,35 L 240,65 L 210,25 L 155,25 L 115,70 L 75,70 L 45,115 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="75" cy="180" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'zandvoort', name: 'Circuit Zandvoort', country: 'Olanda', city: 'Zandvoort',
-                category: 'Storico con Paraboliche', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
-                speedKm: 315, lat: 52.3888, lng: 4.5409, length: '4.259 km', laps: '72 Giri', turns: '14 (4S / 10D)', elevation: '15.0 m',
-                firstGP: '1952', drs: '2 Zone', record: '1:11.097', holder: 'L. Hamilton (2021)', speed: '315 km/h', speedLoc: 'Rettilineo dei Box',
-                fact: 'Tra le dune del Mare del Nord con spettacolari curve paraboliche inclinate fino a 18°.',
-                telemetry: { throttle: 65, downforce: 90, brakes: 60, tyres: 88, gears: '40' },
-                weather: { temp: '18°C', trackTemp: '25°C', wind: '25 km/h N', rain: '35%' },
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 75,175 L 275,175 C 315,175 335,140 315,95 L 230,75 L 155,120 L 90,55 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="105" cy="175" r="5" fill="#10B981"/></svg>`
             },
             {
                 id: 'monza', name: 'Autodromo Nazionale Monza', country: 'Italia', city: 'Monza',
@@ -954,148 +955,169 @@
                 fact: 'Tracciato storico ad altissima velocità. Casa della Ferrari, della Prima Variante e della Parabolica.',
                 telemetry: { throttle: 83, downforce: 20, brakes: 80, tyres: 40, gears: '40' },
                 weather: { temp: '24°C', trackTemp: '38°C', wind: '8 km/h SE', rain: '10%' },
+                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/monza-7.svg',
                 svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 55,195 L 270,195 L 272,180 L 285,180 L 288,195 L 340,195 C 385,195 390,145 350,110 L 315,80 C 305,72 310,55 325,55 C 345,55 350,30 330,20 L 290,20 C 270,20 260,45 250,60 L 225,105 C 220,112 205,115 190,108 L 115,70 C 95,60 75,75 60,98 L 35,140 C 25,160 35,195 55,195 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="160" cy="195" r="5" fill="#10B981"/></svg>`
             },
             {
-                id: 'baku', name: 'Baku City Circuit', country: 'Azerbaigian', city: 'Baku',
-                category: 'Cittadino Ad Estremi', isStreet: true, isHistoric: false, isNight: false, isNew2026: false,
-                speedKm: 355, lat: 40.3725, lng: 49.8533, length: '6.003 km', laps: '51 Giri', turns: '20 (8S / 12D)', elevation: '-24.0 m',
-                firstGP: '2016', drs: '2 Zone', record: '1:43.009', holder: 'C. Leclerc (2019)', speed: '355 km/h', speedLoc: 'Rettilineo Lungomare (2.2 km)',
-                fact: 'Combina il rettilineo più lungo dell\'anno con la strettissima sezione del Castello (7.6 metri di larghezza).',
-                telemetry: { throttle: 56, downforce: 35, brakes: 90, tyres: 60, gears: '64' },
-                weather: { temp: '25°C', trackTemp: '36°C', wind: '20 km/h NE', rain: '0%' },
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 45,185 L 335,185 L 315,130 L 230,130 L 210,75 L 125,75 L 80,130 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="90" cy="185" r="5" fill="#10B981"/></svg>`
+                id: 'sepang', name: 'Sepang International Circuit', country: 'Malesia', city: 'Kuala Lumpur',
+                category: 'Permanente Tecnico Classico', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
+                speedKm: 332, lat: 2.7606, lng: 101.7380, length: '5.543 km', laps: '56 Giri', turns: '15 (5S / 10D)', elevation: '11.0 m',
+                firstGP: '1999', drs: '2 Zone', record: '1:34.080', holder: 'S. Vettel (2017)', speed: '332 km/h', speedLoc: 'Rettilineo Principale',
+                fact: 'Capolavoro di Hermann Tilke con rettilinei paralleli contrapposti e curve ad ampio raggio.',
+                telemetry: { throttle: 65, downforce: 80, brakes: 75, tyres: 90, gears: '52' },
+                weather: { temp: '32°C', trackTemp: '44°C', wind: '7 km/h SW', rain: '50%' },
+                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/sepang-1.svg',
+                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 50,185 L 310,185 L 340,135 L 260,65 L 160,85 L 90,45 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="90" cy="185" r="5" fill="#10B981"/></svg>`
             },
             {
-                id: 'singapore', name: 'Marina Bay Street Circuit', country: 'Singapore', city: 'Singapore',
-                category: 'Cittadino Notturno Estremo', isStreet: true, isHistoric: false, isNight: true, isNew2026: false,
-                speedKm: 310, lat: 1.2915, lng: 103.8640, length: '4.940 km', laps: '62 Giri', turns: '19 (10S / 9D)', elevation: '2.0 m',
-                firstGP: '2008', drs: '4 Zone', record: '1:35.867', holder: 'L. Hamilton (2023)', speed: '310 km/h', speedLoc: 'Raffles Boulevard',
-                fact: 'Gara notturna tra le più probanti per la salute fisica dei piloti con caldo umido soffocante.',
-                telemetry: { throttle: 48, downforce: 95, brakes: 92, tyres: 80, gears: '70' },
-                weather: { temp: '31°C', trackTemp: '37°C', wind: '5 km/h S', rain: '40%' },
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 55,175 L 250,175 L 290,205 L 350,150 L 300,85 L 185,65 L 100,110 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="90" cy="175" r="5" fill="#10B981"/></svg>`
+                id: 'shanghai', name: 'Shanghai International Circuit', country: 'Cina', city: 'Shanghai',
+                category: 'Permanente Tecnico', isStreet: false, isHistoric: false, isNight: false, isNew2026: false,
+                speedKm: 340, lat: 31.3389, lng: 121.2200, length: '5.451 km', laps: '56 Giri', turns: '16 (9S / 7D)', elevation: '7.4 m',
+                firstGP: '2004', drs: '2 Zone', record: '1:32.238', holder: 'M. Schumacher (2004)', speed: '340 km/h', speedLoc: 'Back Straight (1.2 km)',
+                fact: 'Disegnato a forma del carattere cinese "Shang" (上). Noto per la Curva 1 a chiocciola e il lungo rettilineo.',
+                telemetry: { throttle: 65, downforce: 80, brakes: 75, tyres: 85, gears: '54' },
+                weather: { temp: '19°C', trackTemp: '28°C', wind: '8 km/h NE', rain: '20%' },
+                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/shanghai-1.svg',
+                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 60,200 L 230,200 C 265,200 280,175 265,140 C 245,95 200,95 180,125 C 160,155 120,125 145,85 L 290,85 L 345,45 C 365,25 330,25 310,45 L 220,120 L 80,120 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="95" cy="200" r="5" fill="#10B981"/></svg>`
             },
             {
-                id: 'austin', name: 'Circuit of the Americas', country: 'Stati Uniti', city: 'Austin',
-                category: 'Permanente Moderno', isStreet: false, isHistoric: false, isNight: false, isNew2026: false,
-                speedKm: 332, lat: 30.1328, lng: -97.6411, length: '5.513 km', laps: '56 Giri', turns: '20 (11S / 9D)', elevation: '41.0 m',
-                firstGP: '2012', drs: '2 Zone', record: '1:36.169', holder: 'C. Leclerc (2019)', speed: '332 km/h', speedLoc: 'Rettilineo Opposto',
-                fact: 'Ripida salita verso Curva 1 cieca e primo settore ispirato alle curve più belle di Silverstone e Suzuka.',
-                telemetry: { throttle: 63, downforce: 85, brakes: 75, tyres: 88, gears: '56' },
-                weather: { temp: '28°C', trackTemp: '40°C', wind: '12 km/h SE', rain: '10%' },
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 55,185 L 290,185 L 330,120 L 250,55 L 155,85 L 100,40 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="100" cy="185" r="5" fill="#10B981"/></svg>`
+                id: 'silverstone', name: 'Silverstone Circuit', country: 'Regno Unito', city: 'Silverstone',
+                category: 'Tempio delle Curve Veloci', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
+                speedKm: 340, lat: 52.0786, lng: -1.0169, length: '5.891 km', laps: '52 Giri', turns: '18 (8S / 10D)', elevation: '11.3 m',
+                firstGP: '1950', drs: '2 Zone', record: '1:27.097', holder: 'M. Verstappen (2020)', speed: '340 km/h', speedLoc: 'Hangar Straight',
+                fact: 'Casa del primo GP F1 della storia. Sequenza leggendaria Maggotts-Becketts-Chapel.',
+                telemetry: { throttle: 78, downforce: 85, brakes: 50, tyres: 95, gears: '42' },
+                weather: { temp: '17°C', trackTemp: '24°C', wind: '22 km/h O', rain: '40%' },
+                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/silverstone-8.svg',
+                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 55,175 L 205,175 L 270,195 L 350,140 L 290,60 L 205,85 L 105,40 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="95" cy="175" r="5" fill="#10B981"/></svg>`
             },
             {
-                id: 'mexico', name: 'Autódromo Hermanos Rodríguez', country: 'Messico', city: 'Città del Messico',
-                category: 'Alta Quota Tecnico', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
-                speedKm: 352, lat: 19.4042, lng: -99.0907, length: '4.304 km', laps: '71 Giri', turns: '17 (7S / 10D)', elevation: '2285.0 m',
-                firstGP: '1963', drs: '3 Zone', record: '1:17.774', holder: 'V. Bottas (2021)', speed: '352 km/h', speedLoc: 'Rettilineo dei Box (2285m)',
-                fact: 'Situato a oltre 2.200m di altitudine: l\'aria rada riduce il carico e permette velocità elevate.',
-                telemetry: { throttle: 52, downforce: 100, brakes: 85, tyres: 50, gears: '46' },
-                weather: { temp: '22°C', trackTemp: '42°C', wind: '9 km/h NE', rain: '15%' },
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 45,175 L 320,175 L 340,130 L 280,75 L 155,75 L 90,120 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="90" cy="175" r="5" fill="#10B981"/></svg>`
+                id: 'spa', name: 'Circuit de Spa-Francorchamps', country: 'Belgio', city: 'Stavelot',
+                category: 'Storico ad Alto Dislivello', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
+                speedKm: 345, lat: 50.4372, lng: 5.9714, length: '7.004 km', laps: '44 Giri', turns: '19 (9S / 10D)', elevation: '102.2 m',
+                firstGP: '1950', drs: '2 Zone', record: '1:46.286', holder: 'V. Bottas (2018)', speed: '345 km/h', speedLoc: 'Rettilineo Kemmel',
+                fact: 'Il circuito più lungo del calendario nelle Ardenne. Famosa compressione Eau Rouge-Raidillon.',
+                telemetry: { throttle: 70, downforce: 60, brakes: 65, tyres: 90, gears: '48' },
+                weather: { temp: '16°C', trackTemp: '22°C', wind: '14 km/h NO', rain: '60%' },
+                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/spa-francorchamps-4.svg',
+                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 45,180 L 105,180 L 115,200 L 135,160 L 240,155 L 280,185 L 310,185 L 330,160 L 370,120 C 390,90 360,45 320,35 L 270,35 L 240,65 L 210,25 L 155,25 L 115,70 L 75,70 L 45,115 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="75" cy="180" r="5" fill="#10B981"/></svg>`
             },
             {
-                id: 'interlagos', name: 'Autódromo José Carlos Pace', country: 'Brasile', city: 'San Paolo',
-                category: 'Storico Antiorario', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
-                speedKm: 330, lat: -23.7036, lng: -46.6997, length: '4.309 km', laps: '71 Giri', turns: '15 (9S / 6D)', elevation: '43.0 m',
-                firstGP: '1973', drs: '2 Zone', record: '1:10.540', holder: 'V. Bottas (2018)', speed: '330 km/h', speedLoc: 'Rettilineo Subida do Box',
-                fact: 'Tracciato iconico in senso antiorario. S do Senna, Junção e gare spesso caratterizzate da pioggia improvvisa.',
-                telemetry: { throttle: 65, downforce: 80, brakes: 70, tyres: 75, gears: '42' },
-                weather: { temp: '24°C', trackTemp: '35°C', wind: '15 km/h S', rain: '45%' },
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 85,185 L 280,185 L 330,130 L 260,55 L 155,85 L 110,40 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="110" cy="185" r="5" fill="#10B981"/></svg>`
+                id: 'redbullring', name: 'Red Bull Ring', country: 'Austria', city: 'Spielberg',
+                category: 'Storico Collinare Veloce', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
+                speedKm: 328, lat: 47.2197, lng: 14.7647, length: '4.318 km', laps: '71 Giri', turns: '10 (3S / 7D)', elevation: '63.5 m',
+                firstGP: '1970', drs: '3 Zone', record: '1:05.619', holder: 'C. Sainz (2020)', speed: '328 km/h', speedLoc: 'Salita Curva 3',
+                fact: 'Giro più breve della stagione. Salite ripide, 3 zone DRS e molte opportunità di sorpasso.',
+                telemetry: { throttle: 77, downforce: 60, brakes: 80, tyres: 65, gears: '36' },
+                weather: { temp: '20°C', trackTemp: '32°C', wind: '11 km/h SO', rain: '25%' },
+                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/spielberg-3.svg',
+                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 90,185 L 310,185 L 335,120 L 205,50 L 115,105 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="115" cy="185" r="5" fill="#10B981"/></svg>`
             },
             {
-                id: 'lasvegas', name: 'Las Vegas Strip Circuit', country: 'Stati Uniti', city: 'Las Vegas',
-                category: 'Cittadino Notturno Veloce', isStreet: true, isHistoric: false, isNight: true, isNew2026: false,
-                speedKm: 350, lat: 36.1147, lng: -115.1728, length: '6.201 km', laps: '50 Giri', turns: '17 (11S / 6D)', elevation: '0.0 m',
-                firstGP: '2023', drs: '2 Zone', record: '1:35.490', holder: 'O. Piastri (2023)', speed: '350 km/h', speedLoc: 'The Strip Straight (1.9 km)',
-                fact: 'Sfreccia lungo la celebre Strip di Las Vegas con temperature notturne rigide e lunghi allunghi.',
-                telemetry: { throttle: 78, downforce: 25, brakes: 88, tyres: 45, gears: '50' },
-                weather: { temp: '14°C', trackTemp: '18°C', wind: '8 km/h O', rain: '0%' },
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 55,195 L 335,195 L 355,140 L 290,75 L 145,75 L 80,130 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="100" cy="195" r="5" fill="#10B981"/></svg>`
+                id: 'suzuka', name: 'Suzuka Racing Course', country: 'Giappone', city: 'Suzuka',
+                category: 'Tecnico a Figura di 8', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
+                speedKm: 325, lat: 34.8431, lng: 136.5410, length: '5.807 km', laps: '53 Giri', turns: '18 (8S / 10D)', elevation: '40.4 m',
+                firstGP: '1987', drs: '1 Zona', record: '1:30.983', holder: 'L. Hamilton (2019)', speed: '325 km/h', speedLoc: 'Curva 130R',
+                fact: 'Unico circuito conformato ad "8" con un ponte di intersezione. Amato dai piloti per le Esse e la 130R.',
+                telemetry: { throttle: 70, downforce: 90, brakes: 55, tyres: 95, gears: '46' },
+                weather: { temp: '18°C', trackTemp: '26°C', wind: '15 km/h E', rain: '30%' },
+                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/suzuka-2.svg',
+                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 55,195 C 90,195 105,140 145,115 C 170,95 210,95 235,120 C 260,145 300,195 340,195 C 375,195 380,140 345,105 L 305,70 L 240,40 L 145,40 C 95,40 45,95 55,195 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="85" cy="195" r="5" fill="#10B981"/></svg>`
             },
             {
-                id: 'qatar', name: 'Lusail International Circuit', country: 'Qatar', city: 'Lusail',
-                category: 'Permanente Notturno Veloce', isStreet: false, isHistoric: false, isNight: true, isNew2026: false,
-                speedKm: 338, lat: 25.4900, lng: 51.4542, length: '5.419 km', laps: '57 Giri', turns: '16 (6S / 10D)', elevation: '0.0 m',
-                firstGP: '2021', drs: '1 Zona', record: '1:24.319', holder: 'M. Verstappen (2023)', speed: '338 km/h', speedLoc: 'Rettilineo Principale (1 km)',
-                fact: 'Nato per la MotoGP, presenta curve veloci a medio-alto raggio che sollecitano al massimo i pneumatici.',
-                telemetry: { throttle: 73, downforce: 85, brakes: 60, tyres: 98, gears: '48' },
-                weather: { temp: '26°C', trackTemp: '31°C', wind: '14 km/h N', rain: '0%' },
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 65,185 L 300,185 L 340,130 L 270,65 L 165,85 L 100,50 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="100" cy="185" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'abudhabi', name: 'Yas Marina Circuit', country: 'Emirati Arabi Uniti', city: 'Abu Dhabi',
-                category: 'Permanente Notturno Finale', isStreet: false, isHistoric: false, isNight: true, isNew2026: false,
-                speedKm: 332, lat: 24.4672, lng: 54.6031, length: '5.281 km', laps: '58 Giri', turns: '16 (9S / 7D)', elevation: '3.0 m',
-                firstGP: '2009', drs: '2 Zone', record: '1:26.103', holder: 'M. Verstappen (2021)', speed: '332 km/h', speedLoc: 'Rettilineo Tra Curva 5 e 6',
-                fact: 'Gara di chiusura del Mondiale al tramonto. Layout con la spettacolare curva parabolica al settore 1.',
-                telemetry: { throttle: 66, downforce: 70, brakes: 80, tyres: 70, gears: '58' },
+                id: 'yasmarina', name: 'Yas Marina Circuit', country: 'Emirati Arabi Uniti', city: 'Abu Dhabi',
+                category: 'Permanente Notturno Moderno', isStreet: false, isHistoric: false, isNight: true, isNew2026: false,
+                speedKm: 335, lat: 24.4672, lng: 54.6031, length: '5.281 km', laps: '58 Giri', turns: '16 (9S / 7D)', elevation: '3.0 m',
+                firstGP: '2009', drs: '2 Zone', record: '1:26.103', holder: 'M. Verstappen (2021)', speed: '335 km/h', speedLoc: 'Rettilineo Tra Curva 5 e 6',
+                fact: 'Sede finale del campionato del mondo. Spettacolare illuminazione al tramonto attorno alla marina.',
+                telemetry: { throttle: 64, downforce: 75, brakes: 82, tyres: 70, gears: '56' },
                 weather: { temp: '28°C', trackTemp: '33°C', wind: '10 km/h NO', rain: '0%' },
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 75,195 L 295,195 L 335,150 L 280,75 L 165,85 L 100,60 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="110" cy="195" r="5" fill="#10B981"/></svg>`
+                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/yas-marina-2.svg',
+                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 60,185 L 290,185 L 320,135 L 250,65 L 150,85 L 90,45 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="100" cy="185" r="5" fill="#10B981"/></svg>`
+            },
+            {
+                id: 'zandvoort', name: 'Circuit Zandvoort', country: 'Olanda', city: 'Zandvoort',
+                category: 'Storico con Paraboliche', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
+                speedKm: 315, lat: 52.3888, lng: 4.5409, length: '4.259 km', laps: '72 Giri', turns: '14 (4S / 10D)', elevation: '15.0 m',
+                firstGP: '1952', drs: '2 Zone', record: '1:11.097', holder: 'L. Hamilton (2021)', speed: '315 km/h', speedLoc: 'Rettilineo dei Box',
+                fact: 'Tra le dune del Mare del Nord con spettacolari curve paraboliche inclinate fino a 18°.',
+                telemetry: { throttle: 65, downforce: 90, brakes: 60, tyres: 88, gears: '40' },
+                weather: { temp: '18°C', trackTemp: '25°C', wind: '25 km/h N', rain: '35%' },
+                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/zandvoort-5.svg',
+                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 75,175 L 275,175 C 315,175 335,140 315,95 L 230,75 L 155,120 L 90,55 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="105" cy="175" r="5" fill="#10B981"/></svg>`
             }
         ];
 
-        /* 4. INIZIALIZZAZIONE GLOBO 3D & TELECAMERA */
-        let worldGlobe = null;
+        /* GLOBALS */
+        let world = null;
         let selectedCircuit = null;
+        let activeFilter = 'all';
 
-        function init3DGlobe() {
+        /* INITIALIZATION */
+        window.addEventListener('DOMContentLoaded', () => {
+            initGlobe();
+            populateCircuitSelects();
+            renderCalendarModal();
+            renderStandingsContent('drivers');
+            renderDriversList();
+            updateCircuitCountBadge();
+        });
+
+        function updateCircuitCountBadge() {
+            const count = circuitsData.length;
+            document.getElementById('circuitCount').innerText = count;
+            document.getElementById('calendarTotalCount').innerText = count;
+            document.getElementById('tagAllCount').innerText = count;
+        }
+
+        /* GLOBE SETUP */
+        function initGlobe() {
             const container = document.getElementById('globeViz');
-            container.innerHTML = '';
 
-            worldGlobe = Globe()
+            world = Globe()
                 (container)
                 .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-night.jpg')
                 .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
-                .backgroundColor('#030508')
-                .width(window.innerWidth)
-                .height(window.innerHeight)
+                .backgroundImageUrl('https://unpkg.com/three-globe/example/img/night-sky.png')
                 .htmlElementsData(circuitsData)
                 .htmlElement(d => {
                     const el = document.createElement('div');
                     el.className = 'globe-pin-label';
-                    el.innerHTML = `<i class="fa-solid fa-flag-checkered text-red-500"></i> ${d.city}`;
-                    el.onclick = (e) => {
-                        e.stopPropagation();
-                        selectCircuit(d.id);
-                    };
+                    el.innerHTML = `<i class="fa-solid fa-flag-checkered text-red-500"></i> ${d.name}`;
+                    el.onclick = () => selectCircuit(d.id);
                     return el;
                 })
-                .pointOfView({ lat: 25, lng: 15, altitude: 2.2 }, 0);
+                .pointAltitude(0.01)
+                .pointColor(() => '#E10600')
+                .pointRadius(0.5);
 
-            worldGlobe.controls().autoRotate = true;
-            worldGlobe.controls().autoRotateSpeed = 0.5;
-            worldGlobe.controls().enableZoom = true;
-
-            window.addEventListener('resize', () => {
-                if (worldGlobe) {
-                    worldGlobe.width(window.innerWidth).height(window.innerHeight);
-                }
-            });
+            world.controls().autoRotate = true;
+            world.controls().autoRotateSpeed = 0.5;
+            world.pointOfView({ lat: 20, lng: 0, altitude: 2.5 });
         }
 
-        /* 5. SELEZIONE CIRCUITO CON CAMERAFOCUS E SCHEDA */
+        /* RENDER LAYOUT SVG WITH EXTERNAL IMAGE FALLBACK */
+        function getTrackSvgHtml(circuit) {
+            if (circuit.svgUrl) {
+                return `<img src="${circuit.svgUrl}" alt="${circuit.name} layout" class="track-svg-img" onerror="this.onerror=null; this.parentElement.innerHTML=\`${circuit.svg.replace(/"/g, '&quot;')}\`;">`;
+            }
+            return circuit.svg;
+        }
+
+        /* SELECT CIRCUIT & ANIMATE GLOBE */
         function selectCircuit(id) {
+            playAudio('select');
             const circuit = circuitsData.find(c => c.id === id);
             if (!circuit) return;
 
             selectedCircuit = circuit;
 
-            // Animazione Telecamera Globo 3D
-            if (worldGlobe) {
-                worldGlobe.controls().autoRotate = false;
-                worldGlobe.pointOfView({ lat: circuit.lat, lng: circuit.lng, altitude: 0.75 }, 1200);
-            }
-
-            // Popola Dettagli Sidebar
-            document.getElementById('circuitCountry').innerText = circuit.country;
+            // UI Updates
+            document.getElementById('circuitCountry').innerText = circuit.country.toUpperCase();
             document.getElementById('circuitCategory').innerText = circuit.category;
-            document.getElementById('circuitName').innerText = circuit.name;
+            document.getElementById('circuitName').innerText = circuit.name.toUpperCase();
             document.getElementById('circuitCity').innerHTML = `<i class="fa-solid fa-location-dot text-red-500"></i> ${circuit.city}, ${circuit.country}`;
-
+            
             document.getElementById('statLength').innerText = circuit.length;
             document.getElementById('statLaps').innerText = circuit.laps;
             document.getElementById('statTurns').innerText = circuit.turns;
@@ -1108,594 +1130,60 @@
             document.getElementById('statSpeedLoc').innerText = circuit.speedLoc;
             document.getElementById('circuitFact').innerText = circuit.fact;
 
-            // Popola Telemetria
-            setTelemetryBar('Throttle', circuit.telemetry.throttle, '%');
-            document.getElementById('telemetryDownforce').innerText = circuit.telemetry.downforce > 70 ? 'Alto' : (circuit.telemetry.downforce > 40 ? 'Medio' : 'Basso');
-            setTelemetryBar('Downforce', circuit.telemetry.downforce, '%');
-            setTelemetryBar('Brakes', circuit.telemetry.brakes, '%');
-            setTelemetryBar('Tyres', circuit.telemetry.tyres, '%');
-            document.getElementById('telemetryGears').innerText = circuit.telemetry.gears + ' Cambiate';
+            // Render SVG Layout
+            document.getElementById('svgContainer').innerHTML = getTrackSvgHtml(circuit);
 
-            // SVG Track Rendering 1:1
-            renderSVGTrack(circuit.svg);
-
-            // Widget Meteo
-            updateWeatherWidget(circuit.weather);
-
-            // Apri Sidebar
-            document.getElementById('sidebar').classList.add('active');
-            playAudio('select');
-        }
-
-        function resetView() {
-            document.getElementById('sidebar').classList.remove('active');
-            document.getElementById('weatherWidget').classList.add('hidden');
-            if (worldGlobe) {
-                worldGlobe.controls().autoRotate = true;
-                worldGlobe.pointOfView({ lat: 25, lng: 15, altitude: 2.2 }, 1000);
-            }
-        }
-
-        function renderSVGTrack(svgContent) {
-            const container = document.getElementById('svgContainer');
-            container.innerHTML = svgContent;
-            
-            // Re-trigger CSS SVG Path Animation
-            const path = container.querySelector('path');
-            if (path) {
-                path.classList.remove('svg-track-path');
-                void path.offsetWidth;
-                path.classList.add('svg-track-path');
-            }
-        }
-
-        function replayTrackAnimation() {
-            if (selectedCircuit) {
-                renderSVGTrack(selectedCircuit.svg);
-                playAudio('select');
-            }
-        }
-
-        function updateWeatherWidget(w) {
-            if (!w) return;
-            const widget = document.getElementById('weatherWidget');
+            // Weather Widget
+            const w = circuit.weather;
             document.getElementById('widgetTempText').innerText = `${w.temp} / ${w.trackTemp}`;
             document.getElementById('widgetWindText').innerText = w.wind;
             document.getElementById('widgetRainText').innerText = w.rain;
+            document.getElementById('weatherWidget').classList.remove('hidden');
 
-            const badge = document.getElementById('widgetWeatherBadge');
-            const rainVal = parseInt(w.rain);
-            if (rainVal > 30) {
-                badge.innerText = 'BAGNATO';
-                badge.className = 'text-[9px] bg-cyan-500/20 text-cyan-400 font-mono px-1.5 py-0.5 rounded border border-cyan-500/30';
-            } else {
-                badge.innerText = 'ASCIUTTO';
-                badge.className = 'text-[9px] bg-emerald-500/20 text-emerald-400 font-mono px-1.5 py-0.5 rounded border border-emerald-500/30';
-            }
+            // Open Sidebar
+            document.getElementById('sidebar').classList.add('active');
 
-            widget.classList.remove('hidden');
+            // Globe Focus
+            world.controls().autoRotate = false;
+            world.pointOfView({ lat: circuit.lat, lng: circuit.lng, altitude: 0.8 }, 1800);
         }
 
-        function setTelemetryBar(type, val, unit) {
-            const txt = document.getElementById(`telemetry${type}`);
-            const bar = document.getElementById(`bar${type}`);
-            if (txt && bar) {
-                txt.innerText = `${val}${unit}`;
-                bar.style.width = `${val}%`;
-            }
-        }
-
-        /* 6. TABELLA CLASSIFICHE MONDIALI */
-        let currentStandingsTab = 'drivers';
-
-        function switchStandingsTab(tab) {
-            currentStandingsTab = tab;
-            const btnD = document.getElementById('btnTabDrivers');
-            const btnT = document.getElementById('btnTabTeams');
-
-            if (tab === 'drivers') {
-                btnD.className = "px-4 py-2 rounded-xl text-xs font-bold bg-f1-red text-white transition-all";
-                btnT.className = "px-4 py-2 rounded-xl text-xs font-bold bg-white/5 text-gray-400 hover:bg-white/10 transition-all";
-            } else {
-                btnT.className = "px-4 py-2 rounded-xl text-xs font-bold bg-f1-red text-white transition-all";
-                btnD.className = "px-4 py-2 rounded-xl text-xs font-bold bg-white/5 text-gray-400 hover:bg-white/10 transition-all";
-            }
-            renderStandingsContent();
-        }
-
-        function renderStandingsContent() {
-            const container = document.getElementById('standingsContent');
-            if (currentStandingsTab === 'drivers') {
-                let html = `<div class="space-y-2">`;
-                driversStandings2026.forEach((item) => {
-                    html += `
-                        <div class="glass-card p-3 rounded-2xl flex items-center justify-between border-l-4" style="border-left-color: ${item.color}">
-                            <div class="flex items-center gap-3">
-                                <span class="font-black text-sm font-mono w-6 ${item.pos === 1 ? 'text-amber-400' : (item.pos === 2 ? 'text-gray-300' : (item.pos === 3 ? 'text-amber-600' : 'text-gray-400'))}">P${item.pos}</span>
-                                <div>
-                                    <h4 class="font-bold text-xs text-white uppercase font-orbitron">${item.driver} <span class="text-[10px] text-gray-400">#${item.number}</span></h4>
-                                    <p class="text-[10px] text-gray-400 font-mono">${item.team}</p>
-                                </div>
-                            </div>
-                            <span class="font-black text-sm text-white font-mono">${item.points} PTS</span>
-                        </div>
-                    `;
-                });
-                html += `</div>`;
-                container.innerHTML = html;
-            } else {
-                let html = `<div class="space-y-2">`;
-                teamsStandings2026.forEach((item) => {
-                    html += `
-                        <div class="glass-card p-3 rounded-2xl flex items-center justify-between border-l-4" style="border-left-color: ${item.color}">
-                            <div class="flex items-center gap-3">
-                                <span class="font-black text-sm font-mono w-6 ${item.pos === 1 ? 'text-amber-400' : (item.pos === 2 ? 'text-gray-300' : (item.pos === 3 ? 'text-amber-600' : 'text-gray-400'))}">P${item.pos}</span>
-                                <div>
-                                    <h4 class="font-bold text-sm text-white font-orbitron">${item.team}</h4>
-                                    <p class="text-[10px] text-gray-400 font-mono">Stagione 2026</p>
-                                </div>
-                            </div>
-                            <span class="font-black text-sm text-amber-400 font-mono">${item.points} PTS</span>
-                        </div>
-                    `;
-                });
-                html += `</div>`;
-                container.innerHTML = html;
-            }
-        }
-
-        /* 7. SCHEDA PILOTI */
-        function renderDriversModal() {
-            const listContainer = document.getElementById('driversListContainer');
-            let html = '';
-            driversStandings2026.forEach(d => {
-                html += `
-                    <div onclick="selectDriverDetail(${d.number})" class="glass-card p-2.5 rounded-xl flex items-center justify-between cursor-pointer border-l-2 hover:bg-white/10 transition-all" style="border-left-color: ${d.color}">
-                        <div class="flex items-center gap-2">
-                            <span class="text-xs font-black font-mono text-gray-400">#${d.number}</span>
-                            <span class="text-xs font-bold text-white font-orbitron">${d.code}</span>
-                        </div>
-                        <span class="text-[10px] font-mono text-amber-400">${d.points} PTS</span>
-                    </div>
-                `;
-            });
-            listContainer.innerHTML = html;
-            selectDriverDetail(driversStandings2026[0].number);
-        }
-
-        function selectDriverDetail(driverNum) {
-            const driver = driversStandings2026.find(d => d.number === driverNum);
-            if (!driver) return;
-
-            const container = document.getElementById('driverDetailCard');
-            container.innerHTML = `
-                <div>
-                    <div class="flex items-center justify-between border-b border-white/10 pb-3 mb-3">
-                        <div>
-                            <span class="text-[10px] font-mono uppercase text-red-500 font-bold">PILOTA F1 2026</span>
-                            <h3 class="text-xl sm:text-2xl font-black italic font-orbitron text-white">${driver.driver}</h3>
-                            <p class="text-xs text-gray-400 font-mono">${driver.team}</p>
-                        </div>
-                        <div class="bg-red-600/20 border border-red-500/40 text-red-400 font-black text-2xl font-mono px-3 py-1.5 rounded-2xl">
-                            #${driver.number}
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-3 mb-4">
-                        <div class="glass-card p-3 rounded-2xl">
-                            <span class="text-[9px] text-gray-400 font-mono uppercase block">Posizione Campionato</span>
-                            <span class="text-xl font-black text-amber-400 font-mono mt-0.5 block">P${driver.pos}</span>
-                        </div>
-                        <div class="glass-card p-3 rounded-2xl">
-                            <span class="text-[9px] text-gray-400 font-mono uppercase block">Punti Totali</span>
-                            <span class="text-xl font-black text-white font-mono mt-0.5 block">${driver.points} PTS</span>
-                        </div>
-                    </div>
-
-                    <div class="bg-white/5 border border-white/10 rounded-2xl p-3 space-y-2 text-xs">
-                        <div class="flex justify-between border-b border-white/10 pb-1.5">
-                            <span class="text-gray-400">Codice Pilota:</span>
-                            <span class="font-bold font-mono text-white">${driver.code}</span>
-                        </div>
-                        <div class="flex justify-between border-b border-white/10 pb-1.5">
-                            <span class="text-gray-400">Scuderia Ufficiale:</span>
-                            <span class="font-bold font-mono text-white">${driver.team}</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-gray-400">Stato Contratto 2026:</span>
-                            <span class="font-bold font-mono text-emerald-400">Attivo</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-4 pt-3 border-t border-white/10 text-right">
-                    <span class="text-[10px] text-gray-500 font-mono">Dati Telemetrici Piloti F1 World 2026</span>
-                </div>
-            `;
+        function resetView() {
             playAudio('select');
+            document.getElementById('sidebar').classList.remove('active');
+            document.getElementById('weatherWidget').classList.add('hidden');
+            world.controls().autoRotate = true;
+            world.pointOfView({ lat: 20, lng: 0, altitude: 2.5 }, 1500);
         }
 
-        /* 8. SIMULATORE PASSO GARA E STRATEGIA AVANZATO */
-        let simTyreCompound = 'Soft';
-
-        function setSimTyre(compound, btn) {
-            simTyreCompound = compound;
-            document.querySelectorAll('.sim-tyre-btn').forEach(b => {
-                b.className = "sim-tyre-btn bg-white/10 border border-white/30 text-white font-bold py-2 rounded-xl text-center transition-all";
-            });
-            if (compound === 'Soft') {
-                btn.className = "sim-tyre-btn bg-red-600/30 border border-red-500 text-red-300 font-bold py-2 rounded-xl text-center transition-all";
-            } else if (compound === 'Medium') {
-                btn.className = "sim-tyre-btn bg-amber-500/20 border border-amber-500/40 text-amber-300 font-bold py-2 rounded-xl text-center transition-all";
-            } else {
-                btn.className = "sim-tyre-btn bg-white/20 border border-white text-white font-bold py-2 rounded-xl text-center transition-all";
-            }
-            calculateSimulatedStrategy();
-        }
-
-        function calculateSimulatedStrategy() {
-            const select = document.getElementById('simCircuitSelect');
-            const circuitId = select.value || (selectedCircuit ? selectedCircuit.id : 'monza');
-            const circuit = circuitsData.find(c => c.id === circuitId) || circuitsData[0];
-
-            const fuelKg = parseFloat(document.getElementById('simFuelRange').value);
-            document.getElementById('simFuelVal').innerText = `${fuelKg} kg ${fuelKg >= 100 ? '(Pieno)' : ''}`;
-
-            const engineModeMult = parseFloat(document.getElementById('simEngineMode').value);
-
-            // Tempo base dal record della pista
-            let baseSeconds = 81.0;
-            if (circuit.record && circuit.record.includes(':')) {
-                const parts = circuit.record.split(':');
-                baseSeconds = parseFloat(parts[0]) * 60 + parseFloat(parts[1]);
-            }
-
-            // Calcolo del delta gomme
-            let tyreDelta = 0;
-            let degPerLap = 0.06;
-            if (simTyreCompound === 'Soft') {
-                tyreDelta = -0.65;
-                degPerLap = 0.098;
-            } else if (simTyreCompound === 'Medium') {
-                tyreDelta = 0.0;
-                degPerLap = 0.055;
-            } else { // Hard
-                tyreDelta = +0.55;
-                degPerLap = 0.032;
-            }
-
-            // Penalità peso carburante (+0.033s al kg sopra i 10kg)
-            const fuelPenalty = (fuelKg - 10) * 0.033;
-
-            // Tempo finale del giro
-            const estimatedLapSeconds = (baseSeconds + tyreDelta + fuelPenalty) * engineModeMult;
-
-            // Formattazione giro (MM:SS.sss)
-            const mins = Math.floor(estimatedLapSeconds / 60);
-            const secs = (estimatedLapSeconds % 60).toFixed(3);
-            const formattedLap = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-
-            // Finestra pit stop consigliata
-            const totalLaps = parseInt(circuit.laps) || 53;
-            let pitLapStart = Math.round(totalLaps * 0.3);
-            let pitLapEnd = Math.round(totalLaps * 0.42);
-            let recStrategy = "1 Stop (Soft ➔ Hard)";
-
-            if (simTyreCompound === 'Soft') {
-                pitLapStart = Math.round(totalLaps * 0.25);
-                pitLapEnd = Math.round(totalLaps * 0.35);
-                recStrategy = "1 Stop (Soft ➔ Hard)";
-            } else if (simTyreCompound === 'Medium') {
-                pitLapStart = Math.round(totalLaps * 0.40);
-                pitLapEnd = Math.round(totalLaps * 0.52);
-                recStrategy = "1 Stop (Medium ➔ Hard)";
-            } else {
-                pitLapStart = Math.round(totalLaps * 0.55);
-                pitLapEnd = Math.round(totalLaps * 0.65);
-                recStrategy = "1 Stop (Hard ➔ Medium)";
-            }
-
-            // Update DOM
-            document.getElementById('simResultLaptime').innerText = formattedLap;
-            document.getElementById('simResultDegradation').innerText = `+${degPerLap.toFixed(3)}s / giro`;
-            document.getElementById('simResultPitWindow').innerText = `Giro ${pitLapStart} - ${pitLapEnd}`;
-            document.getElementById('simResultPitStrategy').innerText = recStrategy;
-        }
-
-        /* 9. MODALS CONTROL & AUXILIARIES */
-        function openModal(id) {
-            document.getElementById(id).classList.remove('hidden');
-            if (id === 'standingsModal') renderStandingsContent();
-            if (id === 'driversModal') renderDriversModal();
-            if (id === 'statsModal' && selectedCircuit) {
-                document.getElementById('modalTrackName').innerText = selectedCircuit.name;
-            }
-            if (id === 'simulatorModal') {
-                populateSimDropdown();
-                calculateSimulatedStrategy();
-            }
-            if (id === 'compareModal') populateCompareDropdowns();
+        function replayTrackAnimation() {
+            if (!selectedCircuit) return;
             playAudio('select');
+            document.getElementById('svgContainer').innerHTML = getTrackSvgHtml(selectedCircuit);
         }
 
-        function closeModal(id) {
-            document.getElementById(id).classList.add('hidden');
-        }
+        /* DROPDOWN & SEARCH */
+        function populateCircuitSelects() {
+            const mainSel = document.getElementById('circuitSelect');
+            const compA = document.getElementById('compareSelectA');
+            const compB = document.getElementById('compareSelectB');
+            const simSel = document.getElementById('simCircuitSelect');
 
-        function populateSimDropdown() {
-            const select = document.getElementById('simCircuitSelect');
-            select.innerHTML = '';
+            let optionsHtml = '<option value="">Seleziona Pista...</option>';
             circuitsData.forEach(c => {
-                const opt = document.createElement('option');
-                opt.value = c.id;
-                opt.innerText = `${c.name} (${c.country})`;
-                if (selectedCircuit && selectedCircuit.id === c.id) opt.selected = true;
-                select.appendChild(opt);
-            });
-        }
-
-        function populateCompareDropdowns() {
-            const selA = document.getElementById('compareSelectA');
-            const selB = document.getElementById('compareSelectB');
-            selA.innerHTML = ''; selB.innerHTML = '';
-
-            circuitsData.forEach((c, idx) => {
-                const optA = document.createElement('option');
-                optA.value = c.id; optA.innerText = c.name;
-                const optB = document.createElement('option');
-                optB.value = c.id; optB.innerText = c.name;
-
-                if (idx === 0) optA.selected = true;
-                if (idx === 1) optB.selected = true;
-
-                selA.appendChild(optA);
-                selB.appendChild(optB);
-            });
-            renderComparison();
-        }
-
-        function quickPrepareCompare() {
-            openModal('compareModal');
-            if (selectedCircuit) {
-                document.getElementById('compareSelectA').value = selectedCircuit.id;
-                renderComparison();
-            }
-        }
-
-        function renderComparison() {
-            const idA = document.getElementById('compareSelectA').value;
-            const idB = document.getElementById('compareSelectB').value;
-            const cA = circuitsData.find(c => c.id === idA);
-            const cB = circuitsData.find(c => c.id === idB);
-            if (!cA || !cB) return;
-
-            const res = document.getElementById('compareResults');
-            res.innerHTML = `
-                <div class="grid grid-cols-2 gap-3 text-xs">
-                    <div class="glass-card p-3 rounded-2xl border-l-4 border-l-red-500">
-                        <h4 class="font-black text-sm text-white font-orbitron">${cA.name}</h4>
-                        <p class="text-[10px] text-gray-400 font-mono">${cA.country}</p>
-                        <div class="mt-3 space-y-1.5 font-mono">
-                            <div>Lunghezza: <b>${cA.length}</b></div>
-                            <div>Giri: <b>${cA.laps}</b></div>
-                            <div>Velocity Max: <b>${cA.speed}</b></div>
-                            <div>Throttle: <b>${cA.telemetry.throttle}%</b></div>
-                        </div>
-                    </div>
-                    <div class="glass-card p-3 rounded-2xl border-l-4 border-l-cyan-500">
-                        <h4 class="font-black text-sm text-white font-orbitron">${cB.name}</h4>
-                        <p class="text-[10px] text-gray-400 font-mono">${cB.country}</p>
-                        <div class="mt-3 space-y-1.5 font-mono">
-                            <div>Lunghezza: <b>${cB.length}</b></div>
-                            <div>Giri: <b>${cB.laps}</b></div>
-                            <div>Velocity Max: <b>${cB.speed}</b></div>
-                            <div>Throttle: <b>${cB.telemetry.throttle}%</b></div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        /* 10. LIGHTS OUT REACTION GAME */
-        let gameTimerId = null;
-        let startTime = 0;
-        let gameActive = false;
-        let lightsOn = false;
-
-        function startGame() {
-            gameActive = true;
-            lightsOn = false;
-            document.getElementById('gameStatusText').innerText = "ATTENDI LE LUCI...";
-            document.getElementById('gameStatusText').className = "text-sm sm:text-base font-bold text-amber-400 uppercase font-orbitron animate-pulse";
-            document.getElementById('gameSubText').innerText = "Pronto a cliccare appena le luci si spengono!";
-
-            for (let i = 1; i <= 5; i++) {
-                document.getElementById(`light${i}`).classList.remove('active');
-            }
-
-            let lightCount = 0;
-            if (gameTimerId) clearInterval(gameTimerId);
-
-            gameTimerId = setInterval(() => {
-                lightCount++;
-                if (lightCount <= 5) {
-                    document.getElementById(`light${lightCount}`).classList.add('active');
-                    playAudio('lightOn');
-                } else {
-                    clearInterval(gameTimerId);
-                    lightsOn = true;
-                    const randomDelay = Math.random() * 2000 + 1000;
-                    setTimeout(() => {
-                        if (gameActive && lightsOn) {
-                            for (let i = 1; i <= 5; i++) {
-                                document.getElementById(`light${i}`).classList.remove('active');
-                            }
-                            playAudio('lightsOut');
-                            startTime = performance.now();
-                            document.getElementById('gameStatusText').innerText = "VAI! VAI! VAI!";
-                            document.getElementById('gameStatusText').className = "text-base sm:text-lg font-black text-emerald-400 uppercase font-orbitron";
-                        }
-                    }, randomDelay);
-                }
-            }, 1000);
-        }
-
-        function handleTapArea() {
-            if (!gameActive) return;
-
-            if (!startTime && lightsOn) {
-                // Falsa partenza
-                gameActive = false;
-                if (gameTimerId) clearInterval(gameTimerId);
-                playAudio('jumpStart');
-                document.getElementById('gameStatusText').innerText = "FALSA PARTENZA! (JUMP START)";
-                document.getElementById('gameStatusText').className = "text-sm sm:text-base font-bold text-red-500 uppercase font-orbitron";
-                document.getElementById('gameSubText').innerText = "Hai cliccato prima dello spegnimento!";
-            } else if (startTime > 0) {
-                const reactionTime = ((performance.now() - startTime) / 1000).toFixed(3);
-                gameActive = false;
-                playAudio('correct');
-                document.getElementById('gameStatusText').innerText = `TEMPO REAZIONE: ${reactionTime}s`;
-                document.getElementById('gameStatusText').className = "text-base sm:text-lg font-black text-cyan-400 uppercase font-orbitron";
-                
-                if (reactionTime < 0.22) {
-                    document.getElementById('gameSubText').innerText = "Riflessi da Pilota F1! Eccezionale!";
-                } else {
-                    document.getElementById('gameSubText').innerText = "Buona reazione, continua ad allenarti!";
-                }
-            }
-        }
-
-        /* 11. GUESS THE TRACK GAME */
-        let guessCurrentTrack = null;
-        let guessScore = 0;
-        let guessStreak = 0;
-        let guessTimer = 15;
-        let guessTimerInterval = null;
-
-        function openGuessTrackGame() {
-            openModal('guessGameModal');
-            startNewGuessRound();
-        }
-
-        function closeGuessTrackGame() {
-            closeModal('guessGameModal');
-            if (guessTimerInterval) clearInterval(guessTimerInterval);
-        }
-
-        function startNewGuessRound() {
-            if (guessTimerInterval) clearInterval(guessTimerInterval);
-
-            // Seleziona un circuito a caso
-            const randomIndex = Math.floor(Math.random() * circuitsData.length);
-            guessCurrentTrack = circuitsData[randomIndex];
-
-            // Render SVG layout
-            document.getElementById('gameTrackSvg').innerHTML = guessCurrentTrack.svg;
-
-            // Opzioni risposte (1 corretta + 3 errate)
-            const options = [guessCurrentTrack];
-            while (options.length < 4) {
-                const rand = circuitsData[Math.floor(Math.random() * circuitsData.length)];
-                if (!options.find(o => o.id === rand.id)) {
-                    options.push(rand);
-                }
-            }
-            options.sort(() => Math.random() - 0.5);
-
-            // Genera bottoni
-            const optionsContainer = document.getElementById('gameOptions');
-            optionsContainer.innerHTML = '';
-            options.forEach(opt => {
-                const btn = document.createElement('button');
-                btn.className = "w-full bg-white/10 hover:bg-purple-600/40 border border-white/10 hover:border-purple-400 text-white font-bold py-2.5 px-3 rounded-xl text-xs transition-all text-left font-mono";
-                btn.innerText = opt.name;
-                btn.onclick = () => checkGuessAnswer(opt.id, btn);
-                optionsContainer.appendChild(btn);
+                optionsHtml += `<option value="${c.id}">${c.name} (${c.country})</option>`;
             });
 
-            document.getElementById('gameResultMsg').innerText = '';
-            guessTimer = 15;
-            document.getElementById('gameTimer').innerText = guessTimer;
+            mainSel.innerHTML = optionsHtml;
+            compA.innerHTML = optionsHtml;
+            compB.innerHTML = optionsHtml;
+            simSel.innerHTML = optionsHtml;
 
-            guessTimerInterval = setInterval(() => {
-                guessTimer--;
-                document.getElementById('gameTimer').innerText = guessTimer;
-                if (guessTimer <= 0) {
-                    clearInterval(guessTimerInterval);
-                    handleGuessTimeout();
-                }
-            }, 1000);
-        }
-
-        function checkGuessAnswer(id, btn) {
-            if (guessTimerInterval) clearInterval(guessTimerInterval);
-
-            if (id === guessCurrentTrack.id) {
-                playAudio('correct');
-                btn.className = "w-full bg-emerald-600 border border-emerald-400 text-white font-bold py-2.5 px-3 rounded-xl text-xs font-mono";
-                guessScore += 100 + guessTimer * 10;
-                guessStreak++;
-                document.getElementById('gameResultMsg').innerText = "ESATTO! +100 PTS";
-                document.getElementById('gameResultMsg').className = "text-center font-bold h-6 text-xs text-emerald-400 font-mono";
-            } else {
-                playAudio('wrong');
-                btn.className = "w-full bg-red-600 border border-red-400 text-white font-bold py-2.5 px-3 rounded-xl text-xs font-mono";
-                guessStreak = 0;
-                document.getElementById('gameResultMsg').innerText = `ERRATO! ERA: ${guessCurrentTrack.name}`;
-                document.getElementById('gameResultMsg').className = "text-center font-bold h-6 text-xs text-red-400 font-mono";
+            if (circuitsData.length > 0) {
+                compA.value = circuitsData[0].id;
+                compB.value = circuitsData[1] ? circuitsData[1].id : circuitsData[0].id;
+                simSel.value = circuitsData[0].id;
             }
-
-            document.getElementById('gameScore').innerText = guessScore;
-            document.getElementById('gameStreak').innerText = guessStreak;
-
-            setTimeout(() => {
-                startNewGuessRound();
-            }, 1800);
-        }
-
-        function handleGuessTimeout() {
-            playAudio('wrong');
-            guessStreak = 0;
-            document.getElementById('gameStreak').innerText = 0;
-            document.getElementById('gameResultMsg').innerText = "TEMPO SCADUTO!";
-            document.getElementById('gameResultMsg').className = "text-center font-bold h-6 text-xs text-red-400 font-mono";
-
-            setTimeout(() => {
-                startNewGuessRound();
-            }, 1800);
-        }
-
-        /* 12. FILTRI E RICERCA */
-        function populateDropdownsAndCalendar() {
-            const dropdown = document.getElementById('circuitSelect');
-            const calendarList = document.getElementById('calendarList');
-            dropdown.innerHTML = '<option value="">Seleziona Pista...</option>';
-            calendarList.innerHTML = '';
-
-            circuitsData.forEach((c, idx) => {
-                const opt = document.createElement('option');
-                opt.value = c.id;
-                opt.innerText = `${idx + 1}. ${c.name} (${c.country})`;
-                dropdown.appendChild(opt);
-
-                const item = document.createElement('div');
-                item.className = 'glass-card p-3 rounded-2xl flex items-center justify-between cursor-pointer hover:border-red-500/50';
-                item.onclick = () => {
-                    closeModal('calendarModal');
-                    selectCircuit(c.id);
-                };
-                item.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <span class="font-black text-xs font-mono text-red-500">ROUND ${idx + 1}</span>
-                        <div>
-                            <h4 class="font-bold text-xs text-white uppercase font-orbitron">${c.name}</h4>
-                            <p class="text-[10px] text-gray-400 font-mono">${c.city}, ${c.country}</p>
-                        </div>
-                    </div>
-                    <span class="text-[10px] bg-white/10 px-2 py-1 rounded text-gray-300 font-mono font-bold">${c.length}</span>
-                `;
-                calendarList.appendChild(item);
-            });
         }
 
         function onSelectDropdown(id) {
@@ -1703,39 +1191,428 @@
         }
 
         function filterCircuitsBySearch() {
-            const val = document.getElementById('searchInput').value.toLowerCase().trim();
-            if (!val) return;
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            if (!query) {
+                world.htmlElementsData(circuitsData);
+                return;
+            }
 
-            const found = circuitsData.find(c => 
-                c.name.toLowerCase().includes(val) || 
-                c.country.toLowerCase().includes(val) || 
-                c.city.toLowerCase().includes(val)
+            const filtered = circuitsData.filter(c => 
+                c.name.toLowerCase().includes(query) ||
+                c.country.toLowerCase().includes(query) ||
+                c.city.toLowerCase().includes(query)
             );
-            if (found) selectCircuit(found.id);
+
+            world.htmlElementsData(filtered);
+            if (filtered.length === 1) {
+                selectCircuit(filtered[0].id);
+            }
         }
 
+        /* TAG FILTERS */
         function applyTagFilter(tag, btn) {
+            playAudio('select');
+            activeFilter = tag;
+
             document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
             let filtered = circuitsData;
             if (tag === 'street') filtered = circuitsData.filter(c => c.isStreet);
-            if (tag === 'historic') filtered = circuitsData.filter(c => c.isHistoric);
-            if (tag === 'fast') filtered = circuitsData.filter(c => c.speedKm >= 340);
-            if (tag === 'night') filtered = circuitsData.filter(c => c.isNight);
-            if (tag === 'new2026') filtered = circuitsData.filter(c => c.isNew2026);
+            else if (tag === 'historic') filtered = circuitsData.filter(c => c.isHistoric);
+            else if (tag === 'fast') filtered = circuitsData.filter(c => c.speedKm >= 340);
+            else if (tag === 'night') filtered = circuitsData.filter(c => c.isNight);
+            else if (tag === 'new2026') filtered = circuitsData.filter(c => c.isNew2026);
 
-            if (worldGlobe) {
-                worldGlobe.htmlElementsData(filtered);
-            }
-            playAudio('select');
+            world.htmlElementsData(filtered);
         }
 
-        /* 13. INIZIALIZZAZIONE ALL'AVVIO */
-        window.addEventListener('DOMContentLoaded', () => {
-            init3DGlobe();
-            populateDropdownsAndCalendar();
-        });
+        /* MODAL CONTROLS */
+        function openModal(id) {
+            playAudio('select');
+            document.getElementById(id).classList.remove('hidden');
+            if (id === 'statsModal') updateTelemetryModal();
+            if (id === 'compareModal') renderComparison();
+            if (id === 'simulatorModal') calculateSimulatedStrategy();
+        }
+
+        function closeModal(id) {
+            playAudio('select');
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        /* TELEMETRY MODAL UPDATE */
+        function updateTelemetryModal() {
+            const c = selectedCircuit || circuitsData[0];
+            document.getElementById('modalTrackName').innerText = c.name.toUpperCase();
+            
+            const t = c.telemetry;
+            document.getElementById('telemetryThrottle').innerText = t.throttle + '%';
+            document.getElementById('barThrottle').style.width = t.throttle + '%';
+
+            document.getElementById('telemetryDownforce').innerText = t.downforce + '%';
+            document.getElementById('barDownforce').style.width = t.downforce + '%';
+
+            document.getElementById('telemetryBrakes').innerText = t.brakes + '%';
+            document.getElementById('barBrakes').style.width = t.brakes + '%';
+
+            document.getElementById('telemetryTyres').innerText = t.tyres + '%';
+            document.getElementById('barTyres').style.width = t.tyres + '%';
+
+            document.getElementById('telemetryGears').innerText = t.gears + ' Cambiate';
+        }
+
+        /* CALENDAR MODAL RENDER */
+        function renderCalendarModal() {
+            const list = document.getElementById('calendarList');
+            list.innerHTML = circuitsData.map((c, i) => `
+                <div onclick="closeModal('calendarModal'); selectCircuit('${c.id}');" class="glass-card p-3 rounded-2xl flex items-center justify-between cursor-pointer hover:border-red-500/50">
+                    <div class="flex items-center gap-3">
+                        <span class="font-mono text-xs font-black text-red-500 w-6">#${(i+1).toString().padStart(2, '0')}</span>
+                        <div>
+                            <h4 class="font-bold text-xs text-white">${c.name}</h4>
+                            <span class="text-[10px] text-gray-400 font-mono">${c.city}, ${c.country}</span>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs font-mono font-bold text-gray-300 block">${c.length}</span>
+                        <span class="text-[9px] text-emerald-400 font-mono">${c.speed}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        /* STANDINGS TAB SWITCH */
+        function switchStandingsTab(tab) {
+            playAudio('select');
+            const btnD = document.getElementById('btnTabDrivers');
+            const btnT = document.getElementById('btnTabTeams');
+
+            if (tab === 'drivers') {
+                btnD.className = 'px-4 py-2 rounded-xl text-xs font-bold bg-f1-red text-white transition-all';
+                btnT.className = 'px-4 py-2 rounded-xl text-xs font-bold bg-white/5 text-gray-400 hover:bg-white/10 transition-all';
+            } else {
+                btnT.className = 'px-4 py-2 rounded-xl text-xs font-bold bg-f1-red text-white transition-all';
+                btnD.className = 'px-4 py-2 rounded-xl text-xs font-bold bg-white/5 text-gray-400 hover:bg-white/10 transition-all';
+            }
+            renderStandingsContent(tab);
+        }
+
+        function renderStandingsContent(tab) {
+            const container = document.getElementById('standingsContent');
+            if (tab === 'drivers') {
+                container.innerHTML = driversStandings2026.map(d => `
+                    <div class="glass-card p-3 rounded-2xl flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="font-mono text-xs font-black text-gray-400 w-6">P${d.pos}</span>
+                            <div class="w-1 h-8 rounded-full" style="background-color: ${d.color}"></div>
+                            <div>
+                                <h4 class="font-bold text-xs text-white">${d.driver} <span class="text-[10px] text-gray-400 font-mono">#${d.number}</span></h4>
+                                <span class="text-[10px] text-gray-400 font-mono">${d.team}</span>
+                            </div>
+                        </div>
+                        <span class="text-sm font-black font-mono text-amber-400">${d.points} PTS</span>
+                    </div>
+                `).join('');
+            } else {
+                container.innerHTML = teamsStandings2026.map(t => `
+                    <div class="glass-card p-3 rounded-2xl flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="font-mono text-xs font-black text-gray-400 w-6">P${t.pos}</span>
+                            <div class="w-1 h-8 rounded-full" style="background-color: ${t.color}"></div>
+                            <h4 class="font-bold text-xs text-white">${t.team}</h4>
+                        </div>
+                        <span class="text-sm font-black font-mono text-amber-400">${t.points} PTS</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        /* DRIVERS MODAL RENDER */
+        function renderDriversList() {
+            const container = document.getElementById('driversListContainer');
+            container.innerHTML = driversStandings2026.map(d => `
+                <div onclick="selectDriverCard('${d.code}')" class="glass-card p-2.5 rounded-xl flex items-center justify-between cursor-pointer hover:border-indigo-500/50">
+                    <div class="flex items-center gap-2">
+                        <span class="font-mono text-[10px] font-bold text-gray-400">#${d.number}</span>
+                        <span class="text-xs font-bold text-white">${d.driver}</span>
+                    </div>
+                    <span class="text-[9px] font-mono px-1.5 py-0.5 rounded text-gray-300 bg-white/10">${d.code}</span>
+                </div>
+            `).join('');
+        }
+
+        function selectDriverCard(code) {
+            playAudio('select');
+            const d = driversStandings2026.find(item => item.code === code);
+            if (!d) return;
+
+            const card = document.getElementById('driverDetailCard');
+            card.innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                        <div>
+                            <span class="text-[10px] font-mono text-indigo-400 font-bold uppercase">PILOTA F1 2026</span>
+                            <h3 class="text-xl font-black text-white italic font-orbitron">${d.driver.toUpperCase()}</h3>
+                            <span class="text-xs text-gray-400 font-mono">${d.team}</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-3xl font-black font-mono text-white/20">#${d.number}</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="glass-card p-3 rounded-xl">
+                            <span class="text-[9px] text-gray-400 uppercase block font-mono">Posizione Mondiale</span>
+                            <span class="text-lg font-black text-amber-400 font-mono">P${d.pos}</span>
+                        </div>
+                        <div class="glass-card p-3 rounded-xl">
+                            <span class="text-[9px] text-gray-400 uppercase block font-mono">Punti Totali</span>
+                            <span class="text-lg font-black text-emerald-400 font-mono">${d.points} PTS</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        /* COMPARISON LOGIC */
+        function quickPrepareCompare() {
+            if (!selectedCircuit) return;
+            document.getElementById('compareSelectA').value = selectedCircuit.id;
+            openModal('compareModal');
+        }
+
+        function renderComparison() {
+            const idA = document.getElementById('compareSelectA').value;
+            const idB = document.getElementById('compareSelectB').value;
+
+            const cA = circuitsData.find(c => c.id === idA) || circuitsData[0];
+            const cB = circuitsData.find(c => c.id === idB) || circuitsData[1];
+
+            const container = document.getElementById('compareResults');
+            container.innerHTML = `
+                <div class="grid grid-cols-2 gap-4 bg-black/50 p-4 rounded-2xl border border-white/10">
+                    <div class="space-y-3">
+                        <div class="h-32 bg-black rounded-xl p-2 flex items-center justify-center border border-white/10 overflow-hidden">
+                            ${getTrackSvgHtml(cA)}
+                        </div>
+                        <h4 class="font-bold text-sm text-center font-orbitron text-red-400">${cA.name}</h4>
+                        <div class="space-y-1 text-xs font-mono">
+                            <div class="flex justify-between border-b border-white/5 pb-1"><span class="text-gray-400">Lunghezza:</span> <b>${cA.length}</b></div>
+                            <div class="flex justify-between border-b border-white/5 pb-1"><span class="text-gray-400">Curve:</span> <b>${cA.turns}</b></div>
+                            <div class="flex justify-between border-b border-white/5 pb-1"><span class="text-gray-400">Vel Max:</span> <b>${cA.speed}</b></div>
+                            <div class="flex justify-between"><span class="text-gray-400">Full Throttle:</span> <b>${cA.telemetry.throttle}%</b></div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="h-32 bg-black rounded-xl p-2 flex items-center justify-center border border-white/10 overflow-hidden">
+                            ${getTrackSvgHtml(cB)}
+                        </div>
+                        <h4 class="font-bold text-sm text-center font-orbitron text-cyan-400">${cB.name}</h4>
+                        <div class="space-y-1 text-xs font-mono">
+                            <div class="flex justify-between border-b border-white/5 pb-1"><span class="text-gray-400">Lunghezza:</span> <b>${cB.length}</b></div>
+                            <div class="flex justify-between border-b border-white/5 pb-1"><span class="text-gray-400">Curve:</span> <b>${cB.turns}</b></div>
+                            <div class="flex justify-between border-b border-white/5 pb-1"><span class="text-gray-400">Vel Max:</span> <b>${cB.speed}</b></div>
+                            <div class="flex justify-between"><span class="text-gray-400">Full Throttle:</span> <b>${cB.telemetry.throttle}%</b></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        /* SIMULATOR LOGIC */
+        let simSelectedTyre = 'Medium';
+        function setSimTyre(tyre, btn) {
+            playAudio('select');
+            simSelectedTyre = tyre;
+            document.querySelectorAll('.sim-tyre-btn').forEach(b => b.classList.remove('border-red-500', 'bg-red-600/30'));
+            btn.classList.add('border-red-500', 'bg-red-600/30');
+            calculateSimulatedStrategy();
+        }
+
+        function calculateSimulatedStrategy() {
+            const id = document.getElementById('simCircuitSelect').value;
+            const c = circuitsData.find(item => item.id === id) || circuitsData[0];
+            const fuel = parseInt(document.getElementById('simFuelRange').value);
+            const engineMode = parseFloat(document.getElementById('simEngineMode').value);
+
+            document.getElementById('simFuelVal').innerText = `${fuel} kg`;
+
+            const baseTimeSec = 80 + (c.telemetry.throttle * 0.2);
+            const fuelImpact = (fuel / 10) * 0.3;
+            const engineImpact = (1 - engineMode) * 2;
+            const finalLapSec = baseTimeSec + fuelImpact + engineImpact;
+
+            const minutes = Math.floor(finalLapSec / 60);
+            const seconds = (finalLapSec % 60).toFixed(3);
+            const formattedLap = `${minutes}:${seconds.padStart(6, '0')}`;
+
+            document.getElementById('simResultLaptime').innerText = formattedLap;
+
+            let deg = "+0.085s / giro";
+            let pitWindow = "Giro 18 - 22";
+            let strat = "1 Stop (Soft ➔ Hard)";
+
+            if (simSelectedTyre === 'Soft') {
+                deg = "+0.140s / giro";
+                pitWindow = "Giro 12 - 16";
+                strat = "2 Stop (Soft ➔ Medium ➔ Soft)";
+            } else if (simSelectedTyre === 'Hard') {
+                deg = "+0.045s / giro";
+                pitWindow = "Giro 28 - 34";
+                strat = "1 Stop (Hard ➔ Medium)";
+            }
+
+            document.getElementById('simResultDegradation').innerText = deg;
+            document.getElementById('simResultPitWindow').innerText = pitWindow;
+            document.getElementById('simResultPitStrategy').innerText = strat;
+        }
+
+        /* LIGHTS OUT REACTION GAME */
+        let gameState = 'idle';
+        let startTime = 0;
+        let timeoutId = null;
+
+        function startGame() {
+            playAudio('select');
+            gameState = 'waiting';
+            document.getElementById('gameStatusText').innerText = "ATTENDI L'ACCENSIONE DELLE LUCI...";
+            document.getElementById('gameSubText').innerText = "Non toccare prima dello spegnimento!";
+            
+            for (let i = 1; i <= 5; i++) {
+                document.getElementById(`light${i}`).classList.remove('active');
+            }
+
+            let lightIndex = 1;
+            function turnOnLight() {
+                if (lightIndex <= 5) {
+                    document.getElementById(`light${lightIndex}`).classList.add('active');
+                    playAudio('lightOn');
+                    lightIndex++;
+                    timeoutId = setTimeout(turnOnLight, 1000);
+                } else {
+                    const randomDelay = Math.floor(Math.random() * 2500) + 1000;
+                    timeoutId = setTimeout(() => {
+                        for (let i = 1; i <= 5; i++) {
+                            document.getElementById(`light${i}`).classList.remove('active');
+                        }
+                        playAudio('lightsOut');
+                        gameState = 'ready';
+                        startTime = Date.now();
+                        document.getElementById('gameStatusText').innerText = "CLICCA ORA!";
+                    }, randomDelay);
+                }
+            }
+            turnOnLight();
+        }
+
+        function handleTapArea() {
+            if (gameState === 'waiting') {
+                clearTimeout(timeoutId);
+                playAudio('jumpStart');
+                gameState = 'idle';
+                document.getElementById('gameStatusText').innerText = "PARTENZA ANTICIPATA! (FALSE START)";
+                document.getElementById('gameSubText').innerText = "Hai cliccato prima dello spegnimento dei semafori.";
+                for (let i = 1; i <= 5; i++) {
+                    document.getElementById(`light${i}`).classList.remove('active');
+                }
+            } else if (gameState === 'ready') {
+                const reaction = ((Date.now() - startTime) / 1000).toFixed(3);
+                playAudio('correct');
+                gameState = 'idle';
+                document.getElementById('gameStatusText').innerText = `TEMPO DI REAZIONE: ${reaction}s`;
+                if (parseFloat(reaction) < 0.22) {
+                    document.getElementById('gameSubText').innerText = "Riflessi da Campione del Mondo F1!";
+                } else {
+                    document.getElementById('gameSubText').innerText = "Buona reazione, puoi migliorare ancora!";
+                }
+            }
+        }
+
+        /* GUESS THE TRACK GAME */
+        let guessScore = 0;
+        let guessStreak = 0;
+        let guessHighScore = 0;
+        let guessTimer = 15;
+        let guessInterval = null;
+        let currentTargetCircuit = null;
+
+        function openGuessTrackGame() {
+            playAudio('select');
+            document.getElementById('guessGameModal').classList.remove('hidden');
+            startNewGuessRound();
+        }
+
+        function closeGuessTrackGame() {
+            playAudio('select');
+            clearInterval(guessInterval);
+            document.getElementById('guessGameModal').classList.add('hidden');
+        }
+
+        function startNewGuessRound() {
+            clearInterval(guessInterval);
+            document.getElementById('gameResultMsg').innerText = "";
+
+            currentTargetCircuit = circuitsData[Math.floor(Math.random() * circuitsData.length)];
+            document.getElementById('gameTrackSvg').innerHTML = getTrackSvgHtml(currentTargetCircuit);
+
+            let options = [currentTargetCircuit];
+            while (options.length < 4) {
+                const randomC = circuitsData[Math.floor(Math.random() * circuitsData.length)];
+                if (!options.includes(randomC)) options.push(randomC);
+            }
+            options.sort(() => Math.random() - 0.5);
+
+            const optionsContainer = document.getElementById('gameOptions');
+            optionsContainer.innerHTML = options.map(opt => `
+                <button onclick="submitGuess('${opt.id}')" class="bg-white/10 hover:bg-white/20 text-white font-bold py-2.5 px-3 rounded-xl border border-white/10 text-xs text-left truncate transition-all">
+                    ${opt.name} (${opt.country})
+                </button>
+            `).join('');
+
+            guessTimer = 15;
+            document.getElementById('gameTimer').innerText = guessTimer;
+
+            guessInterval = setInterval(() => {
+                guessTimer--;
+                document.getElementById('gameTimer').innerText = guessTimer;
+                if (guessTimer <= 0) {
+                    clearInterval(guessInterval);
+                    playAudio('wrong');
+                    document.getElementById('gameResultMsg').innerText = "TEMPO SCADUTO!";
+                    document.getElementById('gameResultMsg').className = "text-center font-bold h-6 text-xs transition-all font-mono text-red-400";
+                    guessStreak = 0;
+                    document.getElementById('gameStreak').innerText = guessStreak;
+                    setTimeout(startNewGuessRound, 2000);
+                }
+            }, 1000);
+        }
+
+        function submitGuess(selectedId) {
+            clearInterval(guessInterval);
+            if (selectedId === currentTargetCircuit.id) {
+                playAudio('correct');
+                guessScore += 10 + guessTimer;
+                guessStreak++;
+                if (guessStreak > guessHighScore) guessHighScore = guessStreak;
+
+                document.getElementById('gameScore').innerText = guessScore;
+                document.getElementById('gameStreak').innerText = guessStreak;
+                document.getElementById('gameHighScore').innerText = guessHighScore;
+
+                document.getElementById('gameResultMsg').innerText = "CORRETTO! + " + (10 + guessTimer) + " PTS";
+                document.getElementById('gameResultMsg').className = "text-center font-bold h-6 text-xs transition-all font-mono text-emerald-400";
+            } else {
+                playAudio('wrong');
+                guessStreak = 0;
+                document.getElementById('gameStreak').innerText = guessStreak;
+
+                document.getElementById('gameResultMsg').innerText = "ERRORE! Era: " + currentTargetCircuit.name;
+                document.getElementById('gameResultMsg').className = "text-center font-bold h-6 text-xs transition-all font-mono text-red-400";
+            }
+            setTimeout(startNewGuessRound, 2000);
+        }
     </script>
 </body>
 </html>
