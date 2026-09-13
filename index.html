@@ -197,7 +197,6 @@
             filter: drop-shadow(0 0 8px rgba(225, 6, 0, 0.4));
         }
 
-        /* Performance Optimizations: Modal Content Containment */
         .modal-optimized {
             content-visibility: auto;
             contain-intrinsic-size: 500px;
@@ -598,7 +597,7 @@
                 <div>
                     <label class="block font-mono text-gray-300 mb-1 uppercase font-bold">Mescola Pneumatico Partenza:</label>
                     <div class="grid grid-cols-3 gap-2">
-                        <button onclick="setSimTyre('Soft', this)" class="sim-tyre-btn bg-red-600/30 border border-red-500 text-red-300 font-bold py-2 rounded-xl text-center transition-all">Soft (Morbida)</button>
+                        <button onclick="setSimTyre('Soft', this)" class="sim-tyre-btn bg-red-600/30 border border-red-500 text-red-300 font-bold py-2 rounded-xl text-center transition-all ring-2 ring-white">Soft (Morbida)</button>
                         <button onclick="setSimTyre('Medium', this)" class="sim-tyre-btn bg-amber-500/20 border border-amber-500/40 text-amber-300 font-bold py-2 rounded-xl text-center transition-all">Medium (Media)</button>
                         <button onclick="setSimTyre('Hard', this)" class="sim-tyre-btn bg-white/10 border border-white/30 text-white font-bold py-2 rounded-xl text-center transition-all">Hard (Dura)</button>
                     </div>
@@ -1071,7 +1070,6 @@
         let selectedCircuit = null;
         let simCurrentTyre = 'Soft';
         let searchDebounceTimeout = null;
-        let resizeDebounceTimeout = null;
 
         /* INITIALIZATION */
         window.addEventListener('DOMContentLoaded', () => {
@@ -1090,7 +1088,7 @@
             document.getElementById('tagAllCount').innerText = count;
         }
 
-        /* GLOBE SETUP CON PERFORMANCE OPTIMIZATIONS (PIXEL RATIO CAP & RENDER THROTTLING) */
+        /* GLOBE SETUP CON STOP ROTAZIONE AUTOMATICA ALLO ZOOM & LIMITI DI DISTANZA */
         function initGlobe() {
             const container = document.getElementById('globeViz');
 
@@ -1124,13 +1122,32 @@
                     if (d && d.id) selectCircuit(d.id);
                 });
 
-            // Performance tweak for Mobile/High-DPI displays to lock 60fps
+            // Cap del pixel ratio per alte prestazioni
             if (world.renderer) {
                 world.renderer().setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
             }
 
-            world.controls().autoRotate = true;
-            world.controls().autoRotateSpeed = 0.5;
+            const controls = world.controls();
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = 0.5;
+
+            // Limiti di zoom (Minimo = massimo ingrandimento, Massimo = stop a una determinata distanza)
+            controls.minDistance = 110;
+            controls.maxDistance = 350;
+
+            // Interrompe la rotazione automatica quando l'utente interagisce con il globo (zoom/rotazione)
+            controls.addEventListener('start', () => {
+                controls.autoRotate = false;
+            });
+
+            // Rileva lo zoom: se ci si avvicina, disattiva la rotazione e mantiene il focus
+            controls.addEventListener('change', () => {
+                const distance = controls.object.position.distanceTo(controls.target);
+                if (distance < 300) {
+                    controls.autoRotate = false;
+                }
+            });
+
             world.pointOfView({ lat: 20, lng: 0, altitude: 2.3 });
         }
 
@@ -1142,7 +1159,7 @@
             return circuit.svg;
         }
 
-        /* SELEZIONA CIRCUITO E ANIMAZIONE GLOBO */
+        /* SELEZIONA CIRCUITO, FERMA ROTAZIONE E ZOOMA SUL PUNTO */
         function selectCircuit(id) {
             playAudio('select');
             const circuit = circuitsData.find(c => c.id === id);
@@ -1150,7 +1167,13 @@
 
             selectedCircuit = circuit;
 
-            // UI Updates
+            // Disattiva la rotazione e centra lo zoom sul punto preciso del tracciato
+            if (world && world.controls) {
+                world.controls().autoRotate = false;
+                world.pointOfView({ lat: circuit.lat, lng: circuit.lng, altitude: 0.6 }, 1500);
+            }
+
+            // Aggiornamento interfaccia UI
             document.getElementById('circuitCountry').innerText = circuit.country.toUpperCase();
             document.getElementById('circuitCategory').innerText = circuit.category;
             document.getElementById('circuitName').innerText = circuit.name.toUpperCase();
@@ -1168,65 +1191,78 @@
             document.getElementById('statSpeedLoc').innerText = circuit.speedLoc;
             document.getElementById('circuitFact').innerText = circuit.fact;
 
+            // Weather Widget
+            document.getElementById('widgetTempText').innerText = `${circuit.weather.temp} / ${circuit.weather.trackTemp}`;
+            document.getElementById('widgetWindText').innerText = circuit.weather.wind;
+            document.getElementById('widgetRainText').innerText = circuit.weather.rain;
+            document.getElementById('weatherWidget').classList.remove('hidden');
+
             // SVG Layout
             document.getElementById('svgContainer').innerHTML = getTrackSvgHtml(circuit);
 
-            // Weather Widget
-            const w = circuit.weather;
-            document.getElementById('widgetTempText').innerText = `${w.temp} / ${w.trackTemp}`;
-            document.getElementById('widgetWindText').innerText = w.wind;
-            document.getElementById('widgetRainText').innerText = w.rain;
-            document.getElementById('weatherWidget').classList.remove('hidden');
-
-            // Telemetry Modal Prep
-            document.getElementById('modalTrackName').innerText = circuit.name.toUpperCase();
-            document.getElementById('telemetryThrottle').innerText = circuit.telemetry.throttle + '%';
-            document.getElementById('barThrottle').style.width = circuit.telemetry.throttle + '%';
-            document.getElementById('telemetryDownforce').innerText = circuit.telemetry.downforce > 70 ? 'Alto' : (circuit.telemetry.downforce > 40 ? 'Medio' : 'Basso');
-            document.getElementById('barDownforce').style.width = circuit.telemetry.downforce + '%';
-            document.getElementById('telemetryBrakes').innerText = circuit.telemetry.brakes + '%';
-            document.getElementById('barBrakes').style.width = circuit.telemetry.brakes + '%';
-            document.getElementById('telemetryTyres').innerText = circuit.telemetry.tyres + '%';
-            document.getElementById('barTyres').style.width = circuit.telemetry.tyres + '%';
-            document.getElementById('telemetryGears').innerText = circuit.telemetry.gears + ' Cambiate';
-
-            // Open Sidebar
+            // Apertura Sidebar
             document.getElementById('sidebar').classList.add('active');
-
-            // Globe Focus
-            if (world) {
-                world.controls().autoRotate = false;
-                world.pointOfView({ lat: circuit.lat, lng: circuit.lng, altitude: 0.85 }, 1200);
-            }
         }
 
-        /* RESET VISTA GLOBO */
+        /* RIPRISTINA LA VISTA GLOBO */
         function resetView() {
             playAudio('select');
             document.getElementById('sidebar').classList.remove('active');
             document.getElementById('weatherWidget').classList.add('hidden');
             if (world) {
                 world.controls().autoRotate = true;
-                world.pointOfView({ lat: 20, lng: 0, altitude: 2.3 }, 1200);
+                world.pointOfView({ lat: 20, lng: 0, altitude: 2.3 }, 1500);
             }
         }
 
-        /* REPLAY TRACK SVG ANIMATION */
-        function replayTrackAnimation() {
-            if (!selectedCircuit) return;
-            const container = document.getElementById('svgContainer');
-            const currentSvg = getTrackSvgHtml(selectedCircuit);
-            container.innerHTML = '';
-            requestAnimationFrame(() => {
-                container.innerHTML = currentSvg;
-            });
+        /* RICERCA CIRCUITI */
+        function filterCircuitsBySearch() {
+            clearTimeout(searchDebounceTimeout);
+            searchDebounceTimeout = setTimeout(() => {
+                const query = document.getElementById('searchInput').value.toLowerCase().trim();
+                if (!query) {
+                    world.htmlElementsData(circuitsData).pointsData(circuitsData);
+                    return;
+                }
+                const filtered = circuitsData.filter(c => 
+                    c.name.toLowerCase().includes(query) ||
+                    c.country.toLowerCase().includes(query) ||
+                    c.city.toLowerCase().includes(query)
+                );
+                world.htmlElementsData(filtered).pointsData(filtered);
+                if (filtered.length === 1) {
+                    selectCircuit(filtered[0].id);
+                }
+            }, 200);
         }
 
-        /* TAG FILTERS */
+        function onSelectDropdown(id) {
+            if (id) selectCircuit(id);
+        }
+
+        function populateCircuitSelects() {
+            const select = document.getElementById('circuitSelect');
+            const compareA = document.getElementById('compareSelectA');
+            const compareB = document.getElementById('compareSelectB');
+            const simSelect = document.getElementById('simCircuitSelect');
+
+            const options = circuitsData.map(c => `<option value="${c.id}">${c.name} (${c.country})</option>`).join('');
+            
+            select.innerHTML = `<option value="">Seleziona Pista...</option>` + options;
+            compareA.innerHTML = options;
+            compareB.innerHTML = options;
+            simSelect.innerHTML = options;
+
+            if (circuitsData.length > 1) {
+                compareB.value = circuitsData[1].id;
+            }
+        }
+
+        /* FILTRI CATEGORIA */
         function applyTagFilter(tag, btn) {
             playAudio('select');
             document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
-            if (btn) btn.classList.add('active');
+            btn.classList.add('active');
 
             let filtered = circuitsData;
             if (tag === 'street') filtered = circuitsData.filter(c => c.isStreet);
@@ -1235,489 +1271,361 @@
             else if (tag === 'night') filtered = circuitsData.filter(c => c.isNight);
             else if (tag === 'new2026') filtered = circuitsData.filter(c => c.isNew2026);
 
-            if (world) {
-                world.htmlElementsData(filtered);
-                world.pointsData(filtered);
-            }
+            world.htmlElementsData(filtered).pointsData(filtered);
         }
 
-        /* SEARCH FILTER WITH DEBOUNCE */
-        function filterCircuitsBySearch() {
-            clearTimeout(searchDebounceTimeout);
-            searchDebounceTimeout = setTimeout(() => {
-                const query = document.getElementById('searchInput').value.toLowerCase().trim();
-                const filtered = circuitsData.filter(c => 
-                    c.name.toLowerCase().includes(query) || 
-                    c.country.toLowerCase().includes(query) || 
-                    c.city.toLowerCase().includes(query)
-                );
-                if (world) {
-                    world.htmlElementsData(filtered);
-                    world.pointsData(filtered);
-                }
-            }, 120);
-        }
-
-        /* POPULATE DROPDOWNS */
-        function populateCircuitSelects() {
-            const select = document.getElementById('circuitSelect');
-            const compA = document.getElementById('compareSelectA');
-            const compB = document.getElementById('compareSelectB');
-            const simSelect = document.getElementById('simCircuitSelect');
-
-            let optionsHtml = '<option value="">Seleziona Pista...</option>';
-            let compAHtml = '';
-            let compBHtml = '';
-            let simHtml = '';
-
-            circuitsData.forEach((c, idx) => {
-                optionsHtml += `<option value="${c.id}">${c.name} (${c.country})</option>`;
-                compAHtml += `<option value="${c.id}" ${idx === 0 ? 'selected' : ''}>${c.name}</option>`;
-                compBHtml += `<option value="${c.id}" ${idx === 1 ? 'selected' : ''}>${c.name}</option>`;
-                simHtml += `<option value="${c.id}">${c.name}</option>`;
-            });
-
-            if (select) select.innerHTML = optionsHtml;
-            if (compA) compA.innerHTML = compAHtml;
-            if (compB) compB.innerHTML = compBHtml;
-            if (simSelect) simSelect.innerHTML = simHtml;
-        }
-
-        function onSelectDropdown(id) {
-            if (id) selectCircuit(id);
-        }
-
-        /* MODAL CONTROL */
+        /* MODALI */
         function openModal(id) {
             playAudio('select');
-            const modal = document.getElementById(id);
-            if (modal) {
-                modal.classList.remove('hidden');
-                if (id === 'compareModal') renderComparison();
-                if (id === 'simulatorModal') calculateSimulatedStrategy();
+            document.getElementById(id).classList.remove('hidden');
+            if (id === 'compareModal') renderComparison();
+            if (id === 'simulatorModal') calculateSimulatedStrategy();
+            if (id === 'statsModal' && selectedCircuit) {
+                document.getElementById('modalTrackName').innerText = selectedCircuit.name.toUpperCase();
+                setTimeout(() => {
+                    document.getElementById('barThrottle').style.width = selectedCircuit.telemetry.throttle + '%';
+                    document.getElementById('barDownforce').style.width = selectedCircuit.telemetry.downforce + '%';
+                    document.getElementById('barBrakes').style.width = selectedCircuit.telemetry.brakes + '%';
+                    document.getElementById('barTyres').style.width = selectedCircuit.telemetry.tyres + '%';
+                    document.getElementById('telemetryThrottle').innerText = selectedCircuit.telemetry.throttle + '%';
+                    document.getElementById('telemetryDownforce').innerText = selectedCircuit.telemetry.downforce > 75 ? 'Alto' : selectedCircuit.telemetry.downforce < 40 ? 'Basso' : 'Medio';
+                    document.getElementById('telemetryBrakes').innerText = selectedCircuit.telemetry.brakes > 80 ? 'Elevata' : 'Media';
+                    document.getElementById('telemetryTyres').innerText = selectedCircuit.telemetry.tyres + '%';
+                    document.getElementById('telemetryGears').innerText = selectedCircuit.telemetry.gears + ' Cambiate';
+                }, 100);
             }
         }
 
         function closeModal(id) {
             playAudio('select');
-            const modal = document.getElementById(id);
-            if (modal) modal.classList.add('hidden');
+            document.getElementById(id).classList.add('hidden');
         }
 
-        /* STANDINGS SWITCHER */
+        /* CLASSIFICHE */
         function switchStandingsTab(tab) {
             playAudio('select');
             const btnDrivers = document.getElementById('btnTabDrivers');
             const btnTeams = document.getElementById('btnTabTeams');
-
             if (tab === 'drivers') {
-                btnDrivers.className = 'px-4 py-2 rounded-xl text-xs font-bold bg-f1-red text-white transition-all';
-                btnTeams.className = 'px-4 py-2 rounded-xl text-xs font-bold bg-white/5 text-gray-300 hover:bg-white/10 transition-all';
+                btnDrivers.className = "px-4 py-2 rounded-xl text-xs font-bold bg-f1-red text-white transition-all";
+                btnTeams.className = "px-4 py-2 rounded-xl text-xs font-bold bg-white/5 text-gray-300 hover:bg-white/10 transition-all";
+                renderStandingsContent('drivers');
             } else {
-                btnTeams.className = 'px-4 py-2 rounded-xl text-xs font-bold bg-f1-red text-white transition-all';
-                btnDrivers.className = 'px-4 py-2 rounded-xl text-xs font-bold bg-white/5 text-gray-300 hover:bg-white/10 transition-all';
+                btnTeams.className = "px-4 py-2 rounded-xl text-xs font-bold bg-f1-red text-white transition-all";
+                btnDrivers.className = "px-4 py-2 rounded-xl text-xs font-bold bg-white/5 text-gray-300 hover:bg-white/10 transition-all";
+                renderStandingsContent('teams');
             }
-            renderStandingsContent(tab);
         }
 
-        function renderStandingsContent(tab) {
+        function renderStandingsContent(type) {
             const container = document.getElementById('standingsContent');
-            const fragment = document.createDocumentFragment();
-
-            if (tab === 'drivers') {
-                driversStandings2026.forEach(d => {
-                    const div = document.createElement('div');
-                    div.className = 'glass-card p-3 rounded-2xl flex items-center justify-between border-l-4 border border-white/10';
-                    div.style.borderLeftColor = d.color;
-                    div.innerHTML = `
+            if (type === 'drivers') {
+                container.innerHTML = driversStandings2026.map(d => `
+                    <div class="glass-card p-3 rounded-2xl flex items-center justify-between border-l-4" style="border-left-color: ${d.color}">
                         <div class="flex items-center gap-3">
-                            <span class="font-black text-sm w-6 text-gray-400 font-mono">P${d.pos}</span>
+                            <span class="font-mono font-black text-sm w-6 text-gray-400">P${d.pos}</span>
                             <div>
-                                <h4 class="font-bold text-xs sm:text-sm text-white">${d.driver} <span class="text-[10px] text-gray-400 font-mono">#${d.number}</span></h4>
-                                <span class="text-[10px] text-gray-400 font-mono">${d.team}</span>
+                                <div class="font-bold text-xs text-white font-orbitron flex items-center gap-2">
+                                    ${d.driver} <span class="text-[10px] bg-white/10 px-1.5 py-0.2 rounded font-mono text-gray-300">#${d.number}</span>
+                                </div>
+                                <div class="text-[10px] text-gray-400 font-medium">${d.team}</div>
                             </div>
                         </div>
-                        <span class="font-black text-sm text-amber-400 font-mono">${d.points} PTS</span>
-                    `;
-                    fragment.appendChild(div);
-                });
+                        <div class="font-mono font-black text-sm text-amber-400">${d.points} <span class="text-[9px] text-gray-400 font-normal">PTS</span></div>
+                    </div>
+                `).join('');
             } else {
-                teamsStandings2026.forEach(t => {
-                    const div = document.createElement('div');
-                    div.className = 'glass-card p-3 rounded-2xl flex items-center justify-between border-l-4 border border-white/10';
-                    div.style.borderLeftColor = t.color;
-                    div.innerHTML = `
+                container.innerHTML = teamsStandings2026.map(t => `
+                    <div class="glass-card p-3 rounded-2xl flex items-center justify-between border-l-4" style="border-left-color: ${t.color}">
                         <div class="flex items-center gap-3">
-                            <span class="font-black text-sm w-6 text-gray-400 font-mono">P${t.pos}</span>
-                            <div>
-                                <h4 class="font-bold text-xs sm:text-sm text-white">${t.team}</h4>
-                            </div>
+                            <span class="font-mono font-black text-sm w-6 text-gray-400">P${t.pos}</span>
+                            <div class="font-bold text-xs text-white font-orbitron">${t.team}</div>
                         </div>
-                        <span class="font-black text-sm text-amber-400 font-mono">${t.points} PTS</span>
-                    `;
-                    fragment.appendChild(div);
-                });
+                        <div class="font-mono font-black text-sm text-amber-400">${t.points} <span class="text-[9px] text-gray-400 font-normal">PTS</span></div>
+                    </div>
+                `).join('');
             }
-            container.innerHTML = '';
-            container.appendChild(fragment);
         }
 
-        /* DRIVERS RENDER */
+        /* LISTA E DETTAGLIO PILOTI */
         function renderDriversList() {
             const container = document.getElementById('driversListContainer');
-            const fragment = document.createDocumentFragment();
-
-            driversStandings2026.forEach(d => {
-                const item = document.createElement('div');
-                item.className = 'glass-card p-2.5 rounded-xl cursor-pointer flex items-center justify-between border border-white/10 hover:border-indigo-500 transition-all';
-                item.onclick = () => showDriverDetail(d.code);
-                item.innerHTML = `
-                    <div class="flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full" style="background-color: ${d.color}"></span>
-                        <div>
-                            <span class="font-bold text-xs text-white block leading-tight">${d.driver}</span>
-                            <span class="text-[9px] text-gray-400 font-mono">${d.team}</span>
-                        </div>
+            container.innerHTML = driversStandings2026.map((d, index) => `
+                <div onclick="showDriverDetail(${index})" class="glass-card p-2.5 rounded-xl cursor-pointer flex items-center justify-between hover:border-red-500 transition-all border-l-2" style="border-left-color: ${d.color}">
+                    <div>
+                        <div class="text-xs font-bold font-orbitron text-white">${d.driver}</div>
+                        <div class="text-[9px] text-gray-400 font-mono">${d.team}</div>
                     </div>
-                    <span class="text-xs font-mono font-bold text-indigo-300">#${d.number}</span>
-                `;
-                fragment.appendChild(item);
-            });
-
-            container.innerHTML = '';
-            container.appendChild(fragment);
-            if (driversStandings2026.length > 0) showDriverDetail(driversStandings2026[0].code);
+                    <span class="text-xs font-mono font-bold text-amber-400">#${d.number}</span>
+                </div>
+            `).join('');
         }
 
-        function showDriverDetail(code) {
+        function showDriverDetail(index) {
             playAudio('select');
-            const driver = driversStandings2026.find(d => d.code === code);
-            if (!driver) return;
-
-            const detailCard = document.getElementById('driverDetailCard');
-            detailCard.innerHTML = `
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between border-b border-white/10 pb-3">
+            const d = driversStandings2026[index];
+            const card = document.getElementById('driverDetailCard');
+            card.innerHTML = `
+                <div>
+                    <div class="flex items-center justify-between border-b border-white/10 pb-3 mb-3">
                         <div>
-                            <span class="text-[10px] font-mono uppercase tracking-widest text-indigo-400 font-bold">SCHEDA PILOTA F1 2026</span>
-                            <h3 class="text-xl font-black font-orbitron text-white leading-tight mt-0.5">${driver.driver}</h3>
-                            <p class="text-xs text-gray-300 font-mono">${driver.team}</p>
+                            <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded font-bold" style="background:${d.color}33; color:${d.color}">${d.team}</span>
+                            <h3 class="text-xl font-black italic font-orbitron text-white mt-1">${d.driver}</h3>
                         </div>
-                        <div class="text-right">
-                            <span class="text-3xl font-black font-orbitron text-indigo-400">#${driver.number}</span>
-                        </div>
+                        <div class="text-3xl font-black font-mono" style="color:${d.color}">#${d.number}</div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="glass-card p-3 rounded-xl border border-white/10">
-                            <span class="text-[9px] text-gray-400 uppercase font-mono block">Posizione Attuale</span>
-                            <span class="text-lg font-black font-mono text-white">P${driver.pos}</span>
+                    <div class="grid grid-cols-2 gap-3 mb-4">
+                        <div class="glass-card p-3 rounded-xl">
+                            <span class="text-[9px] text-gray-400 uppercase block font-mono">Codice Pilota</span>
+                            <span class="text-sm font-bold font-mono text-white">${d.code}</span>
                         </div>
-                        <div class="glass-card p-3 rounded-xl border border-white/10">
-                            <span class="text-[9px] text-gray-400 uppercase font-mono block">Punti Campionato</span>
-                            <span class="text-lg font-black font-mono text-amber-400">${driver.points} PTS</span>
+                        <div class="glass-card p-3 rounded-xl">
+                            <span class="text-[9px] text-gray-400 uppercase block font-mono">Posizione Attuale</span>
+                            <span class="text-sm font-bold font-mono text-amber-400">P${d.pos} (${d.points} PTS)</span>
                         </div>
-                    </div>
-
-                    <div class="p-3 bg-white/5 rounded-xl border border-white/10">
-                        <span class="text-[10px] font-mono text-gray-300 uppercase block font-bold mb-1">Codice Identificativo:</span>
-                        <span class="text-sm font-bold font-mono text-cyan-400 tracking-wider">${driver.code}</span>
                     </div>
                 </div>
+
+                <button onclick="closeModal('driversModal')" class="w-full bg-white/10 hover:bg-white/20 text-white font-bold text-xs py-2.5 rounded-xl transition-all font-orbitron uppercase">
+                    Chiudi Scheda Pilota
+                </button>
             `;
         }
 
-        /* CALENDAR MODAL RENDER */
+        /* CALENDARIO MODAL */
         function renderCalendarModal() {
-            const container = document.getElementById('calendarList');
-            const fragment = document.createDocumentFragment();
-
-            circuitsData.forEach((c, i) => {
-                const item = document.createElement('div');
-                item.className = 'glass-card p-3 rounded-2xl flex items-center justify-between border border-white/10 hover:border-red-500 cursor-pointer transition-all';
-                item.onclick = () => {
-                    closeModal('calendarModal');
-                    selectCircuit(c.id);
-                };
-                item.innerHTML = `
+            const list = document.getElementById('calendarList');
+            list.innerHTML = circuitsData.map((c, idx) => `
+                <div onclick="closeModal('calendarModal'); selectCircuit('${c.id}');" class="glass-card p-3 rounded-2xl flex items-center justify-between cursor-pointer hover:border-red-500 transition-all">
                     <div class="flex items-center gap-3">
-                        <span class="font-mono font-bold text-xs text-red-500 w-6">ROUND ${i + 1}</span>
+                        <span class="font-mono text-xs font-bold text-red-500 w-6">ROUND ${idx + 1}</span>
                         <div>
-                            <h4 class="font-bold text-xs text-white">${c.name}</h4>
-                            <span class="text-[10px] text-gray-400 font-mono">${c.city}, ${c.country} • ${c.length}</span>
+                            <div class="text-xs font-bold text-white font-orbitron">${c.name}</div>
+                            <div class="text-[10px] text-gray-400"><i class="fa-solid fa-location-dot text-red-500 mr-1"></i>${c.city}, ${c.country}</div>
                         </div>
                     </div>
-                    <i class="fa-solid fa-chevron-right text-xs text-gray-500"></i>
-                `;
-                fragment.appendChild(item);
-            });
-
-            container.innerHTML = '';
-            container.appendChild(fragment);
+                    <span class="text-[10px] font-mono bg-white/10 px-2 py-1 rounded text-gray-300">${c.length}</span>
+                </div>
+            `).join('');
         }
 
-        /* COMPARISON LOGIC */
+        /* CONFRONTO TRACCIATI */
         function quickPrepareCompare() {
-            if (selectedCircuit) {
-                const compA = document.getElementById('compareSelectA');
-                if (compA) compA.value = selectedCircuit.id;
-            }
+            if (!selectedCircuit) return;
+            document.getElementById('compareSelectA').value = selectedCircuit.id;
             openModal('compareModal');
         }
 
         function renderComparison() {
             const idA = document.getElementById('compareSelectA').value;
             const idB = document.getElementById('compareSelectB').value;
-
-            const cA = circuitsData.find(c => c.id === idA) || circuitsData[0];
-            const cB = circuitsData.find(c => c.id === idB) || circuitsData[1];
+            const cA = circuitsData.find(c => c.id === idA);
+            const cB = circuitsData.find(c => c.id === idB);
+            if (!cA || !cB) return;
 
             const res = document.getElementById('compareResults');
             res.innerHTML = `
-                <div class="grid grid-cols-2 gap-3 text-center mb-2">
-                    <div class="font-black text-sm text-red-400 font-orbitron uppercase">${cA.name}</div>
-                    <div class="font-black text-sm text-cyan-400 font-orbitron uppercase">${cB.name}</div>
-                </div>
-
-                <div class="glass-card p-3 rounded-xl space-y-2 text-xs">
-                    <div class="flex justify-between border-b border-white/10 pb-1 font-mono">
-                        <span class="font-bold text-red-400">${cA.length}</span>
-                        <span class="text-gray-400 uppercase font-sans">Lunghezza</span>
-                        <span class="font-bold text-cyan-400">${cB.length}</span>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="glass-card p-4 rounded-2xl border-t-4 border-t-red-500">
+                        <h4 class="font-black text-sm font-orbitron text-red-400">${cA.name}</h4>
+                        <p class="text-[10px] text-gray-400 font-mono mb-3">${cA.country}</p>
+                        <div class="space-y-2 text-xs font-mono">
+                            <div><b>Lunghezza:</b> ${cA.length}</div>
+                            <div><b>Giri:</b> ${cA.laps}</div>
+                            <div><b>Curve:</b> ${cA.turns}</div>
+                            <div><b>Velocità Max:</b> ${cA.speed}</div>
+                            <div><b>Throttle %:</b> ${cA.telemetry.throttle}%</div>
+                            <div><b>Carico Aero:</b> ${cA.telemetry.downforce}%</div>
+                        </div>
                     </div>
-
-                    <div class="flex justify-between border-b border-white/10 pb-1 font-mono">
-                        <span class="font-bold text-red-400">${cA.laps}</span>
-                        <span class="text-gray-400 uppercase font-sans">Giri Gara</span>
-                        <span class="font-bold text-cyan-400">${cB.laps}</span>
-                    </div>
-
-                    <div class="flex justify-between border-b border-white/10 pb-1 font-mono">
-                        <span class="font-bold text-red-400">${cA.turns}</span>
-                        <span class="text-gray-400 uppercase font-sans">Curve</span>
-                        <span class="font-bold text-cyan-400">${cB.turns}</span>
-                    </div>
-
-                    <div class="flex justify-between border-b border-white/10 pb-1 font-mono">
-                        <span class="font-bold text-red-400">${cA.speed}</span>
-                        <span class="text-gray-400 uppercase font-sans">Velocità Max</span>
-                        <span class="font-bold text-cyan-400">${cB.speed}</span>
-                    </div>
-
-                    <div class="flex justify-between border-b border-white/10 pb-1 font-mono">
-                        <span class="font-bold text-red-400">${cA.telemetry.throttle}%</span>
-                        <span class="text-gray-400 uppercase font-sans">% Full Throttle</span>
-                        <span class="font-bold text-cyan-400">${cB.telemetry.throttle}%</span>
-                    </div>
-
-                    <div class="flex justify-between border-b border-white/10 pb-1 font-mono">
-                        <span class="font-bold text-red-400">${cA.record}</span>
-                        <span class="text-gray-400 uppercase font-sans">Record Giro</span>
-                        <span class="font-bold text-cyan-400">${cB.record}</span>
+                    <div class="glass-card p-4 rounded-2xl border-t-4 border-t-cyan-500">
+                        <h4 class="font-black text-sm font-orbitron text-cyan-400">${cB.name}</h4>
+                        <p class="text-[10px] text-gray-400 font-mono mb-3">${cB.country}</p>
+                        <div class="space-y-2 text-xs font-mono">
+                            <div><b>Lunghezza:</b> ${cB.length}</div>
+                            <div><b>Giri:</b> ${cB.laps}</div>
+                            <div><b>Curve:</b> ${cB.turns}</div>
+                            <div><b>Velocità Max:</b> ${cB.speed}</div>
+                            <div><b>Throttle %:</b> ${cB.telemetry.throttle}%</div>
+                            <div><b>Carico Aero:</b> ${cB.telemetry.downforce}%</div>
+                        </div>
                     </div>
                 </div>
             `;
         }
 
-        /* STRATEGY SIMULATOR LOGIC */
+        /* SIMULATORE STRATEGIA */
         function setSimTyre(tyre, btn) {
             playAudio('select');
             simCurrentTyre = tyre;
-            document.querySelectorAll('.sim-tyre-btn').forEach(b => {
-                b.classList.remove('bg-red-600/50', 'bg-amber-500/50', 'bg-white/30');
-            });
-            if (btn) btn.classList.add('bg-white/30');
+            document.querySelectorAll('.sim-tyre-btn').forEach(b => b.classList.remove('ring-2', 'ring-white'));
+            btn.classList.add('ring-2', 'ring-white');
             calculateSimulatedStrategy();
         }
 
         function calculateSimulatedStrategy() {
-            const circuitId = document.getElementById('simCircuitSelect').value || circuitsData[0].id;
-            const circuit = circuitsData.find(c => c.id === circuitId) || circuitsData[0];
-
-            const fuel = parseFloat(document.getElementById('simFuelRange').value);
+            const id = document.getElementById('simCircuitSelect').value || (selectedCircuit ? selectedCircuit.id : circuitsData[0].id);
+            const circuit = circuitsData.find(c => c.id === id) || circuitsData[0];
+            const fuel = parseInt(document.getElementById('simFuelRange').value);
             const engineMode = parseFloat(document.getElementById('simEngineMode').value);
 
-            document.getElementById('simFuelVal').innerText = `${fuel} kg ${fuel === 110 ? '(Pieno)' : ''}`;
+            document.getElementById('simFuelVal').innerText = `${fuel} kg`;
 
-            let baseTime = 81.0; 
+            let baseLapSec = 80;
             if (circuit.record && circuit.record.includes(':')) {
                 const parts = circuit.record.split(':');
-                baseTime = parseFloat(parts[0]) * 60 + parseFloat(parts[1]);
+                baseLapSec = parseFloat(parts[0]) * 60 + parseFloat(parts[1]);
             }
 
-            const fuelPenalty = (fuel / 10) * 0.3;
-            let tyreMod = 0;
-            let degRate = 0.085;
-            let pitWindow = "Giro 18 - 22";
-            let strategy = "1 Stop (Soft ➔ Hard)";
+            let tyrePenalty = simCurrentTyre === 'Soft' ? -0.4 : simCurrentTyre === 'Medium' ? 0.0 : 0.5;
+            let fuelPenalty = (fuel / 10) * 0.3;
+            let totalSec = (baseLapSec + tyrePenalty + fuelPenalty) * (2 - engineMode);
 
-            if (simCurrentTyre === 'Soft') {
-                tyreMod = -0.5;
-                degRate = 0.120;
-                pitWindow = "Giro 14 - 18";
-                strategy = "1 Stop (Soft ➔ Hard) o 2 Stop";
-            } else if (simCurrentTyre === 'Medium') {
-                tyreMod = 0;
-                degRate = 0.075;
-                pitWindow = "Giro 20 - 25";
-                strategy = "1 Stop (Medium ➔ Hard)";
-            } else if (simCurrentTyre === 'Hard') {
-                tyreMod = 0.6;
-                degRate = 0.045;
-                pitWindow = "Giro 28 - 35";
-                strategy = "1 Stop (Hard ➔ Medium)";
-            }
+            const minutes = Math.floor(totalSec / 60);
+            const seconds = (totalSec % 60).toFixed(3);
+            const laptimeStr = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
-            const finalLapSec = (baseTime + fuelPenalty + tyreMod) / engineMode;
-            const minutes = Math.floor(finalLapSec / 60);
-            const seconds = (finalLapSec % 60).toFixed(3);
-            const formattedSec = seconds < 10 ? '0' + seconds : seconds;
-
-            document.getElementById('simResultLaptime').innerText = `${minutes}:${formattedSec}`;
-            document.getElementById('simResultDegradation').innerText = `+${degRate.toFixed(3)}s / giro`;
-            document.getElementById('simResultPitWindow').innerText = pitWindow;
-            document.getElementById('simResultPitStrategy').innerText = strategy;
+            document.getElementById('simResultLaptime').innerText = laptimeStr;
+            document.getElementById('simResultDegradation').innerText = `+${(0.06 + Math.random() * 0.04).toFixed(3)}s / giro`;
+            document.getElementById('simResultPitWindow').innerText = simCurrentTyre === 'Soft' ? 'Giro 14 - 18' : simCurrentTyre === 'Medium' ? 'Giro 20 - 26' : 'Giro 28 - 34';
+            document.getElementById('simResultPitStrategy').innerText = simCurrentTyre === 'Soft' ? '1 Stop (Soft ➔ Hard)' : simCurrentTyre === 'Medium' ? '1 Stop (Medium ➔ Hard)' : '1 Stop (Hard ➔ Soft)';
         }
 
-        /* REACTION GAME ENGINE */
-        let gameTimerId = null;
+        /* LIGHTS OUT GAME */
+        let gameTimer = null;
         let gameStartTime = 0;
-        let gameActive = false;
-        let lightsState = 0;
+        let gamePhase = 'idle';
+
+        function resetGameLights() {
+            for (let i = 1; i <= 5; i++) {
+                document.getElementById(`light${i}`).classList.remove('active');
+            }
+        }
 
         function startGame() {
-            playAudio('select');
-            resetLights();
-            gameActive = true;
-            document.getElementById('gameStatusText').innerText = "ATTENDI L'ACCENSIONE DELLE LUCI...";
+            if (gamePhase === 'counting' || gamePhase === 'waiting') return;
+            gamePhase = 'counting';
+            resetGameLights();
+            document.getElementById('gameStatusText').innerText = "ATTENDI LE LUCI ROSSE...";
             document.getElementById('gameStatusText').className = "text-sm sm:text-base font-bold text-amber-400 uppercase font-orbitron";
-            document.getElementById('gameSubText').innerText = "Non cliccare prima che si spengano!";
+            document.getElementById('gameSubText').innerText = "Non toccare prima che si spengano!";
 
-            let lightIndex = 1;
-            gameTimerId = setInterval(() => {
-                if (lightIndex <= 5) {
-                    const light = document.getElementById(`light${lightIndex}`);
-                    if (light) light.classList.add('active');
+            let lightCount = 0;
+            const interval = setInterval(() => {
+                lightCount++;
+                if (lightCount <= 5) {
+                    document.getElementById(`light${lightCount}`).classList.add('active');
                     playAudio('lightOn');
-                    lightIndex++;
                 } else {
-                    clearInterval(gameTimerId);
-                    const randomDelay = Math.random() * 2300 + 1200;
-                    gameTimerId = setTimeout(() => {
-                        resetLights();
+                    clearInterval(interval);
+                    gamePhase = 'waiting';
+                    const randomDelay = 1000 + Math.random() * 2500;
+                    gameTimer = setTimeout(() => {
+                        resetGameLights();
                         playAudio('lightsOut');
                         gameStartTime = performance.now();
-                        lightsState = 2;
+                        gamePhase = 'active';
                         document.getElementById('gameStatusText').innerText = "VIA! CLICCA ORA!";
-                        document.getElementById('gameStatusText').className = "text-sm sm:text-base font-bold text-emerald-400 uppercase font-orbitron animate-pulse";
+                        document.getElementById('gameStatusText').className = "text-base sm:text-lg font-black text-emerald-400 uppercase font-orbitron animate-pulse";
                     }, randomDelay);
                 }
             }, 1000);
-            lightsState = 1;
-        }
-
-        function resetLights() {
-            for (let i = 1; i <= 5; i++) {
-                const el = document.getElementById(`light${i}`);
-                if (el) el.classList.remove('active');
-            }
         }
 
         function handleTapArea() {
-            if (lightsState === 0) return;
-
-            if (lightsState === 1) {
-                clearTimeout(gameTimerId);
-                clearInterval(gameTimerId);
-                resetLights();
+            if (gamePhase === 'idle') {
+                startGame();
+            } else if (gamePhase === 'counting' || gamePhase === 'waiting') {
+                clearTimeout(gameTimer);
                 playAudio('jumpStart');
-                document.getElementById('gameStatusText').innerText = "PARTENZA ANTICIPATA! (FALSE START)";
+                gamePhase = 'idle';
+                resetGameLights();
+                document.getElementById('gameStatusText').innerText = "PARTENZA ANTICIPATA! (JUMP START)";
                 document.getElementById('gameStatusText').className = "text-sm sm:text-base font-bold text-red-500 uppercase font-orbitron";
-                document.getElementById('gameSubText').innerText = "Hai cliccato prima dello spegnimento dei semafori. Riprova!";
-                lightsState = 0;
-            } else if (lightsState === 2) {
+                document.getElementById('gameSubText').innerText = "Hai cliccato prima dello spegnimento. Riprova!";
+            } else if (gamePhase === 'active') {
                 const reactionTime = ((performance.now() - gameStartTime) / 1000).toFixed(3);
+                gamePhase = 'finished';
                 playAudio('correct');
-                document.getElementById('gameStatusText').innerText = `TEMPO REAZIONE: ${reactionTime}s`;
-                document.getElementById('gameStatusText').className = "text-sm sm:text-base font-bold text-cyan-400 uppercase font-orbitron";
-
-                let feedback = "Ottima reazione livello F1!";
-                if (reactionTime < 0.20) feedback = "REAZIONE DA CAMPIONE DEL MONDO! 🏆";
-                else if (reactionTime > 0.35) feedback = "Un po' lento! Puoi fare di meglio.";
+                document.getElementById('gameStatusText').innerText = `TEMPO DI REAZIONE: ${reactionTime}s`;
+                document.getElementById('gameStatusText').className = "text-base sm:text-xl font-black text-cyan-400 uppercase font-orbitron";
                 
-                document.getElementById('gameSubText').innerText = feedback;
-                lightsState = 0;
+                let rating = "Livello Pilota F1 Super Pro!";
+                if (reactionTime > 0.3) rating = "Buono, ma puoi migliorare!";
+                if (reactionTime > 0.4) rating = "Reazione un po' lenta!";
+                document.getElementById('gameSubText').innerText = rating;
+                
+                setTimeout(() => { gamePhase = 'idle'; }, 1000);
             }
         }
 
-        /* GUESS THE TRACK GAME ENGINE */
+        /* GUESS THE TRACK GAME */
         let guessScore = 0;
         let guessStreak = 0;
         let guessHighScore = 0;
-        let guessTimer = 15;
-        let guessInterval = null;
-        let currentTargetCircuit = null;
+        let guessTimer = null;
+        let guessTimeLeft = 15;
+        let currentGuessTarget = null;
 
         function openGuessTrackGame() {
             playAudio('select');
             document.getElementById('guessGameModal').classList.remove('hidden');
-            startNewGuessRound();
+            guessScore = 0;
+            guessStreak = 0;
+            document.getElementById('gameScore').innerText = guessScore;
+            document.getElementById('gameStreak').innerText = guessStreak;
+            setupGuessQuestion();
         }
 
         function closeGuessTrackGame() {
-            playAudio('select');
-            clearInterval(guessInterval);
+            clearInterval(guessTimer);
             document.getElementById('guessGameModal').classList.add('hidden');
         }
 
-        function startNewGuessRound() {
-            clearInterval(guessInterval);
-            guessTimer = 15;
-            document.getElementById('gameTimer').innerText = guessTimer;
-            document.getElementById('gameResultMsg').innerText = '';
+        function setupGuessQuestion() {
+            clearInterval(guessTimer);
+            document.getElementById('gameResultMsg').innerText = "";
+            
+            const targetIdx = Math.floor(Math.random() * circuitsData.length);
+            currentGuessTarget = circuitsData[targetIdx];
 
-            const randomIndex = Math.floor(Math.random() * circuitsData.length);
-            currentTargetCircuit = circuitsData[randomIndex];
-
-            document.getElementById('gameTrackSvg').innerHTML = getTrackSvgHtml(currentTargetCircuit);
-
-            const options = [currentTargetCircuit];
+            let options = [currentGuessTarget];
             while (options.length < 4) {
-                const rnd = circuitsData[Math.floor(Math.random() * circuitsData.length)];
-                if (!options.some(o => o.id === rnd.id)) {
-                    options.push(rnd);
+                const r = circuitsData[Math.floor(Math.random() * circuitsData.length)];
+                if (!options.some(o => o.id === r.id)) {
+                    options.push(r);
                 }
             }
-
             options.sort(() => Math.random() - 0.5);
 
-            const optionsContainer = document.getElementById('gameOptions');
-            optionsContainer.innerHTML = '';
-            options.forEach(opt => {
-                const btn = document.createElement('button');
-                btn.className = 'bg-white/10 hover:bg-purple-600/40 border border-white/20 hover:border-purple-400 text-white font-bold text-xs py-2.5 px-3 rounded-xl transition-all font-mono text-left truncate';
-                btn.innerText = opt.name;
-                btn.onclick = () => submitGuess(opt.id, btn);
-                optionsContainer.appendChild(btn);
-            });
+            document.getElementById('gameTrackSvg').innerHTML = getTrackSvgHtml(currentGuessTarget);
 
-            guessInterval = setInterval(() => {
-                guessTimer--;
-                document.getElementById('gameTimer').innerText = guessTimer;
-                if (guessTimer <= 0) {
-                    clearInterval(guessInterval);
+            const container = document.getElementById('gameOptions');
+            container.innerHTML = options.map(o => `
+                <button onclick="checkGuessAnswer('${o.id}')" class="guess-opt-btn bg-white/5 hover:bg-white/15 border border-white/10 text-white font-bold text-xs py-3 rounded-xl transition-all font-orbitron truncate px-2">
+                    ${o.name}
+                </button>
+            `).join('');
+
+            guessTimeLeft = 15;
+            document.getElementById('gameTimer').innerText = guessTimeLeft;
+            guessTimer = setInterval(() => {
+                guessTimeLeft--;
+                document.getElementById('gameTimer').innerText = guessTimeLeft;
+                if (guessTimeLeft <= 0) {
+                    clearInterval(guessTimer);
                     handleGuessTimeout();
                 }
             }, 1000);
         }
 
-        function submitGuess(selectedId, btnElement) {
-            clearInterval(guessInterval);
-            const isCorrect = selectedId === currentTargetCircuit.id;
-
-            if (isCorrect) {
+        function checkGuessAnswer(selectedId) {
+            clearInterval(guessTimer);
+            const msgEl = document.getElementById('gameResultMsg');
+            if (selectedId === currentGuessTarget.id) {
                 playAudio('correct');
-                guessScore += 100 + guessTimer * 10;
+                guessScore += 100 + guessTimeLeft * 10;
                 guessStreak++;
                 if (guessStreak > guessHighScore) guessHighScore = guessStreak;
                 
@@ -1725,48 +1633,37 @@
                 document.getElementById('gameStreak').innerText = guessStreak;
                 document.getElementById('gameHighScore').innerText = guessHighScore;
 
-                document.getElementById('gameResultMsg').innerText = "ESATTO! +100 PUNTI 🎉";
-                document.getElementById('gameResultMsg').className = "text-center font-bold h-6 text-xs transition-all font-mono text-emerald-400";
-                
-                if (btnElement) btnElement.classList.add('bg-emerald-600', 'border-emerald-400');
+                msgEl.innerText = "CORRETTO! +100 PTS";
+                msgEl.className = "text-center font-bold h-6 text-xs transition-all font-mono text-emerald-400";
+
+                setTimeout(setupGuessQuestion, 1200);
             } else {
                 playAudio('wrong');
                 guessStreak = 0;
                 document.getElementById('gameStreak').innerText = guessStreak;
+                
+                msgEl.innerText = `ERRATO! Era: ${currentGuessTarget.name}`;
+                msgEl.className = "text-center font-bold h-6 text-xs transition-all font-mono text-red-500";
 
-                document.getElementById('gameResultMsg').innerText = `ERRORE! Era ${currentTargetCircuit.name}`;
-                document.getElementById('gameResultMsg').className = "text-center font-bold h-6 text-xs transition-all font-mono text-red-400";
-
-                if (btnElement) btnElement.classList.add('bg-red-600', 'border-red-400');
+                setTimeout(setupGuessQuestion, 1800);
             }
-
-            setTimeout(() => {
-                startNewGuessRound();
-            }, 1800);
         }
 
         function handleGuessTimeout() {
             playAudio('wrong');
             guessStreak = 0;
             document.getElementById('gameStreak').innerText = guessStreak;
-            document.getElementById('gameResultMsg').innerText = `TEMPO SCADUTO! Era ${currentTargetCircuit.name}`;
-            document.getElementById('gameResultMsg').className = "text-center font-bold h-6 text-xs transition-all font-mono text-amber-400";
+            const msgEl = document.getElementById('gameResultMsg');
+            msgEl.innerText = `TEMPO SCADUTO! Era: ${currentGuessTarget.name}`;
+            msgEl.className = "text-center font-bold h-6 text-xs transition-all font-mono text-amber-400";
 
-            setTimeout(() => {
-                startNewGuessRound();
-            }, 1800);
+            setTimeout(setupGuessQuestion, 1800);
         }
 
-        /* THROTTLED RESIZE LISTENER */
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeDebounceTimeout);
-            resizeDebounceTimeout = setTimeout(() => {
-                if (world) {
-                    world.width(window.innerWidth);
-                    world.height(window.innerHeight);
-                }
-            }, 150);
-        }, { passive: true });
+        function replayTrackAnimation() {
+            if (!selectedCircuit) return;
+            document.getElementById('svgContainer').innerHTML = getTrackSvgHtml(selectedCircuit);
+        }
     </script>
 </body>
 </html>
