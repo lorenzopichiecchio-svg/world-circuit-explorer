@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>F1 World Circuit Explorer 2026 - Telemetry, Standings & Analytics</title>
+
+    <!-- Performance Optimizations: DNS Prefetch & Preconnect -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='100' fill='%230a0b0e'/><path d='M 120,400 L 360,400 C 420,400 450,360 410,310 L 380,270 C 360,250 360,230 380,210 L 410,180 C 430,160 410,110 360,110 L 260,110 C 220,110 200,130 180,160 L 150,210 C 130,240 110,270 120,310 Z' fill='none' stroke='%23ff1e00' stroke-width='28' stroke-linecap='round' stroke-linejoin='round'/><g transform='translate(210, 205)'><rect x='0' y='0' width='22' height='22' fill='%23fff'/><rect x='22' y='0' width='22' height='22' fill='%23000'/><rect x='0' y='22' width='22' height='22' fill='%23000'/><rect x='22' y='22' width='22' height='22' fill='%23fff'/></g></svg>">
@@ -37,6 +44,7 @@
             width: 100vw;
             height: 100vh;
             user-select: none;
+            text-rendering: optimizeSpeed;
         }
 
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
@@ -49,6 +57,7 @@
             height: 100vh;
             z-index: 1;
             background-color: #030712;
+            will-change: transform;
         }
 
         .glass-panel {
@@ -57,6 +66,7 @@
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.15);
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+            transform: translateZ(0);
         }
 
         .glass-card {
@@ -65,6 +75,7 @@
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.2s ease-out;
+            transform: translateZ(0);
         }
 
         .glass-card:hover {
@@ -108,6 +119,7 @@
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             transform: translateY(100%);
             z-index: 40;
+            will-change: transform;
         }
 
         @media (min-width: 640px) {
@@ -153,6 +165,7 @@
             align-items: center;
             gap: 4px;
             transform: translate(-50%, -100%);
+            will-change: transform;
         }
 
         .globe-pin-label:hover {
@@ -182,6 +195,12 @@
             max-height: 100%;
             object-fit: contain;
             filter: drop-shadow(0 0 8px rgba(225, 6, 0, 0.4));
+        }
+
+        /* Performance Optimizations: Modal Content Containment */
+        .modal-optimized {
+            content-visibility: auto;
+            contain-intrinsic-size: 500px;
         }
     </style>
 </head>
@@ -408,7 +427,7 @@
     </aside>
 
     <!-- MODAL CLASSIFICHE 2026 -->
-    <div id="standingsModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div id="standingsModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden modal-optimized">
         <div class="glass-panel w-full max-w-3xl rounded-3xl p-5 sm:p-6 relative max-h-[90vh] flex flex-col border border-amber-500/30">
             <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-3">
                 <div>
@@ -436,7 +455,7 @@
     </div>
 
     <!-- MODAL PILOTI -->
-    <div id="driversModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div id="driversModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden modal-optimized">
         <div class="glass-panel w-full max-w-3xl rounded-3xl p-5 sm:p-6 relative max-h-[90vh] flex flex-col border border-indigo-500/30">
             <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-3">
                 <div>
@@ -461,7 +480,7 @@
     </div>
 
     <!-- MODAL CALENDARIO -->
-    <div id="calendarModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div id="calendarModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden modal-optimized">
         <div class="glass-panel w-full max-w-2xl rounded-3xl p-5 sm:p-6 relative max-h-[85vh] flex flex-col border border-white/15">
             <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-3">
                 <h3 class="text-base sm:text-xl font-black italic flex items-center gap-2 font-orbitron text-white">
@@ -474,7 +493,7 @@
     </div>
 
     <!-- MODAL TELEMETRIA -->
-    <div id="statsModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div id="statsModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden modal-optimized">
         <div class="glass-panel w-full max-w-md rounded-3xl p-5 sm:p-6 relative max-h-[90vh] overflow-y-auto border border-emerald-500/30">
             <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
                 <div>
@@ -536,7 +555,7 @@
     </div>
 
     <!-- MODAL CONFRONTO -->
-    <div id="compareModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div id="compareModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden modal-optimized">
         <div class="glass-panel w-full max-w-3xl rounded-3xl p-5 sm:p-6 relative max-h-[90vh] overflow-y-auto border border-emerald-500/30">
             <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
                 <h3 class="text-base sm:text-xl font-black italic flex items-center gap-2 font-orbitron text-white">
@@ -561,7 +580,7 @@
     </div>
 
     <!-- MODAL SIMULATORE AVANZATO PASSO GARA E STRATEGIA -->
-    <div id="simulatorModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div id="simulatorModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden modal-optimized">
         <div class="glass-panel w-full max-w-xl rounded-3xl p-5 sm:p-6 relative max-h-[90vh] overflow-y-auto border border-blue-500/30">
             <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
                 <h3 class="text-base sm:text-xl font-black italic flex items-center gap-2 font-orbitron text-white">
@@ -625,7 +644,7 @@
     </div>
 
     <!-- MODAL LIGHTS OUT REACTION GAME -->
-    <div id="gameModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div id="gameModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden modal-optimized">
         <div class="glass-panel w-full max-w-xl rounded-3xl p-5 sm:p-6 relative flex flex-col items-center text-center border border-red-500/30 max-h-[90vh] overflow-y-auto">
             <button onclick="closeModal('gameModal')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">
                 <i class="fa-solid fa-xmark"></i>
@@ -659,7 +678,7 @@
     </div>
 
     <!-- MODAL GUESS THE TRACK -->
-    <div id="guessGameModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-[100] hidden flex items-center justify-center p-4">
+    <div id="guessGameModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-[100] hidden flex items-center justify-center p-4 modal-optimized">
         <div class="glass-panel border border-purple-500/30 rounded-3xl p-5 sm:p-6 max-w-lg w-full text-white shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <button onclick="closeGuessTrackGame()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
                 <i class="fa-solid fa-xmark text-xl"></i>
@@ -1047,10 +1066,12 @@
             }
         ];
 
-        /* GLOBALS */
+        /* GLOBALS & CACHE */
         let world = null;
         let selectedCircuit = null;
         let simCurrentTyre = 'Soft';
+        let searchDebounceTimeout = null;
+        let resizeDebounceTimeout = null;
 
         /* INITIALIZATION */
         window.addEventListener('DOMContentLoaded', () => {
@@ -1060,7 +1081,7 @@
             renderStandingsContent('drivers');
             renderDriversList();
             updateCircuitCountBadge();
-        });
+        }, { passive: true });
 
         function updateCircuitCountBadge() {
             const count = circuitsData.length;
@@ -1069,7 +1090,7 @@
             document.getElementById('tagAllCount').innerText = count;
         }
 
-        /* GLOBE SETUP CON MAPPA CHIARA ED ETICHETTE COMPATTE E INTERATTIVE */
+        /* GLOBE SETUP CON PERFORMANCE OPTIMIZATIONS (PIXEL RATIO CAP & RENDER THROTTLING) */
         function initGlobe() {
             const container = document.getElementById('globeViz');
 
@@ -1086,11 +1107,10 @@
                     el.className = 'globe-pin-label';
                     el.innerHTML = `<i class="fa-solid fa-flag-checkered text-red-500 text-[10px]"></i> ${d.name}`;
                     
-                    // Click handler per far aprire la scheda circuito
                     el.addEventListener('click', (e) => {
                         e.stopPropagation();
                         selectCircuit(d.id);
-                    });
+                    }, { passive: true });
                     
                     return el;
                 })
@@ -1104,6 +1124,11 @@
                     if (d && d.id) selectCircuit(d.id);
                 });
 
+            // Performance tweak for Mobile/High-DPI displays to lock 60fps
+            if (world.renderer) {
+                world.renderer().setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+            }
+
             world.controls().autoRotate = true;
             world.controls().autoRotateSpeed = 0.5;
             world.pointOfView({ lat: 20, lng: 0, altitude: 2.3 });
@@ -1112,7 +1137,7 @@
         /* RENDER LAYOUT SVG */
         function getTrackSvgHtml(circuit) {
             if (circuit.svgUrl) {
-                return `<img src="${circuit.svgUrl}" alt="${circuit.name} layout" class="track-svg-img" onerror="this.onerror=null; this.parentElement.innerHTML=\`${circuit.svg.replace(/"/g, '&quot;')}\`;">`;
+                return `<img src="${circuit.svgUrl}" alt="${circuit.name} layout" class="track-svg-img" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML=\`${circuit.svg.replace(/"/g, '&quot;')}\`;">`;
             }
             return circuit.svg;
         }
@@ -1153,71 +1178,55 @@
             document.getElementById('widgetRainText').innerText = w.rain;
             document.getElementById('weatherWidget').classList.remove('hidden');
 
+            // Telemetry Modal Prep
+            document.getElementById('modalTrackName').innerText = circuit.name.toUpperCase();
+            document.getElementById('telemetryThrottle').innerText = circuit.telemetry.throttle + '%';
+            document.getElementById('barThrottle').style.width = circuit.telemetry.throttle + '%';
+            document.getElementById('telemetryDownforce').innerText = circuit.telemetry.downforce > 70 ? 'Alto' : (circuit.telemetry.downforce > 40 ? 'Medio' : 'Basso');
+            document.getElementById('barDownforce').style.width = circuit.telemetry.downforce + '%';
+            document.getElementById('telemetryBrakes').innerText = circuit.telemetry.brakes + '%';
+            document.getElementById('barBrakes').style.width = circuit.telemetry.brakes + '%';
+            document.getElementById('telemetryTyres').innerText = circuit.telemetry.tyres + '%';
+            document.getElementById('barTyres').style.width = circuit.telemetry.tyres + '%';
+            document.getElementById('telemetryGears').innerText = circuit.telemetry.gears + ' Cambiate';
+
             // Open Sidebar
             document.getElementById('sidebar').classList.add('active');
 
             // Globe Focus
-            world.controls().autoRotate = false;
-            world.pointOfView({ lat: circuit.lat, lng: circuit.lng, altitude: 0.8 }, 1600);
+            if (world) {
+                world.controls().autoRotate = false;
+                world.pointOfView({ lat: circuit.lat, lng: circuit.lng, altitude: 0.85 }, 1200);
+            }
         }
 
+        /* RESET VISTA GLOBO */
         function resetView() {
             playAudio('select');
             document.getElementById('sidebar').classList.remove('active');
             document.getElementById('weatherWidget').classList.add('hidden');
-            world.controls().autoRotate = true;
-            world.pointOfView({ lat: 20, lng: 0, altitude: 2.3 }, 1500);
-        }
-
-        function replayTrackAnimation() {
-            if (!selectedCircuit) return;
-            playAudio('select');
-            document.getElementById('svgContainer').innerHTML = getTrackSvgHtml(selectedCircuit);
-        }
-
-        /* POPOLA DROPDOWN E MODAL */
-        function populateCircuitSelects() {
-            const select = document.getElementById('circuitSelect');
-            const compA = document.getElementById('compareSelectA');
-            const compB = document.getElementById('compareSelectB');
-            const simSel = document.getElementById('simCircuitSelect');
-
-            let html = '<option value="">Seleziona Pista...</option>';
-            circuitsData.forEach(c => {
-                html += `<option value="${c.id}">${c.name} (${c.country})</option>`;
-            });
-
-            select.innerHTML = html;
-            compA.innerHTML = html;
-            compB.innerHTML = html;
-            simSel.innerHTML = html;
-
-            if (circuitsData.length >= 2) {
-                compA.value = circuitsData[0].id;
-                compB.value = circuitsData[1].id;
-                simSel.value = circuitsData[0].id;
+            if (world) {
+                world.controls().autoRotate = true;
+                world.pointOfView({ lat: 20, lng: 0, altitude: 2.3 }, 1200);
             }
         }
 
-        function onSelectDropdown(id) {
-            if (id) selectCircuit(id);
+        /* REPLAY TRACK SVG ANIMATION */
+        function replayTrackAnimation() {
+            if (!selectedCircuit) return;
+            const container = document.getElementById('svgContainer');
+            const currentSvg = getTrackSvgHtml(selectedCircuit);
+            container.innerHTML = '';
+            requestAnimationFrame(() => {
+                container.innerHTML = currentSvg;
+            });
         }
 
-        function filterCircuitsBySearch() {
-            const query = document.getElementById('searchInput').value.toLowerCase().trim();
-            const filtered = circuitsData.filter(c => 
-                c.name.toLowerCase().includes(query) ||
-                c.country.toLowerCase().includes(query) ||
-                c.city.toLowerCase().includes(query)
-            );
-            world.htmlElementsData(filtered);
-            world.pointsData(filtered);
-        }
-
+        /* TAG FILTERS */
         function applyTagFilter(tag, btn) {
             playAudio('select');
             document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+            if (btn) btn.classList.add('active');
 
             let filtered = circuitsData;
             if (tag === 'street') filtered = circuitsData.filter(c => c.isStreet);
@@ -1226,173 +1235,234 @@
             else if (tag === 'night') filtered = circuitsData.filter(c => c.isNight);
             else if (tag === 'new2026') filtered = circuitsData.filter(c => c.isNew2026);
 
-            world.htmlElementsData(filtered);
-            world.pointsData(filtered);
+            if (world) {
+                world.htmlElementsData(filtered);
+                world.pointsData(filtered);
+            }
         }
 
-        /* CALENDARIO MODAL */
-        function renderCalendarModal() {
-            const list = document.getElementById('calendarList');
-            let html = '';
+        /* SEARCH FILTER WITH DEBOUNCE */
+        function filterCircuitsBySearch() {
+            clearTimeout(searchDebounceTimeout);
+            searchDebounceTimeout = setTimeout(() => {
+                const query = document.getElementById('searchInput').value.toLowerCase().trim();
+                const filtered = circuitsData.filter(c => 
+                    c.name.toLowerCase().includes(query) || 
+                    c.country.toLowerCase().includes(query) || 
+                    c.city.toLowerCase().includes(query)
+                );
+                if (world) {
+                    world.htmlElementsData(filtered);
+                    world.pointsData(filtered);
+                }
+            }, 120);
+        }
+
+        /* POPULATE DROPDOWNS */
+        function populateCircuitSelects() {
+            const select = document.getElementById('circuitSelect');
+            const compA = document.getElementById('compareSelectA');
+            const compB = document.getElementById('compareSelectB');
+            const simSelect = document.getElementById('simCircuitSelect');
+
+            let optionsHtml = '<option value="">Seleziona Pista...</option>';
+            let compAHtml = '';
+            let compBHtml = '';
+            let simHtml = '';
+
             circuitsData.forEach((c, idx) => {
-                html += `
-                    <div onclick="closeModal('calendarModal'); selectCircuit('${c.id}');" class="glass-card p-3 rounded-2xl flex items-center justify-between cursor-pointer hover:bg-white/10 transition-all">
-                        <div class="flex items-center gap-3">
-                            <span class="font-mono text-xs font-black text-red-500 bg-red-950/40 px-2 py-1 rounded-lg border border-red-500/20">GP ${idx + 1}</span>
-                            <div>
-                                <h4 class="font-bold text-xs text-white">${c.name}</h4>
-                                <p class="text-[10px] text-gray-300 font-mono">${c.city}, ${c.country}</p>
-                            </div>
-                        </div>
-                        <span class="text-xs font-mono font-bold text-emerald-400">${c.length}</span>
-                    </div>
-                `;
+                optionsHtml += `<option value="${c.id}">${c.name} (${c.country})</option>`;
+                compAHtml += `<option value="${c.id}" ${idx === 0 ? 'selected' : ''}>${c.name}</option>`;
+                compBHtml += `<option value="${c.id}" ${idx === 1 ? 'selected' : ''}>${c.name}</option>`;
+                simHtml += `<option value="${c.id}">${c.name}</option>`;
             });
-            list.innerHTML = html;
+
+            if (select) select.innerHTML = optionsHtml;
+            if (compA) compA.innerHTML = compAHtml;
+            if (compB) compB.innerHTML = compBHtml;
+            if (simSelect) simSelect.innerHTML = simHtml;
         }
 
-        /* CLASSIFICHE MODAL */
+        function onSelectDropdown(id) {
+            if (id) selectCircuit(id);
+        }
+
+        /* MODAL CONTROL */
+        function openModal(id) {
+            playAudio('select');
+            const modal = document.getElementById(id);
+            if (modal) {
+                modal.classList.remove('hidden');
+                if (id === 'compareModal') renderComparison();
+                if (id === 'simulatorModal') calculateSimulatedStrategy();
+            }
+        }
+
+        function closeModal(id) {
+            playAudio('select');
+            const modal = document.getElementById(id);
+            if (modal) modal.classList.add('hidden');
+        }
+
+        /* STANDINGS SWITCHER */
         function switchStandingsTab(tab) {
             playAudio('select');
-            const btnD = document.getElementById('btnTabDrivers');
-            const btnT = document.getElementById('btnTabTeams');
+            const btnDrivers = document.getElementById('btnTabDrivers');
+            const btnTeams = document.getElementById('btnTabTeams');
 
             if (tab === 'drivers') {
-                btnD.className = "px-4 py-2 rounded-xl text-xs font-bold bg-f1-red text-white transition-all";
-                btnT.className = "px-4 py-2 rounded-xl text-xs font-bold bg-white/5 text-gray-300 hover:bg-white/10 transition-all";
+                btnDrivers.className = 'px-4 py-2 rounded-xl text-xs font-bold bg-f1-red text-white transition-all';
+                btnTeams.className = 'px-4 py-2 rounded-xl text-xs font-bold bg-white/5 text-gray-300 hover:bg-white/10 transition-all';
             } else {
-                btnT.className = "px-4 py-2 rounded-xl text-xs font-bold bg-f1-red text-white transition-all";
-                btnD.className = "px-4 py-2 rounded-xl text-xs font-bold bg-white/5 text-gray-300 hover:bg-white/10 transition-all";
+                btnTeams.className = 'px-4 py-2 rounded-xl text-xs font-bold bg-f1-red text-white transition-all';
+                btnDrivers.className = 'px-4 py-2 rounded-xl text-xs font-bold bg-white/5 text-gray-300 hover:bg-white/10 transition-all';
             }
             renderStandingsContent(tab);
         }
 
         function renderStandingsContent(tab) {
             const container = document.getElementById('standingsContent');
-            let html = '';
+            const fragment = document.createDocumentFragment();
 
             if (tab === 'drivers') {
                 driversStandings2026.forEach(d => {
-                    html += `
-                        <div class="glass-card p-2.5 rounded-2xl flex items-center justify-between border-l-4" style="border-left-color: ${d.color}">
-                            <div class="flex items-center gap-3">
-                                <span class="font-mono text-xs font-black w-6 text-center text-gray-300">${d.pos}</span>
-                                <div>
-                                    <div class="flex items-center gap-2">
-                                        <h4 class="font-bold text-xs text-white">${d.driver}</h4>
-                                        <span class="text-[9px] font-mono px-1.5 rounded text-black font-bold" style="background-color: ${d.color}">#${d.number}</span>
-                                    </div>
-                                    <p class="text-[10px] text-gray-300 font-mono">${d.team}</p>
-                                </div>
+                    const div = document.createElement('div');
+                    div.className = 'glass-card p-3 rounded-2xl flex items-center justify-between border-l-4 border border-white/10';
+                    div.style.borderLeftColor = d.color;
+                    div.innerHTML = `
+                        <div class="flex items-center gap-3">
+                            <span class="font-black text-sm w-6 text-gray-400 font-mono">P${d.pos}</span>
+                            <div>
+                                <h4 class="font-bold text-xs sm:text-sm text-white">${d.driver} <span class="text-[10px] text-gray-400 font-mono">#${d.number}</span></h4>
+                                <span class="text-[10px] text-gray-400 font-mono">${d.team}</span>
                             </div>
-                            <span class="font-mono font-black text-sm text-amber-400">${d.points} PTS</span>
                         </div>
+                        <span class="font-black text-sm text-amber-400 font-mono">${d.points} PTS</span>
                     `;
+                    fragment.appendChild(div);
                 });
             } else {
                 teamsStandings2026.forEach(t => {
-                    html += `
-                        <div class="glass-card p-3 rounded-2xl flex items-center justify-between border-l-4" style="border-left-color: ${t.color}">
-                            <div class="flex items-center gap-3">
-                                <span class="font-mono text-xs font-black w-6 text-center text-gray-300">${t.pos}</span>
-                                <h4 class="font-bold text-xs text-white">${t.team}</h4>
+                    const div = document.createElement('div');
+                    div.className = 'glass-card p-3 rounded-2xl flex items-center justify-between border-l-4 border border-white/10';
+                    div.style.borderLeftColor = t.color;
+                    div.innerHTML = `
+                        <div class="flex items-center gap-3">
+                            <span class="font-black text-sm w-6 text-gray-400 font-mono">P${t.pos}</span>
+                            <div>
+                                <h4 class="font-bold text-xs sm:text-sm text-white">${t.team}</h4>
                             </div>
-                            <span class="font-mono font-black text-sm text-amber-400">${t.points} PTS</span>
                         </div>
+                        <span class="font-black text-sm text-amber-400 font-mono">${t.points} PTS</span>
                     `;
+                    fragment.appendChild(div);
                 });
             }
-            container.innerHTML = html;
+            container.innerHTML = '';
+            container.appendChild(fragment);
         }
 
-        /* PILOTI MODAL */
+        /* DRIVERS RENDER */
         function renderDriversList() {
-            const list = document.getElementById('driversListContainer');
-            let html = '';
+            const container = document.getElementById('driversListContainer');
+            const fragment = document.createDocumentFragment();
+
             driversStandings2026.forEach(d => {
-                html += `
-                    <div onclick="selectDriver('${d.code}')" class="glass-card p-2.5 rounded-xl flex items-center justify-between cursor-pointer hover:bg-white/10 transition-all border-l-2" style="border-left-color: ${d.color}">
-                        <div class="flex items-center gap-2">
-                            <span class="font-mono text-[10px] text-gray-300 font-bold">${d.code}</span>
-                            <span class="text-xs font-bold text-white">${d.driver}</span>
+                const item = document.createElement('div');
+                item.className = 'glass-card p-2.5 rounded-xl cursor-pointer flex items-center justify-between border border-white/10 hover:border-indigo-500 transition-all';
+                item.onclick = () => showDriverDetail(d.code);
+                item.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full" style="background-color: ${d.color}"></span>
+                        <div>
+                            <span class="font-bold text-xs text-white block leading-tight">${d.driver}</span>
+                            <span class="text-[9px] text-gray-400 font-mono">${d.team}</span>
                         </div>
-                        <span class="text-[10px] font-mono font-bold text-gray-300">#${d.number}</span>
                     </div>
+                    <span class="text-xs font-mono font-bold text-indigo-300">#${d.number}</span>
                 `;
+                fragment.appendChild(item);
             });
-            list.innerHTML = html;
+
+            container.innerHTML = '';
+            container.appendChild(fragment);
+            if (driversStandings2026.length > 0) showDriverDetail(driversStandings2026[0].code);
         }
 
-        function selectDriver(code) {
+        function showDriverDetail(code) {
             playAudio('select');
-            const d = driversStandings2026.find(x => x.code === code);
-            if (!d) return;
+            const driver = driversStandings2026.find(d => d.code === code);
+            if (!driver) return;
 
-            const card = document.getElementById('driverDetailCard');
-            card.innerHTML = `
-                <div>
-                    <div class="flex items-center justify-between border-b border-white/10 pb-3 mb-3">
+            const detailCard = document.getElementById('driverDetailCard');
+            detailCard.innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between border-b border-white/10 pb-3">
                         <div>
-                            <span class="text-[10px] font-mono uppercase text-gray-300">SCHEDA PILOTA 2026</span>
-                            <h2 class="text-xl font-black font-orbitron text-white mt-0.5">${d.driver}</h2>
-                            <p class="text-xs text-indigo-400 font-mono font-bold">${d.team}</p>
+                            <span class="text-[10px] font-mono uppercase tracking-widest text-indigo-400 font-bold">SCHEDA PILOTA F1 2026</span>
+                            <h3 class="text-xl font-black font-orbitron text-white leading-tight mt-0.5">${driver.driver}</h3>
+                            <p class="text-xs text-gray-300 font-mono">${driver.team}</p>
                         </div>
-                        <div class="bg-indigo-600/30 border border-indigo-500/40 text-indigo-300 font-mono font-black text-2xl px-3 py-1 rounded-xl">
-                            #${d.number}
+                        <div class="text-right">
+                            <span class="text-3xl font-black font-orbitron text-indigo-400">#${driver.number}</span>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-3 mb-4">
-                        <div class="glass-card p-3 rounded-xl">
-                            <span class="text-[9px] text-gray-300 uppercase block font-mono">Punti Stagione</span>
-                            <span class="text-lg font-black text-amber-400 font-mono mt-0.5 block">${d.points} PTS</span>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="glass-card p-3 rounded-xl border border-white/10">
+                            <span class="text-[9px] text-gray-400 uppercase font-mono block">Posizione Attuale</span>
+                            <span class="text-lg font-black font-mono text-white">P${driver.pos}</span>
                         </div>
-                        <div class="glass-card p-3 rounded-xl">
-                            <span class="text-[9px] text-gray-300 uppercase block font-mono">Posizione</span>
-                            <span class="text-lg font-black text-emerald-400 font-mono mt-0.5 block">${d.pos}° Posto</span>
+                        <div class="glass-card p-3 rounded-xl border border-white/10">
+                            <span class="text-[9px] text-gray-400 uppercase font-mono block">Punti Campionato</span>
+                            <span class="text-lg font-black font-mono text-amber-400">${driver.points} PTS</span>
                         </div>
                     </div>
-                </div>
 
-                <div class="p-3 bg-white/5 rounded-xl border border-white/10 text-xs text-gray-300">
-                    <i class="fa-solid fa-circle-info text-indigo-400 mr-1"></i> Pilota ufficiale della stagione Formula 1 2026 impegnato nel nuovo regolamento tecnico.
+                    <div class="p-3 bg-white/5 rounded-xl border border-white/10">
+                        <span class="text-[10px] font-mono text-gray-300 uppercase block font-bold mb-1">Codice Identificativo:</span>
+                        <span class="text-sm font-bold font-mono text-cyan-400 tracking-wider">${driver.code}</span>
+                    </div>
                 </div>
             `;
         }
 
-        /* MODAL CONTROLS */
-        function openModal(id) {
-            playAudio('select');
-            if (id === 'statsModal') {
-                if (!selectedCircuit) selectedCircuit = circuitsData[0];
-                document.getElementById('modalTrackName').innerText = selectedCircuit.name.toUpperCase();
-                const t = selectedCircuit.telemetry;
-                document.getElementById('telemetryThrottle').innerText = `${t.throttle}%`;
-                document.getElementById('barThrottle').style.width = `${t.throttle}%`;
-                document.getElementById('barDownforce').style.width = `${t.downforce}%`;
-                document.getElementById('barBrakes').style.width = `${t.brakes}%`;
-                document.getElementById('barTyres').style.width = `${t.tyres}%`;
-                document.getElementById('telemetryGears').innerText = `${t.gears} Cambiate`;
-            } else if (id === 'compareModal') {
-                renderComparison();
-            } else if (id === 'simulatorModal') {
-                calculateSimulatedStrategy();
-            }
-            document.getElementById(id).classList.remove('hidden');
+        /* CALENDAR MODAL RENDER */
+        function renderCalendarModal() {
+            const container = document.getElementById('calendarList');
+            const fragment = document.createDocumentFragment();
+
+            circuitsData.forEach((c, i) => {
+                const item = document.createElement('div');
+                item.className = 'glass-card p-3 rounded-2xl flex items-center justify-between border border-white/10 hover:border-red-500 cursor-pointer transition-all';
+                item.onclick = () => {
+                    closeModal('calendarModal');
+                    selectCircuit(c.id);
+                };
+                item.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="font-mono font-bold text-xs text-red-500 w-6">ROUND ${i + 1}</span>
+                        <div>
+                            <h4 class="font-bold text-xs text-white">${c.name}</h4>
+                            <span class="text-[10px] text-gray-400 font-mono">${c.city}, ${c.country} • ${c.length}</span>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-xs text-gray-500"></i>
+                `;
+                fragment.appendChild(item);
+            });
+
+            container.innerHTML = '';
+            container.appendChild(fragment);
         }
 
-        function closeModal(id) {
-            playAudio('select');
-            document.getElementById(id).classList.add('hidden');
-        }
-
-        /* CONFRONTO TRACCIATI */
+        /* COMPARISON LOGIC */
         function quickPrepareCompare() {
-            openModal('compareModal');
             if (selectedCircuit) {
-                document.getElementById('compareSelectA').value = selectedCircuit.id;
-                renderComparison();
+                const compA = document.getElementById('compareSelectA');
+                if (compA) compA.value = selectedCircuit.id;
             }
+            openModal('compareModal');
         }
 
         function renderComparison() {
@@ -1402,143 +1472,196 @@
             const cA = circuitsData.find(c => c.id === idA) || circuitsData[0];
             const cB = circuitsData.find(c => c.id === idB) || circuitsData[1];
 
-            const results = document.getElementById('compareResults');
-            results.innerHTML = `
-                <div class="grid grid-cols-2 gap-3 text-center">
-                    <div class="glass-card p-3 rounded-2xl border-t-2 border-t-red-500">
-                        <h4 class="font-black text-xs text-red-400 font-orbitron">${cA.name}</h4>
-                        <p class="text-[10px] text-gray-300 font-mono">${cA.country}</p>
-                    </div>
-                    <div class="glass-card p-3 rounded-2xl border-t-2 border-t-cyan-500">
-                        <h4 class="font-black text-xs text-cyan-400 font-orbitron">${cB.name}</h4>
-                        <p class="text-[10px] text-gray-300 font-mono">${cB.country}</p>
-                    </div>
+            const res = document.getElementById('compareResults');
+            res.innerHTML = `
+                <div class="grid grid-cols-2 gap-3 text-center mb-2">
+                    <div class="font-black text-sm text-red-400 font-orbitron uppercase">${cA.name}</div>
+                    <div class="font-black text-sm text-cyan-400 font-orbitron uppercase">${cB.name}</div>
                 </div>
 
-                <div class="space-y-2 text-xs mt-3">
-                    <div class="glass-card p-2.5 rounded-xl flex justify-between items-center font-mono">
+                <div class="glass-card p-3 rounded-xl space-y-2 text-xs">
+                    <div class="flex justify-between border-b border-white/10 pb-1 font-mono">
                         <span class="font-bold text-red-400">${cA.length}</span>
-                        <span class="text-[10px] text-gray-300 uppercase font-sans">Lunghezza</span>
+                        <span class="text-gray-400 uppercase font-sans">Lunghezza</span>
                         <span class="font-bold text-cyan-400">${cB.length}</span>
                     </div>
-                    <div class="glass-card p-2.5 rounded-xl flex justify-between items-center font-mono">
-                        <span class="font-bold text-red-400">${cA.speed}</span>
-                        <span class="text-[10px] text-gray-300 uppercase font-sans">Velocità Max</span>
-                        <span class="font-bold text-cyan-400">${cB.speed}</span>
+
+                    <div class="flex justify-between border-b border-white/10 pb-1 font-mono">
+                        <span class="font-bold text-red-400">${cA.laps}</span>
+                        <span class="text-gray-400 uppercase font-sans">Giri Gara</span>
+                        <span class="font-bold text-cyan-400">${cB.laps}</span>
                     </div>
-                    <div class="glass-card p-2.5 rounded-xl flex justify-between items-center font-mono">
+
+                    <div class="flex justify-between border-b border-white/10 pb-1 font-mono">
                         <span class="font-bold text-red-400">${cA.turns}</span>
-                        <span class="text-[10px] text-gray-300 uppercase font-sans">Curve</span>
+                        <span class="text-gray-400 uppercase font-sans">Curve</span>
                         <span class="font-bold text-cyan-400">${cB.turns}</span>
                     </div>
-                    <div class="glass-card p-2.5 rounded-xl flex justify-between items-center font-mono">
+
+                    <div class="flex justify-between border-b border-white/10 pb-1 font-mono">
+                        <span class="font-bold text-red-400">${cA.speed}</span>
+                        <span class="text-gray-400 uppercase font-sans">Velocità Max</span>
+                        <span class="font-bold text-cyan-400">${cB.speed}</span>
+                    </div>
+
+                    <div class="flex justify-between border-b border-white/10 pb-1 font-mono">
                         <span class="font-bold text-red-400">${cA.telemetry.throttle}%</span>
-                        <span class="text-[10px] text-gray-300 uppercase font-sans">% Full Throttle</span>
+                        <span class="text-gray-400 uppercase font-sans">% Full Throttle</span>
                         <span class="font-bold text-cyan-400">${cB.telemetry.throttle}%</span>
+                    </div>
+
+                    <div class="flex justify-between border-b border-white/10 pb-1 font-mono">
+                        <span class="font-bold text-red-400">${cA.record}</span>
+                        <span class="text-gray-400 uppercase font-sans">Record Giro</span>
+                        <span class="font-bold text-cyan-400">${cB.record}</span>
                     </div>
                 </div>
             `;
         }
 
-        /* SIMULATORE STRATEGIA */
+        /* STRATEGY SIMULATOR LOGIC */
         function setSimTyre(tyre, btn) {
             playAudio('select');
             simCurrentTyre = tyre;
-            document.querySelectorAll('.sim-tyre-btn').forEach(b => b.classList.remove('ring-2', 'ring-white'));
-            btn.classList.add('ring-2', 'ring-white');
+            document.querySelectorAll('.sim-tyre-btn').forEach(b => {
+                b.classList.remove('bg-red-600/50', 'bg-amber-500/50', 'bg-white/30');
+            });
+            if (btn) btn.classList.add('bg-white/30');
             calculateSimulatedStrategy();
         }
 
         function calculateSimulatedStrategy() {
-            const circuitId = document.getElementById('simCircuitSelect').value;
+            const circuitId = document.getElementById('simCircuitSelect').value || circuitsData[0].id;
             const circuit = circuitsData.find(c => c.id === circuitId) || circuitsData[0];
-            const fuel = parseInt(document.getElementById('simFuelRange').value);
+
+            const fuel = parseFloat(document.getElementById('simFuelRange').value);
             const engineMode = parseFloat(document.getElementById('simEngineMode').value);
 
-            document.getElementById('simFuelVal').innerText = `${fuel} kg`;
+            document.getElementById('simFuelVal').innerText = `${fuel} kg ${fuel === 110 ? '(Pieno)' : ''}`;
 
-            let baseLap = 80.0;
-            let degPerLap = 0.08;
+            let baseTime = 81.0; 
+            if (circuit.record && circuit.record.includes(':')) {
+                const parts = circuit.record.split(':');
+                baseTime = parseFloat(parts[0]) * 60 + parseFloat(parts[1]);
+            }
 
-            if (simCurrentTyre === 'Soft') { baseLap -= 0.6; degPerLap = 0.12; }
-            else if (simCurrentTyre === 'Hard') { baseLap += 0.8; degPerLap = 0.04; }
+            const fuelPenalty = (fuel / 10) * 0.3;
+            let tyreMod = 0;
+            let degRate = 0.085;
+            let pitWindow = "Giro 18 - 22";
+            let strategy = "1 Stop (Soft ➔ Hard)";
 
-            const lapTimeSec = (baseLap + (fuel * 0.03)) * engineMode;
-            const mins = Math.floor(lapTimeSec / 60);
-            const secs = (lapTimeSec % 60).toFixed(3);
+            if (simCurrentTyre === 'Soft') {
+                tyreMod = -0.5;
+                degRate = 0.120;
+                pitWindow = "Giro 14 - 18";
+                strategy = "1 Stop (Soft ➔ Hard) o 2 Stop";
+            } else if (simCurrentTyre === 'Medium') {
+                tyreMod = 0;
+                degRate = 0.075;
+                pitWindow = "Giro 20 - 25";
+                strategy = "1 Stop (Medium ➔ Hard)";
+            } else if (simCurrentTyre === 'Hard') {
+                tyreMod = 0.6;
+                degRate = 0.045;
+                pitWindow = "Giro 28 - 35";
+                strategy = "1 Stop (Hard ➔ Medium)";
+            }
 
-            document.getElementById('simResultLaptime').innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-            document.getElementById('simResultDegradation').innerText = `+${degPerLap.toFixed(3)}s / giro`;
-            
-            const pitLapStart = simCurrentTyre === 'Soft' ? 14 : simCurrentTyre === 'Medium' ? 22 : 32;
-            document.getElementById('simResultPitWindow').innerText = `Giro ${pitLapStart} - ${pitLapStart + 5}`;
-            document.getElementById('simResultPitStrategy').innerText = `1 Stop (${simCurrentTyre} ➔ Hard)`;
+            const finalLapSec = (baseTime + fuelPenalty + tyreMod) / engineMode;
+            const minutes = Math.floor(finalLapSec / 60);
+            const seconds = (finalLapSec % 60).toFixed(3);
+            const formattedSec = seconds < 10 ? '0' + seconds : seconds;
+
+            document.getElementById('simResultLaptime').innerText = `${minutes}:${formattedSec}`;
+            document.getElementById('simResultDegradation').innerText = `+${degRate.toFixed(3)}s / giro`;
+            document.getElementById('simResultPitWindow').innerText = pitWindow;
+            document.getElementById('simResultPitStrategy').innerText = strategy;
         }
 
-        /* REACTION GAME */
-        let gameState = 'idle';
-        let gameTimer = null;
-        let startTime = 0;
+        /* REACTION GAME ENGINE */
+        let gameTimerId = null;
+        let gameStartTime = 0;
+        let gameActive = false;
+        let lightsState = 0;
 
         function startGame() {
             playAudio('select');
-            gameState = 'waiting';
-            document.getElementById('gameStatusText').innerText = "ATTENDI LE LUCI ROSSE...";
-            document.getElementById('gameSubText').innerText = "Non cliccare prima dello spegnimento!";
+            resetLights();
+            gameActive = true;
+            document.getElementById('gameStatusText').innerText = "ATTENDI L'ACCENSIONE DELLE LUCI...";
+            document.getElementById('gameStatusText').className = "text-sm sm:text-base font-bold text-amber-400 uppercase font-orbitron";
+            document.getElementById('gameSubText').innerText = "Non cliccare prima che si spengano!";
 
-            for (let i = 1; i <= 5; i++) {
-                document.getElementById(`light${i}`).classList.remove('active');
-            }
-
-            let currentLight = 1;
-            const lightInterval = setInterval(() => {
-                if (gameState !== 'waiting') { clearInterval(lightInterval); return; }
-                if (currentLight <= 5) {
+            let lightIndex = 1;
+            gameTimerId = setInterval(() => {
+                if (lightIndex <= 5) {
+                    const light = document.getElementById(`light${lightIndex}`);
+                    if (light) light.classList.add('active');
                     playAudio('lightOn');
-                    document.getElementById(`light${currentLight}`).classList.add('active');
-                    currentLight++;
+                    lightIndex++;
                 } else {
-                    clearInterval(lightInterval);
-                    const randomDelay = 1000 + Math.random() * 2500;
-                    gameTimer = setTimeout(() => {
-                        for (let i = 1; i <= 5; i++) document.getElementById(`light${i}`).classList.remove('active');
+                    clearInterval(gameTimerId);
+                    const randomDelay = Math.random() * 2300 + 1200;
+                    gameTimerId = setTimeout(() => {
+                        resetLights();
                         playAudio('lightsOut');
-                        gameState = 'ready';
-                        startTime = Date.now();
+                        gameStartTime = performance.now();
+                        lightsState = 2;
                         document.getElementById('gameStatusText').innerText = "VIA! CLICCA ORA!";
+                        document.getElementById('gameStatusText').className = "text-sm sm:text-base font-bold text-emerald-400 uppercase font-orbitron animate-pulse";
                     }, randomDelay);
                 }
             }, 1000);
+            lightsState = 1;
         }
 
-        function handleTapArea() {
-            if (gameState === 'waiting') {
-                clearTimeout(gameTimer);
-                playAudio('jumpStart');
-                gameState = 'idle';
-                document.getElementById('gameStatusText').innerText = "PARTENZA ANTICIPATA! (FALSE START)";
-                document.getElementById('gameSubText').innerText = "Hai cliccato prima dello spegnimento delle luci.";
-            } else if (gameState === 'ready') {
-                const reactionTime = ((Date.now() - startTime) / 1000).toFixed(3);
-                playAudio('correct');
-                gameState = 'idle';
-                document.getElementById('gameStatusText').innerText = `TEMPO REAZIONE: ${reactionTime}s`;
-                document.getElementById('gameSubText').innerText = reactionTime < 0.22 ? "LIVELLO PILOTA F1 REALE!" : "Buona reazione, riprova per migliorare!";
+        function resetLights() {
+            for (let i = 1; i <= 5; i++) {
+                const el = document.getElementById(`light${i}`);
+                if (el) el.classList.remove('active');
             }
         }
 
-        /* GUESS THE TRACK GAME */
-        let guessCurrentTrack = null;
+        function handleTapArea() {
+            if (lightsState === 0) return;
+
+            if (lightsState === 1) {
+                clearTimeout(gameTimerId);
+                clearInterval(gameTimerId);
+                resetLights();
+                playAudio('jumpStart');
+                document.getElementById('gameStatusText').innerText = "PARTENZA ANTICIPATA! (FALSE START)";
+                document.getElementById('gameStatusText').className = "text-sm sm:text-base font-bold text-red-500 uppercase font-orbitron";
+                document.getElementById('gameSubText').innerText = "Hai cliccato prima dello spegnimento dei semafori. Riprova!";
+                lightsState = 0;
+            } else if (lightsState === 2) {
+                const reactionTime = ((performance.now() - gameStartTime) / 1000).toFixed(3);
+                playAudio('correct');
+                document.getElementById('gameStatusText').innerText = `TEMPO REAZIONE: ${reactionTime}s`;
+                document.getElementById('gameStatusText').className = "text-sm sm:text-base font-bold text-cyan-400 uppercase font-orbitron";
+
+                let feedback = "Ottima reazione livello F1!";
+                if (reactionTime < 0.20) feedback = "REAZIONE DA CAMPIONE DEL MONDO! 🏆";
+                else if (reactionTime > 0.35) feedback = "Un po' lento! Puoi fare di meglio.";
+                
+                document.getElementById('gameSubText').innerText = feedback;
+                lightsState = 0;
+            }
+        }
+
+        /* GUESS THE TRACK GAME ENGINE */
         let guessScore = 0;
         let guessStreak = 0;
         let guessHighScore = 0;
-        let guessTimerVal = 15;
+        let guessTimer = 15;
         let guessInterval = null;
+        let currentTargetCircuit = null;
 
         function openGuessTrackGame() {
             playAudio('select');
             document.getElementById('guessGameModal').classList.remove('hidden');
-            nextGuessQuestion();
+            startNewGuessRound();
         }
 
         function closeGuessTrackGame() {
@@ -1547,66 +1670,103 @@
             document.getElementById('guessGameModal').classList.add('hidden');
         }
 
-        function nextGuessQuestion() {
+        function startNewGuessRound() {
             clearInterval(guessInterval);
-            guessTimerVal = 15;
-            document.getElementById('gameTimer').innerText = guessTimerVal;
+            guessTimer = 15;
+            document.getElementById('gameTimer').innerText = guessTimer;
             document.getElementById('gameResultMsg').innerText = '';
 
-            guessCurrentTrack = circuitsData[Math.floor(Math.random() * circuitsData.length)];
-            document.getElementById('gameTrackSvg').innerHTML = getTrackSvgHtml(guessCurrentTrack);
+            const randomIndex = Math.floor(Math.random() * circuitsData.length);
+            currentTargetCircuit = circuitsData[randomIndex];
 
-            let options = [guessCurrentTrack];
+            document.getElementById('gameTrackSvg').innerHTML = getTrackSvgHtml(currentTargetCircuit);
+
+            const options = [currentTargetCircuit];
             while (options.length < 4) {
-                const rand = circuitsData[Math.floor(Math.random() * circuitsData.length)];
-                if (!options.find(o => o.id === rand.id)) options.push(rand);
+                const rnd = circuitsData[Math.floor(Math.random() * circuitsData.length)];
+                if (!options.some(o => o.id === rnd.id)) {
+                    options.push(rnd);
+                }
             }
+
             options.sort(() => Math.random() - 0.5);
 
-            let optsHtml = '';
+            const optionsContainer = document.getElementById('gameOptions');
+            optionsContainer.innerHTML = '';
             options.forEach(opt => {
-                optsHtml += `
-                    <button onclick="checkGuessAnswer('${opt.id}')" class="bg-white/10 hover:bg-white/20 text-white font-bold text-xs py-2.5 px-3 rounded-xl border border-white/10 transition-all text-left truncate">
-                        ${opt.name}
-                    </button>
-                `;
+                const btn = document.createElement('button');
+                btn.className = 'bg-white/10 hover:bg-purple-600/40 border border-white/20 hover:border-purple-400 text-white font-bold text-xs py-2.5 px-3 rounded-xl transition-all font-mono text-left truncate';
+                btn.innerText = opt.name;
+                btn.onclick = () => submitGuess(opt.id, btn);
+                optionsContainer.appendChild(btn);
             });
-            document.getElementById('gameOptions').innerHTML = optsHtml;
 
             guessInterval = setInterval(() => {
-                guessTimerVal--;
-                document.getElementById('gameTimer').innerText = guessTimerVal;
-                if (guessTimerVal <= 0) {
+                guessTimer--;
+                document.getElementById('gameTimer').innerText = guessTimer;
+                if (guessTimer <= 0) {
                     clearInterval(guessInterval);
-                    playAudio('wrong');
-                    document.getElementById('gameResultMsg').innerHTML = `<span class="text-red-400">TEMPO SCADUTO! Era ${guessCurrentTrack.name}</span>`;
-                    guessStreak = 0;
-                    document.getElementById('gameStreak').innerText = guessStreak;
-                    setTimeout(nextGuessQuestion, 2000);
+                    handleGuessTimeout();
                 }
             }, 1000);
         }
 
-        function checkGuessAnswer(id) {
+        function submitGuess(selectedId, btnElement) {
             clearInterval(guessInterval);
-            if (id === guessCurrentTrack.id) {
+            const isCorrect = selectedId === currentTargetCircuit.id;
+
+            if (isCorrect) {
                 playAudio('correct');
-                guessScore += 100 + guessTimerVal * 10;
+                guessScore += 100 + guessTimer * 10;
                 guessStreak++;
                 if (guessStreak > guessHighScore) guessHighScore = guessStreak;
-
+                
                 document.getElementById('gameScore').innerText = guessScore;
                 document.getElementById('gameStreak').innerText = guessStreak;
                 document.getElementById('gameHighScore').innerText = guessHighScore;
-                document.getElementById('gameResultMsg').innerHTML = `<span class="text-emerald-400">ESATTO! +${100 + guessTimerVal * 10} PTS</span>`;
+
+                document.getElementById('gameResultMsg').innerText = "ESATTO! +100 PUNTI 🎉";
+                document.getElementById('gameResultMsg').className = "text-center font-bold h-6 text-xs transition-all font-mono text-emerald-400";
+                
+                if (btnElement) btnElement.classList.add('bg-emerald-600', 'border-emerald-400');
             } else {
                 playAudio('wrong');
                 guessStreak = 0;
                 document.getElementById('gameStreak').innerText = guessStreak;
-                document.getElementById('gameResultMsg').innerHTML = `<span class="text-red-400">ERRATO! Era ${guessCurrentTrack.name}</span>`;
+
+                document.getElementById('gameResultMsg').innerText = `ERRORE! Era ${currentTargetCircuit.name}`;
+                document.getElementById('gameResultMsg').className = "text-center font-bold h-6 text-xs transition-all font-mono text-red-400";
+
+                if (btnElement) btnElement.classList.add('bg-red-600', 'border-red-400');
             }
-            setTimeout(nextGuessQuestion, 1800);
+
+            setTimeout(() => {
+                startNewGuessRound();
+            }, 1800);
         }
+
+        function handleGuessTimeout() {
+            playAudio('wrong');
+            guessStreak = 0;
+            document.getElementById('gameStreak').innerText = guessStreak;
+            document.getElementById('gameResultMsg').innerText = `TEMPO SCADUTO! Era ${currentTargetCircuit.name}`;
+            document.getElementById('gameResultMsg').className = "text-center font-bold h-6 text-xs transition-all font-mono text-amber-400";
+
+            setTimeout(() => {
+                startNewGuessRound();
+            }, 1800);
+        }
+
+        /* THROTTLED RESIZE LISTENER */
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeDebounceTimeout);
+            resizeDebounceTimeout = setTimeout(() => {
+                if (world) {
+                    world.width(window.innerWidth);
+                    world.height(window.innerHeight);
+                }
+            }, 150);
+        }, { passive: true });
     </script>
 </body>
 </html>
