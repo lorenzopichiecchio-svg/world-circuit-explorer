@@ -1622,260 +1622,260 @@
 
         /* 4. DATASET CIRCUITI (INALTERATO - TRACCIATI E FONTI IMMAGINI PRESERVATE) */
         const circuitsData = [
-            {
-                id: 'austin', name: 'Circuit of the Americas', country: 'Stati Uniti', city: 'Austin',
-                category: 'Permanente Moderno', isStreet: false, isHistoric: false, isNight: false, isNew2026: false,
-                speedKm: 332, lat: 30.1328, lng: -97.6411, length: '5.513 km', laps: '56 Giri', turns: '20 (11S / 9D)', elevation: '41.0 m',
-                firstGP: '2012', drs: '2 Zone', record: '1:36.169', holder: 'C. Leclerc (2019)', speed: '332 km/h', speedLoc: 'Rettilineo Opposto',
-                fact: 'Ripida salita verso Curva 1 cieca e primo settore ispirato alle curve più belle di Silverstone e Suzuka.',
-                telemetry: { throttle: 63, downforce: 85, brakes: 75, tyres: 88, gears: '56' },
-                weather: { temp: '28°C', trackTemp: '40°C', wind: '12 km/h SE', rain: '10%' },
-                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/austin-1.svg',
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 55,185 L 290,185 L 330,120 L 250,55 L 155,85 L 100,40 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="100" cy="185" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'baku', name: 'Baku City Circuit', country: 'Azerbaigian', city: 'Baku',
-                category: 'Cittadino Ad Estremi', isStreet: true, isHistoric: false, isNight: false, isNew2026: false,
-                speedKm: 355, lat: 40.3725, lng: 49.8533, length: '6.003 km', laps: '51 Giri', turns: '20 (8S / 12D)', elevation: '-24.0 m',
-                firstGP: '2016', drs: '2 Zone', record: '1:43.009', holder: 'C. Leclerc (2019)', speed: '355 km/h', speedLoc: 'Rettilineo Lungomare (2.2 km)',
-                fact: 'Combina il rettilineo più lungo dell\'anno con la strettissima sezione del Castello (7.6 metri di larghezza).',
-                telemetry: { throttle: 56, downforce: 35, brakes: 90, tyres: 60, gears: '64' },
-                weather: { temp: '25°C', trackTemp: '36°C', wind: '20 km/h NE', rain: '0%' },
-                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/baku-1.svg',
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 45,185 L 335,185 L 315,130 L 230,130 L 210,75 L 125,75 L 80,130 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="90" cy="185" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'barcelona', name: 'Circuit de Barcelona-Catalunya', country: 'Spagna', city: 'Montmeló',
-                category: 'Permanente Aerodinamico', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
-                speedKm: 335, lat: 41.5700, lng: 2.2611, length: '4.657 km', laps: '66 Giri', turns: '14 (6S / 8D)', elevation: '29.0 m',
-                firstGP: '1991', drs: '2 Zone', record: '1:16.330', holder: 'M. Verstappen (2023)', speed: '335 km/h', speedLoc: 'Rettilineo Principale',
-                fact: 'Banco di prova per le vetture. Curva 3 in appoggio ad alta velocità ed equilibrata distribuzione dei carichi.',
-                telemetry: { throttle: 68, downforce: 85, brakes: 70, tyres: 90, gears: '44' },
-                weather: { temp: '25°C', trackTemp: '42°C', wind: '11 km/h E', rain: '5%' },
-                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/catalunya-6.svg',
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 45,185 L 305,185 L 345,140 L 280,75 L 185,105 L 120,50 L 65,110 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="85" cy="185" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'hungaroring', name: 'Hungaroring', country: 'Ungheria', city: 'Mogyoród',
-                category: 'Guida Tecnica & Stretta', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
-                speedKm: 318, lat: 47.5830, lng: 19.2486, length: '4.381 km', laps: '70 Giri', turns: '14 (6S / 8D)', elevation: '34.7 m',
-                firstGP: '1986', drs: '2 Zone', record: '1:16.627', holder: 'L. Hamilton (2020)', speed: '318 km/h', speedLoc: 'Rettilineo Principale',
-                fact: 'Tracciato tortuoso soprannominato Monaco senza muri. Le qualifiche sono fondamentali.',
-                telemetry: { throttle: 55, downforce: 95, brakes: 80, tyres: 85, gears: '50' },
-                weather: { temp: '31°C', trackTemp: '48°C', wind: '6 km/h NE', rain: '10%' },
-                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/hungaroring-3.svg',
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 75,185 L 295,185 L 325,140 L 250,70 L 165,95 L 95,60 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="105" cy="185" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'interlagos', name: 'Autódromo José Carlos Pace', country: 'Brasile', city: 'San Paolo',
-                category: 'Storico Antiorario', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
-                speedKm: 330, lat: -23.7036, lng: -46.6997, length: '4.309 km', laps: '71 Giri', turns: '15 (9S / 6D)', elevation: '43.0 m',
-                firstGP: '1973', drs: '2 Zone', record: '1:10.540', holder: 'V. Bottas (2018)', speed: '330 km/h', speedLoc: 'Reta Oposta',
-                fact: 'Famoso tracciato in senso antiorario con la leggendaria S do Senna e meteo altamente imprevedibile.',
-                telemetry: { throttle: 64, downforce: 80, brakes: 65, tyres: 75, gears: '42' },
-                weather: { temp: '24°C', trackTemp: '35°C', wind: '15 km/h S', rain: '45%' },
-                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/interlagos-2.svg',
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 60,190 L 270,190 L 320,135 L 240,60 L 140,85 L 90,45 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="100" cy="190" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'lasvegas', name: 'Las Vegas Strip Circuit', country: 'Stati Uniti', city: 'Las Vegas',
-                category: 'Cittadino Notturno Veloce', isStreet: true, isHistoric: false, isNight: true, isNew2026: false,
-                speedKm: 350, lat: 36.1147, lng: -115.1728, length: '6.201 km', laps: '50 Giri', turns: '17 (11S / 6D)', elevation: '4.0 m',
-                firstGP: '2023', drs: '2 Zone', record: '1:35.490', holder: 'O. Piastri (2023)', speed: '350 km/h', speedLoc: 'Las Vegas Boulevard (1.9 km)',
-                fact: 'Sfreccia sulla Strip tra i casinò illuminati. Temperature molto basse e rettilineo lunghissimo.',
-                telemetry: { throttle: 78, downforce: 25, brakes: 88, tyres: 50, gears: '50' },
-                weather: { temp: '14°C', trackTemp: '16°C', wind: '7 km/h N', rain: '0%' },
-                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/las-vegas-1.svg',
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 50,180 L 340,180 L 320,120 L 220,120 L 200,60 L 90,60 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="90" cy="180" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'lusail', name: 'Lusail International Circuit', country: 'Qatar', city: 'Lusail',
-                category: 'Permanente Notturno Veloce', isStreet: false, isHistoric: false, isNight: true, isNew2026: false,
-                speedKm: 338, lat: 25.4900, lng: 51.4542, length: '5.419 km', laps: '57 Giri', turns: '16 (6S / 10D)', elevation: '3.0 m',
-                firstGP: '2021', drs: '1 Zona', record: '1:24.319', holder: 'M. Verstappen (2023)', speed: '338 km/h', speedLoc: 'Rettilineo Principale (1 km)',
-                fact: 'Tracciato scorrevole con curve veloci in sequenza che sollecitano pesantemente le gomme fisicamente.',
-                telemetry: { throttle: 72, downforce: 85, brakes: 60, tyres: 95, gears: '48' },
-                weather: { temp: '26°C', trackTemp: '30°C', wind: '16 km/h E', rain: '0%' },
-                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/lusail-1.svg',
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 60,185 L 310,185 L 340,135 L 270,65 L 160,85 L 100,45 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="100" cy="185" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'madrid', name: 'Circuito IFEMA Madrid', country: 'Spagna', city: 'Madrid',
-                category: 'Ibrido Citta / Fiera (Nuovo)', isStreet: true, isHistoric: false, isNight: false, isNew2026: true,
-                speedKm: 335, lat: 40.4670, lng: -3.6170, length: '5.470 km', laps: '55 Giri', turns: '20 (9S / 11D)', elevation: '10.0 m',
-                firstGP: '2026', drs: '3 Zone', record: 'In Attesa', holder: 'Novità 2026', speed: '335 km/h', speedLoc: 'Tratto Valdebebas',
-                fact: 'Nuovo tracciato cittadino attorno ad IFEMA e Valdebebas con una curva parabolica fortemente inclinata.',
-                telemetry: { throttle: 70, downforce: 75, brakes: 85, tyres: 70, gears: '52' },
-                weather: { temp: '26°C', trackTemp: '39°C', wind: '7 km/h N', rain: '0%' },
-                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/madring-1.svg',
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 45,175 L 165,175 L 205,205 L 325,205 L 355,150 L 300,105 L 345,50 L 225,50 L 175,95 L 95,50 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="85" cy="175" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'singapore', name: 'Marina Bay Street Circuit', country: 'Singapore', city: 'Singapore',
-                category: 'Cittadino Notturno Estremo', isStreet: true, isHistoric: false, isNight: true, isNew2026: false,
-                speedKm: 310, lat: 1.2915, lng: 103.8640, length: '4.940 km', laps: '62 Giri', turns: '19 (10S / 9D)', elevation: '2.0 m',
-                firstGP: '2008', drs: '4 Zone', record: '1:35.867', holder: 'L. Hamilton (2023)', speed: '310 km/h', speedLoc: 'Raffles Boulevard',
-                fact: 'Gara notturna tra le più probanti per la salute fisica dei piloti con caldo umido soffocante.',
-                telemetry: { throttle: 48, downforce: 95, brakes: 92, tyres: 80, gears: '70' },
-                weather: { temp: '31°C', trackTemp: '37°C', wind: '5 km/h S', rain: '40%' },
-                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/marina-bay-4.svg',
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 55,175 L 250,175 L 290,205 L 350,150 L 300,85 L 185,65 L 100,110 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="90" cy="175" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'melbourne', name: 'Albert Park Circuit', country: 'Australia', city: 'Melbourne',
-                category: 'Semi-Cittadino Veloce', isStreet: true, isHistoric: true, isNight: false, isNew2026: false,
-                speedKm: 330, lat: -37.8497, lng: 144.9680, length: '5.278 km', laps: '58 Giri', turns: '14 (5S / 9D)', elevation: '2.6 m',
-                firstGP: '1996', drs: '4 Zone', record: '1:19.813', holder: 'C. Leclerc (2024)', speed: '330 km/h', speedLoc: 'Lakeside Drive',
-                fact: 'Tracciato cittadino attorno al lago di Albert Park. Caratterizzato da chicane veloci e ben 4 zone DRS.',
-                telemetry: { throttle: 72, downforce: 75, brakes: 70, tyres: 60, gears: '52' },
-                weather: { temp: '22°C', trackTemp: '34°C', wind: '14 km/h S', rain: '10%' },
-                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/melbourne-2.svg',
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 70,190 C 110,195 180,185 240,190 C 290,195 340,165 350,125 C 360,90 330,55 280,50 L 210,50 C 180,50 150,70 120,90 L 80,115 C 55,135 45,175 70,190 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="100" cy="191" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'mexico', name: 'Autódromo Hermanos Rodríguez', country: 'Messico', city: 'Città del Messico',
-                category: 'Alta Quota Tecnico', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
-                speedKm: 352, lat: 19.4042, lng: -99.0907, length: '4.304 km', laps: '71 Giri', turns: '17 (7S / 10D)', elevation: '2229.0 m',
-                firstGP: '1963', drs: '3 Zone', record: '1:17.774', holder: 'V. Bottas (2021)', speed: '352 km/h', speedLoc: 'Rettilineo Principale',
-                fact: 'Situato a 2.200m d\'altitudine con aria rarefatta. Passaggio unico nello stadio del Foro Sol.',
-                telemetry: { throttle: 60, downforce: 100, brakes: 85, tyres: 55, gears: '48' },
-                weather: { temp: '22°C', trackTemp: '42°C', wind: '9 km/h NE', rain: '15%' },
-                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/mexico-city-3.svg',
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 50,180 L 330,180 L 350,135 L 260,135 L 240,75 L 140,75 L 90,125 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="90" cy="180" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'miami', name: 'Miami International Autodrome', country: 'Stati Uniti', city: 'Miami',
-                category: 'Ibrido Citta / Stadio', isStreet: true, isHistoric: false, isNight: false, isNew2026: false,
-                speedKm: 342, lat: 25.9580, lng: -80.2389, length: '5.412 km', laps: '57 Giri', turns: '19 (12S / 7D)', elevation: '3.0 m',
-                firstGP: '2022', drs: '3 Zone', record: '1:29.708', holder: 'M. Verstappen (2023)', speed: '342 km/h', speedLoc: 'Rettilineo Posteriore',
-                fact: 'Disegnato attorno all\'Hard Rock Stadium. Ha una chicane lentissima e lunghi allunghi ad alta velocità.',
-                telemetry: { throttle: 68, downforce: 65, brakes: 80, tyres: 75, gears: '58' },
-                weather: { temp: '30°C', trackTemp: '45°C', wind: '16 km/h SE', rain: '25%' },
-                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/miami-1.svg',
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 45,170 L 330,170 L 360,125 L 290,75 L 185,95 L 120,50 L 65,85 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="85" cy="170" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'monaco', name: 'Circuit de Monaco', country: 'Monaco', city: 'Monte Carlo',
-                category: 'Storico Cittadino', isStreet: true, isHistoric: true, isNight: false, isNew2026: false,
-                speedKm: 290, lat: 43.7347, lng: 7.4206, length: '3.337 km', laps: '78 Giri', turns: '19 (7S / 12D)', elevation: '42.0 m',
-                firstGP: '1950', drs: '1 Zona', record: '1:12.909', holder: 'L. Hamilton (2021)', speed: '290 km/h', speedLoc: 'Uscita Tunnel',
-                fact: 'Il circuito più leggendario ed esigente per la concentrazione. Margine zero, Loews e iconico tunnel.',
-                telemetry: { throttle: 45, downforce: 100, brakes: 95, tyres: 30, gears: '50' },
-                weather: { temp: '23°C', trackTemp: '36°C', wind: '9 km/h S', rain: '10%' },
-                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/monaco-6.svg',
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 110,195 L 250,195 C 285,195 305,170 280,135 L 225,105 L 290,60 L 225,35 L 140,70 L 75,125 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="130" cy="195" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'montreal', name: 'Circuit Gilles-Villeneuve', country: 'Canada', city: 'Montréal',
-                category: 'Semi-Cittadino Stop & Go', isStreet: true, isHistoric: true, isNight: false, isNew2026: false,
-                speedKm: 345, lat: 45.5000, lng: -73.5228, length: '4.361 km', laps: '70 Giri', turns: '14 (6S / 8D)', elevation: '5.2 m',
-                firstGP: '1978', drs: '3 Zone', record: '1:13.078', holder: 'V. Bottas (2019)', speed: '345 km/h', speedLoc: 'Rettilineo del Casinò',
-                fact: 'Sull\'Isola Notre-Dame. Noto per il famoso "Muro dei Campioni" e staccate violentissime.',
-                telemetry: { throttle: 60, downforce: 40, brakes: 95, tyres: 65, gears: '56' },
-                weather: { temp: '20°C', trackTemp: '31°C', wind: '13 km/h SO', rain: '20%' },
-                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/montreal-6.svg',
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 50,175 L 330,175 L 350,130 L 290,85 L 120,85 L 75,130 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="95" cy="175" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'monza', name: 'Autodromo Nazionale Monza', country: 'Italia', city: 'Monza',
-                category: 'Tempio della Velocità', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
-                speedKm: 360, lat: 45.6189, lng: 9.2811, length: '5.793 km', laps: '53 Giri', turns: '11 (4S / 7D)', elevation: '12.8 m',
-                firstGP: '1950', drs: '2 Zone', record: '1:21.046', holder: 'R. Barrichello (2004)', speed: '360 km/h', speedLoc: 'Prima Variante',
-                fact: 'Tracciato storico ad altissima velocità. Casa della Ferrari, della Prima Variante e della Parabolica.',
-                telemetry: { throttle: 83, downforce: 20, brakes: 80, tyres: 40, gears: '40' },
-                weather: { temp: '24°C', trackTemp: '38°C', wind: '8 km/h SE', rain: '10%' },
-                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/monza-7.svg',
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 55,195 L 270,195 L 272,180 L 285,180 L 288,195 L 340,195 C 385,195 390,145 350,110 L 315,80 C 305,72 310,55 325,55 C 345,55 350,30 330,20 L 290,20 C 270,20 260,45 250,60 L 225,105 C 220,112 205,115 190,108 L 115,70 C 95,60 75,75 60,98 L 35,140 C 25,160 35,195 55,195 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="160" cy="195" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'sepang', name: 'Sepang International Circuit', country: 'Malesia', city: 'Kuala Lumpur',
-                category: 'Permanente Tecnico Classico', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
-                speedKm: 332, lat: 2.7606, lng: 101.7380, length: '5.543 km', laps: '56 Giri', turns: '15 (5S / 10D)', elevation: '11.0 m',
-                firstGP: '1999', drs: '2 Zone', record: '1:34.080', holder: 'S. Vettel (2017)', speed: '332 km/h', speedLoc: 'Rettilineo Principale',
-                fact: 'Capolavoro di Hermann Tilke con rettilinei paralleli contrapposti e curve ad ampio raggio.',
-                telemetry: { throttle: 65, downforce: 80, brakes: 75, tyres: 90, gears: '52' },
-                weather: { temp: '32°C', trackTemp: '44°C', wind: '7 km/h SW', rain: '50%' },
-                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/sepang-1.svg',
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 50,185 L 310,185 L 340,135 L 260,65 L 160,85 L 90,45 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="90" cy="185" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'shanghai', name: 'Shanghai International Circuit', country: 'Cina', city: 'Shanghai',
-                category: 'Permanente Tecnico', isStreet: false, isHistoric: false, isNight: false, isNew2026: false,
-                speedKm: 340, lat: 31.3389, lng: 121.2200, length: '5.451 km', laps: '56 Giri', turns: '16 (9S / 7D)', elevation: '7.4 m',
-                firstGP: '2004', drs: '2 Zone', record: '1:32.238', holder: 'M. Schumacher (2004)', speed: '340 km/h', speedLoc: 'Back Straight (1.2 km)',
-                fact: 'Disegnato a forma del carattere cinese "Shang" (上). Noto per la Curva 1 a chiocciola e il lungo rettilineo.',
-                telemetry: { throttle: 65, downforce: 80, brakes: 75, tyres: 85, gears: '54' },
-                weather: { temp: '19°C', trackTemp: '28°C', wind: '8 km/h NE', rain: '20%' },
-                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/shanghai-1.svg',
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 60,200 L 230,200 C 265,200 280,175 265,140 C 245,95 200,95 180,125 C 160,155 120,125 145,85 L 290,85 L 345,45 C 365,25 330,25 310,45 L 220,120 L 80,120 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="95" cy="200" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'silverstone', name: 'Silverstone Circuit', country: 'Regno Unito', city: 'Silverstone',
-                category: 'Tempio delle Curve Veloci', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
-                speedKm: 340, lat: 52.0786, lng: -1.0169, length: '5.891 km', laps: '52 Giri', turns: '18 (8S / 10D)', elevation: '11.3 m',
-                firstGP: '1950', drs: '2 Zone', record: '1:27.097', holder: 'M. Verstappen (2020)', speed: '340 km/h', speedLoc: 'Hangar Straight',
-                fact: 'Casa del primo GP F1 della storia. Sequenza leggendaria Maggotts-Becketts-Chapel.',
-                telemetry: { throttle: 78, downforce: 85, brakes: 50, tyres: 95, gears: '42' },
-                weather: { temp: '17°C', trackTemp: '24°C', wind: '22 km/h O', rain: '40%' },
-                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/silverstone-8.svg',
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 55,175 L 205,175 L 270,195 L 350,140 L 290,60 L 205,85 L 105,40 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="95" cy="175" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'spa', name: 'Circuit de Spa-Francorchamps', country: 'Belgio', city: 'Stavelot',
-                category: 'Storico ad Alto Dislivello', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
-                speedKm: 345, lat: 50.4372, lng: 5.9714, length: '7.004 km', laps: '44 Giri', turns: '19 (9S / 10D)', elevation: '102.2 m',
-                firstGP: '1950', drs: '2 Zone', record: '1:46.286', holder: 'V. Bottas (2018)', speed: '345 km/h', speedLoc: 'Rettilineo Kemmel',
-                fact: 'Il circuito più lungo del calendario nelle Ardenne. Famosa compressione Eau Rouge-Raidillon.',
-                telemetry: { throttle: 70, downforce: 60, brakes: 65, tyres: 90, gears: '48' },
-                weather: { temp: '16°C', trackTemp: '22°C', wind: '14 km/h NO', rain: '60%' },
-                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/spa-francorchamps-4.svg',
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 45,180 L 105,180 L 115,200 L 135,160 L 240,155 L 280,185 L 310,185 L 330,160 L 370,120 C 390,90 360,45 320,35 L 270,35 L 240,65 L 210,25 L 155,25 L 115,70 L 75,70 L 45,115 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="75" cy="180" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'redbullring', name: 'Red Bull Ring', country: 'Austria', city: 'Spielberg',
-                category: 'Storico Collinare Veloce', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
-                speedKm: 328, lat: 47.2197, lng: 14.7647, length: '4.318 km', laps: '71 Giri', turns: '10 (3S / 7D)', elevation: '63.5 m',
-                firstGP: '1970', drs: '3 Zone', record: '1:05.619', holder: 'C. Sainz (2020)', speed: '328 km/h', speedLoc: 'Salita Curva 3',
-                fact: 'Giro più breve della stagione. Salite ripide, 3 zone DRS e molte opportunità di sorpasso.',
-                telemetry: { throttle: 77, downforce: 60, brakes: 80, tyres: 65, gears: '36' },
-                weather: { temp: '20°C', trackTemp: '32°C', wind: '11 km/h SO', rain: '25%' },
-                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/spielberg-3.svg',
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 90,185 L 310,185 L 335,120 L 205,50 L 115,105 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="115" cy="185" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'suzuka', name: 'Suzuka Racing Course', country: 'Giappone', city: 'Suzuka',
-                category: 'Tecnico a Figura di 8', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
-                speedKm: 325, lat: 34.8431, lng: 136.5410, length: '5.807 km', laps: '53 Giri', turns: '18 (8S / 10D)', elevation: '40.4 m',
-                firstGP: '1987', drs: '1 Zona', record: '1:30.983', holder: 'L. Hamilton (2019)', speed: '325 km/h', speedLoc: 'Curva 130R',
-                fact: 'Unico circuito conformato ad "8" con un ponte di intersezione. Amato dai piloti per le Esse e la 130R.',
-                telemetry: { throttle: 70, downforce: 90, brakes: 55, tyres: 95, gears: '46' },
-                weather: { temp: '18°C', trackTemp: '26°C', wind: '15 km/h E', rain: '30%' },
-                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/suzuka-2.svg',
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 55,195 C 90,195 105,140 145,115 C 170,95 210,95 235,120 C 260,145 300,195 340,195 C 375,195 380,140 345,105 L 305,70 L 240,40 L 145,40 C 95,40 45,95 55,195 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="85" cy="195" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'yasmarina', name: 'Yas Marina Circuit', country: 'Emirati Arabi Uniti', city: 'Abu Dhabi',
-                category: 'Permanente Notturno Moderno', isStreet: false, isHistoric: false, isNight: true, isNew2026: false,
-                speedKm: 335, lat: 24.4672, lng: 54.6031, length: '5.281 km', laps: '58 Giri', turns: '16 (9S / 7D)', elevation: '3.0 m',
-                firstGP: '2009', drs: '2 Zone', record: '1:26.103', holder: 'M. Verstappen (2021)', speed: '335 km/h', speedLoc: 'Rettilineo Tra Curva 5 e 6',
-                fact: 'Sede finale del campionato del mondo. Spettacolare illuminazione al tramonto attorno alla marina.',
-                telemetry: { throttle: 64, downforce: 75, brakes: 82, tyres: 70, gears: '56' },
-                weather: { temp: '28°C', trackTemp: '33°C', wind: '10 km/h NO', rain: '0%' },
-                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/yas-marina-2.svg',
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 60,185 L 290,185 L 320,135 L 250,65 L 150,85 L 90,45 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="100" cy="185" r="5" fill="#10B981"/></svg>`
-            },
-            {
-                id: 'zandvoort', name: 'Circuit Zandvoort', country: 'Olanda', city: 'Zandvoort',
-                category: 'Storico con Paraboliche', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
-                speedKm: 315, lat: 52.3888, lng: 4.5409, length: '4.259 km', laps: '72 Giri', turns: '14 (4S / 10D)', elevation: '15.0 m',
-                firstGP: '1952', drs: '2 Zone', record: '1:11.097', holder: 'L. Hamilton (2021)', speed: '315 km/h', speedLoc: 'Rettilineo dei Box',
-                fact: 'Tra le dune del Mare del Nord con spettacolari curve paraboliche inclinate fino a 18°.',
-                telemetry: { throttle: 65, downforce: 90, brakes: 60, tyres: 88, gears: '40' },
-                weather: { temp: '18°C', trackTemp: '25°C', wind: '25 km/h N', rain: '35%' },
-                svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/zandvoort-5.svg',
-                svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 75,175 L 275,175 C 315,175 335,140 315,95 L 230,75 L 155,120 L 90,55 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="105" cy="175" r="5" fill="#10B981"/></svg>`
-            }
-        ];
+    {
+        id: 'austin', name: 'Circuit of the Americas', country: 'Stati Uniti', city: 'Austin',
+        category: 'Permanente Moderno', isStreet: false, isHistoric: false, isNight: false, isNew2026: false,
+        speedKm: 332, lat: 30.1328, lng: -97.6411, length: '5.513 km', laps: '56 Giri', turns: '20 (11S / 9D)', elevation: '41.0 m',
+        firstGP: '2012', drs: '2 Zone', record: '1:36.169', holder: 'C. Leclerc (2019)', speed: '332 km/h', speedLoc: 'Rettilineo Opposto',
+        fact: 'Ripida salita verso Curva 1 cieca e primo settore ispirato alle curve più belle di Silverstone e Suzuka.',
+        telemetry: { throttle: 63, downforce: 85, brakes: 75, tyres: 88, gears: '56' },
+        weather: { temp: '28°C', trackTemp: '40°C', wind: '12 km/h SE', rain: '10%' },
+        svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/austin-1.svg',
+        svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 55,185 L 290,185 L 330,120 L 250,55 L 155,85 L 100,40 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="100" cy="185" r="5" fill="#10B981"/></svg>`
+    },
+    {
+        id: 'baku', name: 'Baku City Circuit', country: 'Azerbaijan', city: 'Baku',
+        category: 'Cittadino', isStreet: true, isHistoric: false, isNight: false, isNew2026: false,
+        speedKm: 350, lat: 40.3725, lng: 49.8533, length: '6.003 km', laps: '51 Giri', turns: '20 (8S / 12D)', elevation: '8.0 m',
+        firstGP: '2016', drs: '2 Zone', record: '1:43.009', holder: 'C. Leclerc (2023)', speed: '350 km/h', speedLoc: 'Rettilineo Principale',
+        fact: 'Caratterizzato dal passaggio strettissimo nel borgo antico vicino alle mura della fortezza.',
+        telemetry: { throttle: 56, downforce: 65, brakes: 90, tyres: 70, gears: '60' },
+        weather: { temp: '26°C', trackTemp: '38°C', wind: '15 km/h N', rain: '5%' },
+        svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/baku-1.svg',
+        svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 50,120 L 200,120 L 300,80 L 150,40 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="50" cy="120" r="5" fill="#10B981"/></svg>`
+    },
+    {
+        id: 'barcelona', name: 'Circuit de Barcelona-Catalunya', country: 'Spagna', city: 'Montmeló',
+        category: 'Permanente', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
+        speedKm: 335, lat: 41.5700, lng: 2.2611, length: '4.657 km', laps: '66 Giri', turns: '14 (9S / 5D)', elevation: '30.0 m',
+        firstGP: '1991', drs: '2 Zone', record: '1:16.330', holder: 'M. Verstappen (2023)', speed: '335 km/h', speedLoc: 'Rettilineo Principale',
+        fact: 'Tracciato storico di riferimento per i test invernali e lo sviluppo aerodinamico delle monoposto.',
+        telemetry: { throttle: 60, downforce: 90, brakes: 70, tyres: 95, gears: '65' },
+        weather: { temp: '25°C', trackTemp: '35°C', wind: '10 km/h SW', rain: '15%' },
+        svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/catalunya-6.svg',
+        svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 60,150 L 250,150 L 320,90 L 180,60 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="60" cy="150" r="5" fill="#10B981"/></svg>`
+    },
+    {
+        id: 'hungaroring', name: 'Hungaroring', country: 'Ungheria', city: 'Mogyoród',
+        category: 'Permanente', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
+        speedKm: 320, lat: 47.5789, lng: 19.2486, length: '4.381 km', laps: '70 Giri', turns: '14 (8S / 6D)', elevation: '36.0 m',
+        firstGP: '1986', drs: '1 Zona', record: '1:16.627', holder: 'L. Hamilton (2020)', speed: '320 km/h', speedLoc: 'Rettilineo Principale',
+        fact: 'Spesso paragonato a un circuito cittadino senza i muri, dove i sorpassi sono estremamente difficili.',
+        telemetry: { throttle: 55, downforce: 95, brakes: 60, tyres: 90, gears: '70' },
+        weather: { temp: '30°C', trackTemp: '45°C', wind: '8 km/h E', rain: '20%' },
+        svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/hungaroring-3.svg',
+        svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 80,100 L 220,100 L 280,160 L 120,180 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="80" cy="100" r="5" fill="#10B981"/></svg>`
+    },
+    {
+        id: 'interlagos', name: 'Autódromo José Carlos Pace', country: 'Brasile', city: 'San Paolo',
+        category: 'Permanente Storico', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
+        speedKm: 330, lat: -23.7036, lng: -46.6997, length: '4.309 km', laps: '71 Giri', turns: '15 (10S / 5D)', elevation: '43.0 m',
+        firstGP: '1973', drs: '2 Zone', record: '1:10.540', holder: 'V. Bottas (2018)', speed: '330 km/h', speedLoc: 'Rettilineo Principale',
+        fact: 'Tracciato antiorario con una spettacolare discesa iniziale (S do Senna) e grande passione del pubblico.',
+        telemetry: { throttle: 65, downforce: 80, brakes: 75, tyres: 85, gears: '71' },
+        weather: { temp: '24°C', trackTemp: '32°C', wind: '14 km/h SE', rain: '40%' },
+        svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/interlagos-2.svg',
+        svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 70,130 L 230,130 L 290,90 L 140,50 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="70" cy="130" r="5" fill="#10B981"/></svg>`
+    },
+    {
+        id: 'lasvegas', name: 'Las Vegas Strip Circuit', country: 'Stati Uniti', city: 'Las Vegas',
+        category: 'Cittadino Notturno', isStreet: true, isHistoric: false, isNight: true, isNew2026: false,
+        speedKm: 352, lat: 36.1147, lng: -115.1728, length: '6.201 km', laps: '50 Giri', turns: '17 (11S / 6D)', elevation: '12.0 m',
+        firstGP: '2023', drs: '2 Zone', record: '1:35.490', holder: 'O. Piastri (2024)', speed: '352 km/h', speedLoc: 'The Strip',
+        fact: 'Le monoposto sfrecciano a folle velocità lungo la celebre Strip di Las Vegas illuminata dai casinò.',
+        telemetry: { throttle: 70, downforce: 50, brakes: 95, tyres: 60, gears: '50' },
+        weather: { temp: '15°C', trackTemp: '16°C', wind: '6 km/h W', rain: '0%' },
+        svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/las-vegas-1.svg',
+        svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 90,160 L 280,160 L 310,90 L 110,70 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="90" cy="160" r="5" fill="#10B981"/></svg>`
+    },
+    {
+        id: 'lusail', name: 'Lusail International Circuit', country: 'Qatar', city: 'Lusail',
+        category: 'Permanente Notturno', isStreet: false, isHistoric: false, isNight: true, isNew2026: false,
+        speedKm: 338, lat: 25.4900, lng: 51.4542, length: '5.419 km', laps: '57 Giri', turns: '16 (10S / 6D)', elevation: '10.0 m',
+        firstGP: '2021', drs: '1 Zona', record: '1:24.319', holder: 'M. Verstappen (2023)', speed: '338 km/h', speedLoc: 'Rettilineo Principale',
+        fact: 'Fluido susseguirsi di curve a medio-alta velocità dominate da un impianto di illuminazione all’avanguardia.',
+        telemetry: { throttle: 68, downforce: 90, brakes: 65, tyres: 95, gears: '57' },
+        weather: { temp: '29°C', trackTemp: '34°C', wind: '18 km/h NW', rain: '0%' },
+        svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/lusail-1.svg',
+        svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 60,110 L 260,110 L 300,170 L 130,190 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="60" cy="110" r="5" fill="#10B981"/></svg>`
+    },
+    {
+        id: 'madrid', name: 'Madring Circuit', country: 'Spagna', city: 'Madrid',
+        category: 'Cittadino Moderno', isStreet: true, isHistoric: false, isNight: false, isNew2026: true,
+        speedKm: 340, lat: 40.4669, lng: -3.6172, length: '5.470 km', laps: '55 Giri', turns: '20 (12S / 8D)', elevation: '20.0 m',
+        firstGP: '2026', drs: '2 Zone', record: '0:00.000', holder: 'N/D', speed: '340 km/h', speedLoc: 'Rettilineo Principale',
+        fact: 'Innovativo tracciato ibrido attorno al complesso fieristico IFEMA di Madrid.',
+        telemetry: { throttle: 60, downforce: 75, brakes: 80, tyres: 75, gears: '55' },
+        weather: { temp: '27°C', trackTemp: '39°C', wind: '10 km/h S', rain: '10%' },
+        svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/madring-1.svg',
+        svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 50,140 L 240,140 L 320,100 L 150,50 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="50" cy="140" r="5" fill="#10B981"/></svg>`
+    },
+    {
+        id: 'singapore', name: 'Marina Bay Street Circuit', country: 'Singapore', city: 'Singapore',
+        category: 'Cittadino Notturno', isStreet: true, isHistoric: false, isNight: true, isNew2026: false,
+        speedKm: 310, lat: 1.2914, lng: 103.8640, length: '4.940 km', laps: '62 Giri', turns: '19 (10S / 9D)', elevation: '15.0 m',
+        firstGP: '2008', drs: '3 Zone', record: '1:35.787', holder: 'L. Hamilton (2023)', speed: '310 km/h', speedLoc: 'Raffles Boulevard',
+        fact: 'Il Gran Premio più duro e faticoso della stagione a causa del caldo umido tropicale e dei muri vicini.',
+        telemetry: { throttle: 48, downforce: 95, brakes: 98, tyres: 85, gears: '62' },
+        weather: { temp: '31°C', trackTemp: '37°C', wind: '7 km/h E', rain: '45%' },
+        svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/marina-bay-4.svg',
+        svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 80,170 L 250,170 L 310,110 L 140,60 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="80" cy="170" r="5" fill="#10B981"/></svg>`
+    },
+    {
+        id: 'melbourne', name: 'Albert Park Circuit', country: 'Australia', city: 'Melbourne',
+        category: 'Cittadino/Permanente', isStreet: true, isHistoric: false, isNight: false, isNew2026: false,
+        speedKm: 340, lat: -37.8497, lng: 144.9680, length: '5.278 km', laps: '58 Giri', turns: '14 (9S / 5D)', elevation: '8.0 m',
+        firstGP: '1996', drs: '4 Zone', record: '1:19.813', holder: 'C. Leclerc (2024)', speed: '340 km/h', speedLoc: 'Rettilineo Principale',
+        fact: 'Spettacolare pista ricavata attorno al lago artificiale nel parco cittadino di Albert Park.',
+        telemetry: { throttle: 65, downforce: 75, brakes: 70, tyres: 80, gears: '58' },
+        weather: { temp: '22°C', trackTemp: '29°C', wind: '15 km/h S', rain: '25%' },
+        svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/melbourne-2.svg',
+        svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 70,90 L 260,90 L 290,160 L 110,170 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="70" cy="90" r="5" fill="#10B981"/></svg>`
+    },
+    {
+        id: 'mexico', name: 'Autódromo Hermanos Rodríguez', country: 'Messico', city: 'Città del Messico',
+        category: 'Permanente', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
+        speedKm: 355, lat: 19.4042, lng: -99.0907, length: '4.304 km', laps: '71 Giri', turns: '17 (10S / 7D)', elevation: '2240.0 m',
+        firstGP: '1963', drs: '3 Zone', record: '1:17.774', holder: 'V. Bottas (2021)', speed: '355 km/h', speedLoc: 'Rettilineo Principale',
+        fact: 'Situato a oltre 2.200 metri di altitudine, l’aria rarefatta riduce carico aerodinamico e raffreddamento.',
+        telemetry: { throttle: 60, downforce: 95, brakes: 85, tyres: 80, gears: '71' },
+        weather: { temp: '24°C', trackTemp: '42°C', wind: '8 km/h E', rain: '20%' },
+        svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/mexico-city-3.svg',
+        svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 100,150 L 250,150 L 300,100 L 150,70 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="100" cy="150" r="5" fill="#10B981"/></svg>`
+    },
+    {
+        id: 'miami', name: 'Miami International Autodrome', country: 'Stati Uniti', city: 'Miami Gardens',
+        category: 'Cittadino Moderno', isStreet: true, isHistoric: false, isNight: false, isNew2026: false,
+        speedKm: 342, lat: 25.9581, lng: -80.2389, length: '5.412 km', laps: '57 Giri', turns: '19 (12S / 7D)', elevation: '12.0 m',
+        firstGP: '2022', drs: '3 Zone', record: '1:29.708', holder: 'M. Verstappen (2023)', speed: '342 km/h', speedLoc: 'Rettilineo Posteriore',
+        fact: 'Costruito attorno al celebre Hard Rock Stadium, con sezioni tecniche e curve molto tortuose.',
+        telemetry: { throttle: 62, downforce: 75, brakes: 80, tyres: 82, gears: '57' },
+        weather: { temp: '31°C', trackTemp: '48°C', wind: '14 km/h E', rain: '30%' },
+        svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/miami-1.svg',
+        svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 60,130 L 270,130 L 310,180 L 120,70 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="run" class="svg-track-path"/><circle cx="60" cy="130" r="5" fill="#10B981"/></svg>`
+    },
+    {
+        id: 'monaco', name: 'Circuit de Monaco', country: 'Monaco', city: 'Monte Carlo',
+        category: 'Cittadino Storico', isStreet: true, isHistoric: true, isNight: false, isNew2026: false,
+        speedKm: 290, lat: 43.7347, lng: 7.4206, length: '3.337 km', laps: '78 Giri', turns: '19 (11S / 8D)', elevation: '42.0 m',
+        firstGP: '1950', drs: '1 Zona', record: '1:12.909', holder: 'L. Hamilton (2021)', speed: '290 km/h', speedLoc: 'Tunnel',
+        fact: 'Il GP più prestigioso del mondo, disputato a pochi centimetri dai guardrail tra le strade di Monte Carlo.',
+        telemetry: { throttle: 40, downforce: 100, brakes: 90, tyres: 60, gears: '78' },
+        weather: { temp: '23°C', trackTemp: '34°C', wind: '6 km/h S', rain: '10%' },
+        svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/monaco-6.svg',
+        svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 100,120 L 220,120 L 280,180 L 140,80 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="100" cy="120" r="5" fill="#10B981"/></svg>`
+    },
+    {
+        id: 'montreal', name: 'Circuit Gilles-Villeneuve', country: 'Canada', city: 'Montreal',
+        category: 'Cittadino/Permanente', isStreet: true, isHistoric: true, isNight: false, isNew2026: false,
+        speedKm: 345, lat: 45.5000, lng: -73.5228, length: '4.361 km', laps: '70 Giri', turns: '14 (8S / 6D)', elevation: '11.0 m',
+        firstGP: '1978', drs: '2 Zone', record: '1:13.078', holder: 'V. Bottas (2019)', speed: '345 km/h', speedLoc: 'Rettilineo delle Colonie',
+        fact: 'Celebre per il famigerato "Muro dei Campioni" posto all’uscita dell’ultima chicane.',
+        telemetry: { throttle: 65, downforce: 60, brakes: 95, tyres: 75, gears: '70' },
+        weather: { temp: '21°C', trackTemp: '28°C', wind: '12 km/h W', rain: '35%' },
+        svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/montreal-6.svg',
+        svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 70,140 L 240,140 L 290,80 L 120,60 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="70" cy="140" r="5" fill="#10B981"/></svg>`
+    },
+    {
+        id: 'monza', name: 'Autodromo Nazionale Monza', country: 'Italia', city: 'Monza',
+        category: 'Permanente Storico', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
+        speedKm: 360, lat: 45.6156, lng: 9.2811, length: '5.793 km', laps: '53 Giri', turns: '11 (7S / 4D)', elevation: '16.0 m',
+        firstGP: '1950', drs: '2 Zone', record: '1:21.046', holder: 'R. Barrichello (2004)', speed: '360 km/h', speedLoc: 'Rettilineo Principale',
+        fact: 'Il "Tempio della Velocità", dove le vetture adottano ali piccolissime per volare sui rettilinei.',
+        telemetry: { throttle: 78, downforce: 30, brakes: 90, tyres: 65, gears: '53' },
+        weather: { temp: '27°C', trackTemp: '41°C', wind: '9 km/h NE', rain: '15%' },
+        svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/monza-7.svg',
+        svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 50,110 L 280,110 L 320,160 L 100,180 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="50" cy="110" r="5" fill="#10B981"/></svg>`
+    },
+    {
+        id: 'sepang', name: 'Sepang International Circuit', country: 'Malaysia', city: 'Sepang',
+        category: 'Permanente Storico', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
+        speedKm: 330, lat: 2.7606, lng: 101.7380, length: '5.543 km', laps: '56 Giri', turns: '15 (10S / 5D)', elevation: '22.0 m',
+        firstGP: '1999', drs: '2 Zone', record: '1:34.223', holder: 'J. Pablo Montoya (2004)', speed: '330 km/h', speedLoc: 'Rettilineo Principale',
+        fact: 'Capolavoro di Hermann Tilke, noto per i lunghi rettilinei uniti da tornanti e condizioni climatiche estreme.',
+        telemetry: { throttle: 64, downforce: 85, brakes: 80, tyres: 90, gears: '56' },
+        weather: { temp: '32°C', trackTemp: '44°C', wind: '10 km/h SW', rain: '60%' },
+        svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/sepang-1.svg',
+        svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 70,120 L 250,120 L 290,170 L 120,80 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="70" cy="120" r="5" fill="#10B981"/></svg>`
+    },
+    {
+        id: 'shanghai', name: 'Shanghai International Circuit', country: 'Cina', city: 'Shanghai',
+        category: 'Permanente', isStreet: false, isHistoric: false, isNight: false, isNew2026: false,
+        speedKm: 340, lat: 31.3389, lng: 121.2200, length: '5.451 km', laps: '56 Giri', turns: '16 (9S / 7D)', elevation: '10.0 m',
+        firstGP: '2004', drs: '2 Zone', record: '1:32.238', holder: 'M. Schumacher (2004)', speed: '340 km/h', speedLoc: 'Rettilineo Posteriore',
+        fact: 'La curva 1 a spirale crescente che ricorda il carattere cinese "shang" è una delle sfide tecniche più uniche.',
+        telemetry: { throttle: 58, downforce: 80, brakes: 85, tyres: 90, gears: '56' },
+        weather: { temp: '20°C', trackTemp: '25°C', wind: '12 km/h E', rain: '30%' },
+        svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/shanghai-1.svg',
+        svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 80,100 L 260,100 L 300,160 L 110,180 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="80" cy="100" r="5" fill="#10B981"/></svg>`
+    },
+    {
+        id: 'silverstone', name: 'Silverstone Circuit', country: 'Regno Unito', city: 'Silverstone',
+        category: 'Permanente Storico', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
+        speedKm: 335, lat: 52.0786, lng: -1.0169, length: '5.891 km', laps: '52 Giri', turns: '18 (10S / 8D)', elevation: '12.0 m',
+        firstGP: '1950', drs: '2 Zone', record: '1:27.097', holder: 'M. Verstappen (2020)', speed: '335 km/h', speedLoc: 'Rettilineo Wellington',
+        fact: 'Tempio della Formula 1 sorto su una ex base militare, celebre per la combinazione leggendaria Maggotts-Becketts.',
+        telemetry: { throttle: 72, downforce: 90, brakes: 65, tyres: 100, gears: '52' },
+        weather: { temp: '19°C', trackTemp: '26°C', wind: '22 km/h W', rain: '40%' },
+        svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/silverstone-8.svg',
+        svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 60,130 L 270,130 L 310,80 L 140,50 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="60" cy="130" r="5" fill="#10B981"/></svg>`
+    },
+    {
+        id: 'spa', name: 'Circuit de Spa-Francorchamps', country: 'Belgio', city: 'Stavelot',
+        category: 'Permanente Storico', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
+        speedKm: 348, lat: 50.4372, lng: 5.9714, length: '7.004 km', laps: '44 Giri', turns: '19 (10S / 9D)', elevation: '102.0 m',
+        firstGP: '1950', drs: '2 Zone', record: '1:46.286', holder: 'W. Bottas (2018)', speed: '348 km/h', speedLoc: 'Rettilineo Kemmel',
+        fact: 'La leggendaria curva in salita dell’Eau Rouge-Raidillon è una delle pietre miliari di tutto il motorsport.',
+        telemetry: { throttle: 70, downforce: 75, brakes: 70, tyres: 90, gears: '44' },
+        weather: { temp: '18°C', trackTemp: '22°C', wind: '14 km/h S', rain: '55%' },
+        svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/spa-francorchamps-4.svg',
+        svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 50,150 L 280,150 L 330,90 L 120,40 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="50" cy="150" r="5" fill="#10B981"/></svg>`
+    },
+    {
+        id: 'spielberg', name: 'Red Bull Ring', country: 'Austria', city: 'Spielberg',
+        category: 'Permanente', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
+        speedKm: 325, lat: 47.2197, lng: 14.7647, length: '4.318 km', laps: '71 Giri', turns: '10 (7S / 3D)', elevation: '65.0 m',
+        firstGP: '1970', drs: '3 Zone', record: '1:05.619', holder: 'C. Sainz (2020)', speed: '325 km/h', speedLoc: 'Rettilineo Principale',
+        fact: 'Breve, immerso tra le montagne della Stiria, caratterizzato da forti pendenze e frenate violente.',
+        telemetry: { throttle: 65, downforce: 80, brakes: 85, tyres: 75, gears: '71' },
+        weather: { temp: '23°C', trackTemp: '36°C', wind: '8 km/h NW', rain: '25%' },
+        svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/spielberg-3.svg',
+        svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 80,120 L 240,120 L 300,160 L 130,170 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="80" cy="120" r="5" fill="#10B981"/></svg>`
+    },
+    {
+        id: 'suzuka', name: 'Suzuka International Racing Course', country: 'Giappone', city: 'Suzuka',
+        category: 'Permanente Storico', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
+        speedKm: 320, lat: 34.8431, lng: 136.5410, length: '5.807 km', laps: '53 Giri', turns: '18 (10S / 8D)', elevation: '40.0 m',
+        firstGP: '1987', drs: '1 Zona', record: '1:30.983', holder: 'L. Hamilton (2019)', speed: '320 km/h', speedLoc: 'Rettilineo Principale',
+        fact: 'L’unico circuito al mondo con conformazione a "otto" e il celebre settore delle curve S ad alta velocità.',
+        telemetry: { throttle: 68, downforce: 95, brakes: 60, tyres: 100, gears: '53' },
+        weather: { temp: '21°C', trackTemp: '27°C', wind: '11 km/h E', rain: '30%' },
+        svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/suzuka-2.svg',
+        svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 70,110 L 260,110 L 310,150 L 120,180 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="70" cy="110" r="5" fill="#10B981"/></svg>`
+    },
+    {
+        id: 'yashmarina', name: 'Yas Marina Circuit', country: 'Emirati Arabi Uniti', city: 'Abu Dhabi',
+        category: 'Permanente Notturno', isStreet: false, isHistoric: false, isNight: true, isNew2026: false,
+        speedKm: 340, lat: 24.4672, lng: 54.6031, length: '5.281 km', laps: '58 Giri', turns: '16 (10S / 6D)', elevation: '10.0 m',
+        firstGP: '2009', drs: '2 Zone', record: '1:26.103', holder: 'M. Verstappen (2021)', speed: '340 km/h', speedLoc: 'Rettilineo Posteriore',
+        fact: 'Gran Premio finale della stagione che si sviluppa dal crepuscolo alla notte attorno allo Yas Viceroy Hotel.',
+        telemetry: { throttle: 60, downforce: 80, brakes: 75, tyres: 80, gears: '58' },
+        weather: { temp: '28°C', trackTemp: '31°C', wind: '9 km/h N', rain: '0%' },
+        svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/yas-marina-2.svg',
+        svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 60,130 L 250,130 L 300,70 L 140,50 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="60" cy="130" r="5" fill="#10B981"/></svg>`
+    },
+    {
+        id: 'zandvoort', name: 'Circuit Zandvoort', country: 'Paesi Bassi', city: 'Zandvoort',
+        category: 'Permanente Storico', isStreet: false, isHistoric: true, isNight: false, isNew2026: false,
+        speedKm: 315, lat: 52.3888, lng: 4.5408, length: '4.259 km', laps: '72 Giri', turns: '14 (10S / 4D)', elevation: '15.0 m',
+        firstGP: '1952', drs: '2 Zone', record: '1:11.097', holder: 'L. Hamilton (2021)', speed: '315 km/h', speedLoc: 'Rettilineo Principale',
+        fact: 'Caratterizzato da curve paraboliche uniche con pendenze estreme (fino al 18%) immerse tra le dune di sabbia.',
+        telemetry: { throttle: 58, downforce: 90, brakes: 70, tyres: 95, gears: '72' },
+        weather: { temp: '19°C', trackTemp: '24°C', wind: '20 km/h NW', rain: '35%' },
+        svgUrl: 'https://f1-circuits-svg.alwaysdata.net/circuits/detailed/white-outline/zandvoort-5.svg',
+        svg: `<svg viewBox="0 0 400 250" class="w-full h-full p-2"><path d="M 80,140 L 240,140 L 290,90 L 120,60 Z" fill="none" stroke="#E10600" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" class="svg-track-path"/><circle cx="80" cy="140" r="5" fill="#10B981"/></svg>`
+    }
+];
 
         /* GLOBALS & CACHE DI STATO */
         let world = null;
