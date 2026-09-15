@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>F1 World Circuit Explorer 2026 - Official SVG Layouts</title>
+    <title>F1 World Circuit Explorer 2026 - Official Hub & Telemetry</title>
 
-    <!-- Performance Optimizations: DNS Prefetch & Preconnect -->
+    <!-- Preconnect & CDNs -->
     <link rel="preconnect" href="https://cdn.tailwindcss.com">
     <link rel="preconnect" href="https://unpkg.com">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
@@ -15,7 +15,7 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='100' fill='%230a0b0e'/><path d='M 120,400 L 360,400 C 420,400 450,360 410,310 L 380,270 C 360,250 360,230 380,210 L 410,180 C 430,160 410,110 360,110 L 260,110 C 220,110 200,130 180,160 L 150,210 C 130,240 110,270 120,310 Z' fill='none' stroke='%23ff1e00' stroke-width='28' stroke-linecap='round' stroke-linejoin='round'/><g transform='translate(210, 205)'><rect x='0' y='0' width='22' height='22' fill='%23fff'/><rect x='22' y='0' width='22' height='22' fill='%23000'/><rect x='0' y='22' width='22' height='22' fill='%23000'/><rect x='22' y='22' width='22' height='22' fill='%23fff'/></g></svg>">
     
-    <!-- Tailwind CSS CDN -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Globe.gl CDN -->
@@ -24,16 +24,16 @@
     <!-- FontAwesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Google Fonts: Inter & Orbitron -->
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;600;800;900&display=swap" rel="stylesheet">
 
     <style>
         :root {
             --bg-dark: #030712;
-            --panel-bg: rgba(13, 18, 30, 0.94);
+            --panel-bg: rgba(13, 18, 30, 0.95);
             --panel-border: rgba(255, 255, 255, 0.12);
             --card-bg: rgba(255, 255, 255, 0.03);
-            --card-hover: rgba(255, 255, 255, 0.07);
+            --card-hover: rgba(255, 255, 255, 0.08);
             --f1-red: #E10600;
         }
 
@@ -72,20 +72,39 @@
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             border: 1px solid var(--panel-border);
-            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);
         }
 
         .glass-card {
             background: var(--card-bg);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
         }
 
         .glass-card:hover {
             background: var(--card-hover);
-            border-color: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.25);
             transform: translateY(-2px);
+        }
+
+        .clickable-card {
+            cursor: pointer !important;
+            position: relative;
+        }
+        .clickable-card::after {
+            content: "\f0a6";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.3);
+            transition: color 0.2s ease;
+        }
+        .clickable-card:hover::after {
+            color: var(--f1-red);
         }
 
         .f1-red { color: var(--f1-red); }
@@ -106,11 +125,7 @@
             box-shadow: 0 0 20px #ff0000, 0 0 35px #ff0000, inset 0 0 10px #ffffff;
         }
 
-        .tag-btn {
-            transition: all 0.2s ease-out;
-            white-space: nowrap;
-        }
-        
+        .tag-btn { transition: all 0.2s ease-out; white-space: nowrap; }
         .tag-btn.active {
             background-color: var(--f1-red);
             color: #ffffff;
@@ -125,19 +140,13 @@
         }
 
         @media (min-width: 640px) {
-            #sidebar {
-                transform: translateX(480px);
-            }
+            #sidebar { transform: translateX(480px); }
         }
 
-        #sidebar.active {
-            transform: translateY(0) !important;
-        }
+        #sidebar.active { transform: translateY(0) !important; }
 
         @media (min-width: 640px) {
-            #sidebar.active {
-                transform: translateX(0) !important;
-            }
+            #sidebar.active { transform: translateX(0) !important; }
         }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -171,9 +180,7 @@
             z-index: 999;
         }
 
-        .telemetry-bar {
-            transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
+        .telemetry-bar { transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); }
 
         .track-svg-img {
             max-width: 100%;
@@ -184,13 +191,11 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.92); }
+            from { opacity: 0; transform: scale(0.94); }
             to { opacity: 1; transform: scale(1); }
         }
 
-        .animate-fade-in {
-            animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
+        .animate-fade-in { animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     </style>
 </head>
 <body class="relative bg-slate-950 text-white antialiased overflow-hidden select-none">
@@ -205,9 +210,9 @@
                 </div>
                 <div>
                     <h1 class="font-black tracking-wider text-xs sm:text-base leading-none font-orbitron flex items-center gap-2">
-                        WORLD CIRCUIT <span class="text-[10px] bg-red-600/30 text-red-400 px-1.5 py-0.5 rounded font-mono border border-red-500/30">2026</span>
+                        WORLD CIRCUIT <span class="text-[10px] bg-red-600/30 text-red-400 px-1.5 py-0.5 rounded font-mono border border-red-500/30">2026 HUB</span>
                     </h1>
-                    <p class="text-[9px] text-gray-300 font-mono hidden sm:block mt-0.5">3D TELEMETRY & OFFICIAL SVG LAYOUTS</p>
+                    <p class="text-[9px] text-gray-300 font-mono hidden sm:block mt-0.5">TELEMETRIA, CLASSIFICHE & ANALISI INTERATTIVA</p>
                 </div>
             </div>
 
@@ -224,15 +229,15 @@
             </div>
 
             <div class="hidden sm:flex items-center gap-2">
-                <button onclick="openModal('standingsModal')" class="bg-gradient-to-r from-amber-600 to-yellow-500 text-black font-extrabold text-xs px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 shadow-lg shadow-yellow-900/30">
+                <button onclick="openModal('standingsModal')" class="bg-gradient-to-r from-amber-600 to-yellow-500 text-black font-extrabold text-xs px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 shadow-lg shadow-yellow-900/30 hover:scale-105">
                     <i class="fa-solid fa-trophy"></i> Classifiche
                 </button>
 
-                <button onclick="openModal('driversModal')" class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-xs px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 shadow-lg shadow-indigo-900/30">
+                <button onclick="openModal('driversModal')" class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-xs px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 shadow-lg shadow-indigo-900/30 hover:scale-105">
                     <i class="fa-solid fa-id-card"></i> Piloti
                 </button>
 
-                <button onclick="openModal('teamsModal')" class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold text-xs px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 shadow-lg shadow-teal-900/30">
+                <button onclick="openModal('teamsModal')" class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold text-xs px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 shadow-lg shadow-teal-900/30 hover:scale-105">
                     <i class="fa-solid fa-people-group"></i> Scuderie
                 </button>
 
@@ -260,7 +265,7 @@
 
         <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5 text-[11px] font-semibold max-w-7xl mx-auto w-full">
             <span class="text-gray-300 text-[10px] uppercase font-mono mr-1 shrink-0 flex items-center gap-1">
-                <i class="fa-solid fa-filter text-red-500"></i> Filtra:
+                <i class="fa-solid fa-filter text-red-500"></i> Filtra Piste:
             </span>
             <button onclick="applyTagFilter('all', this)" class="tag-btn active px-3 py-1.5 rounded-xl border border-white/10 bg-white/5 text-gray-200">Tutti i GP (<span id="tagAllCount">23</span>)</button>
             <button onclick="applyTagFilter('street', this)" class="tag-btn px-3 py-1.5 rounded-xl border border-white/10 bg-white/5 text-gray-200"><i class="fa-solid fa-city mr-1 text-amber-400"></i> Cittadini</button>
@@ -274,7 +279,7 @@
     <!-- 3D GLOBE CONTAINER -->
     <div id="globeViz"></div>
 
-    <!-- WEATHER WIDGET -->
+    <!-- METEO WIDGET TRACCIATO -->
     <div id="weatherWidget" class="hidden fixed bottom-5 left-5 z-20 glass-panel rounded-2xl p-3 border border-white/10 flex flex-col gap-1 text-xs max-w-[220px]">
         <div class="flex items-center justify-between border-b border-white/10 pb-1.5">
             <span class="text-[10px] font-mono text-gray-300 uppercase font-bold flex items-center gap-1.5">
@@ -296,13 +301,13 @@
         </div>
     </div>
 
-    <!-- MOBILE BOTTOM NAVIGATION -->
+    <!-- MOBILE NAVIGATION BOTTOM -->
     <nav class="sm:hidden fixed bottom-0 left-0 right-0 z-30 glass-panel border-t border-white/10 flex items-center justify-around py-2 px-2">
         <button onclick="resetView()" class="flex flex-col items-center gap-1 text-gray-300 hover:text-white text-[10px] font-semibold">
             <i class="fa-solid fa-globe text-base text-red-500"></i> Globo
         </button>
         <button onclick="openModal('standingsModal')" class="flex flex-col items-center gap-1 text-gray-300 hover:text-white text-[10px] font-semibold">
-            <i class="fa-solid fa-trophy text-base text-amber-400"></i> Standings
+            <i class="fa-solid fa-trophy text-base text-amber-400"></i> Classifiche
         </button>
         <button onclick="openModal('driversModal')" class="flex flex-col items-center gap-1 text-gray-300 hover:text-white text-[10px] font-semibold">
             <i class="fa-solid fa-id-card text-base text-indigo-400"></i> Piloti
@@ -315,7 +320,7 @@
         </button>
     </nav>
 
-    <!-- CIRCUIT SIDEBAR -->
+    <!-- CIRCUIT SIDEBAR (SISTEMA TRACCIATI INVARIATO) -->
     <aside id="sidebar" class="fixed bottom-0 sm:bottom-4 left-0 sm:left-auto right-0 sm:right-4 top-auto sm:top-24 w-full sm:w-[420px] h-[85vh] sm:h-[calc(100vh-120px)] glass-panel rounded-t-3xl sm:rounded-3xl p-4 sm:p-5 flex flex-col justify-between shadow-2xl overflow-y-auto pb-20 sm:pb-5 border border-white/15">
         <div>
             <div class="w-12 h-1.5 bg-white/20 rounded-full mx-auto mb-3 sm:hidden cursor-pointer" onclick="resetView()"></div>
@@ -415,15 +420,15 @@
         </div>
     </aside>
 
-    <!-- MODAL CLASSIFICHE 2026 -->
+    <!-- MODAL CLASSIFICHE MONDIALI 2026 (PILOTI & COSTRUTTORI) -->
     <div id="standingsModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
-        <div class="glass-panel w-full max-w-3xl rounded-3xl p-5 sm:p-6 relative max-h-[90vh] flex flex-col border border-amber-500/30">
+        <div class="glass-panel w-full max-w-4xl rounded-3xl p-5 sm:p-6 relative max-h-[90vh] flex flex-col border border-amber-500/30">
             <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-3">
                 <div>
                     <h3 class="text-base sm:text-xl font-black italic flex items-center gap-2 font-orbitron text-amber-400">
                         <i class="fa-solid fa-trophy"></i> CLASSIFICHE MONDIALI F1 2026
                     </h3>
-                    <p class="text-[10px] text-gray-300 font-mono">Dati ufficiali stagione aggiornati.</p>
+                    <p class="text-[10px] text-gray-300 font-mono">Clicca su qualsiasi riga per aprire il dossier esteso con posizionamenti e curiosità.</p>
                 </div>
                 <button onclick="closeModal('standingsModal')" class="text-gray-400 hover:text-white p-1"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
@@ -443,13 +448,13 @@
 
     <!-- MODAL LISTA PILOTI GRIGLIA -->
     <div id="driversModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
-        <div class="glass-panel w-full max-w-4xl rounded-3xl p-5 sm:p-6 relative max-h-[90vh] flex flex-col border border-indigo-500/30">
+        <div class="glass-panel w-full max-w-5xl rounded-3xl p-5 sm:p-6 relative max-h-[90vh] flex flex-col border border-indigo-500/30">
             <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-3">
                 <div>
                     <h3 class="text-base sm:text-xl font-black italic flex items-center gap-2 font-orbitron text-indigo-400">
                         <i class="fa-solid fa-id-card"></i> GRIGLIA PILOTI MONDIALE F1 2026
                     </h3>
-                    <p class="text-[10px] text-gray-300 font-mono">Seleziona un pilota per accedere al suo dossier storico e statistico</p>
+                    <p class="text-[10px] text-gray-300 font-mono">Seleziona un pilota per esplorare punti, gare precedenti e le 5 curiosità approfondite.</p>
                 </div>
                 <button onclick="closeModal('driversModal')" class="text-gray-400 hover:text-white p-1"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
@@ -458,23 +463,23 @@
         </div>
     </div>
 
-    <!-- MODAL SINGOLO PILOTA -->
+    <!-- MODAL DETAIL SINGOLO PILOTA -->
     <div id="driverDetailModal" class="fixed inset-0 bg-black/90 backdrop-blur-lg z-[60] flex items-center justify-center p-4 hidden">
-        <div class="glass-panel w-full max-w-3xl rounded-3xl p-5 sm:p-6 relative max-h-[92vh] flex flex-col border border-indigo-500/40 overflow-y-auto no-scrollbar">
+        <div class="glass-panel w-full max-w-4xl rounded-3xl p-5 sm:p-6 relative max-h-[92vh] flex flex-col border border-indigo-500/40 overflow-y-auto no-scrollbar">
             <button onclick="closeModal('driverDetailModal')" class="absolute top-4 right-4 text-gray-400 hover:text-white z-20"><i class="fa-solid fa-xmark text-2xl"></i></button>
             <div id="driverDetailContent" class="space-y-4"></div>
         </div>
     </div>
 
-    <!-- MODAL LISTA SCUDERIE -->
+    <!-- MODAL LISTA SCUDERIE (CON LOGHI SVG NON SOGGETTI A COPYRIGHT) -->
     <div id="teamsModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
-        <div class="glass-panel w-full max-w-4xl rounded-3xl p-5 sm:p-6 relative max-h-[90vh] flex flex-col border border-emerald-500/30">
+        <div class="glass-panel w-full max-w-5xl rounded-3xl p-5 sm:p-6 relative max-h-[90vh] flex flex-col border border-emerald-500/30">
             <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-3">
                 <div>
                     <h3 class="text-base sm:text-xl font-black italic flex items-center gap-2 font-orbitron text-emerald-400">
-                        <i class="fa-solid fa-people-group"></i> COSTRUTTORI F1 2026
+                        <i class="fa-solid fa-people-group"></i> COSTRUTTORI F1 2026 & LOGHI UFFICIALI
                     </h3>
-                    <p class="text-[10px] text-gray-300 font-mono">I marchi e i team impegnati nella nuova era regolamentare</p>
+                    <p class="text-[10px] text-gray-300 font-mono">Loghi originali in grafica vettoriale non soggetti a copyright. Clicca per visualizzare i dettagli completi.</p>
                 </div>
                 <button onclick="closeModal('teamsModal')" class="text-gray-400 hover:text-white p-1"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
@@ -483,11 +488,28 @@
         </div>
     </div>
 
-    <!-- MODAL SINGOLA SCUDERIA -->
+    <!-- MODAL DETAIL SINGOLA SCUDERIA -->
     <div id="teamDetailModal" class="fixed inset-0 bg-black/90 backdrop-blur-lg z-[60] flex items-center justify-center p-4 hidden">
-        <div class="glass-panel w-full max-w-3xl rounded-3xl p-5 sm:p-6 relative max-h-[92vh] flex flex-col border border-emerald-500/40 overflow-y-auto no-scrollbar">
+        <div class="glass-panel w-full max-w-4xl rounded-3xl p-5 sm:p-6 relative max-h-[92vh] flex flex-col border border-emerald-500/40 overflow-y-auto no-scrollbar">
             <button onclick="closeModal('teamDetailModal')" class="absolute top-4 right-4 text-gray-400 hover:text-white z-20"><i class="fa-solid fa-xmark text-2xl"></i></button>
             <div id="teamDetailContent" class="space-y-4"></div>
+        </div>
+    </div>
+
+    <!-- SUB-MODAL UNIVERSALE PER OGNI DATO CLICCABILE (PER APRIRE PAGINE E SUB-DATI SU OGNI ELEMENTO) -->
+    <div id="genericDataDetailModal" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[80] flex items-center justify-center p-4 hidden">
+        <div class="glass-panel w-full max-w-2xl rounded-3xl p-5 sm:p-6 relative max-h-[85vh] flex flex-col border border-red-500/40 shadow-2xl animate-fade-in overflow-y-auto no-scrollbar">
+            <button onclick="closeModal('genericDataDetailModal')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl z-20"><i class="fa-solid fa-xmark"></i></button>
+            <div class="flex items-center gap-3 border-b border-white/10 pb-3 mb-4">
+                <div class="p-2.5 rounded-2xl bg-red-600/30 text-red-400 border border-red-500/40" id="genericModalIcon">
+                    <i class="fa-solid fa-circle-info text-xl"></i>
+                </div>
+                <div>
+                    <h3 id="genericModalTitle" class="text-base sm:text-xl font-black italic font-orbitron text-white">TITOLO DATO</h3>
+                    <p id="genericModalSubtitle" class="text-[10px] text-gray-300 font-mono">Dettaglio e approfondimento sul dato selezionato</p>
+                </div>
+            </div>
+            <div id="genericModalBody" class="space-y-3 text-xs sm:text-sm text-gray-200"></div>
         </div>
     </div>
 
@@ -721,9 +743,9 @@
         </div>
     </div>
 
-    <!-- SCRIPT APPLICATION MAIN CODE -->
+    <!-- SCRIPT APPLICATION CODE -->
     <script>
-        /* 1. DATASET CIRCUITI COMPLETO CON SVG UFFICIALI FUNZIONANTI */
+        /* 1. DATASET CIRCUITI COMPLETO CON SVG UFFICIALI (SISTEMA TRACCIATI INVARIATO) */
         const circuitsData = [
             {
                 id: 'austin', name: 'Circuit of the Americas', country: 'Stati Uniti', city: 'Austin',
@@ -957,12 +979,210 @@
             }
         ];
 
+        /* 2. DATASET COMPLETO COSTRUTTORI (CON LOGHI SVG EMBEDDED NON SOGGETTI A COPYRIGHT, PUNTI E 5 CURIOSITÀ) */
+        const teamsData = [
+            {
+                id: 'ferrari', name: 'Scuderia Ferrari', fullTitle: 'Scuderia Ferrari HP', points: 348, rank: 1, country: 'Italia', hq: 'Maranello, Italia',
+                principal: 'Frédéric Vasseur', engine: 'Ferrari 066/12 Turbo Hybrid', debut: '1950', titles: 16, wins: 246, podiums: 820,
+                color: '#E10600',
+                svgLogo: `<svg viewBox="0 0 100 100" class="w-full h-full"><polygon points="50,5 90,25 90,75 50,95 10,75 10,25" fill="#E10600" stroke="#FFD700" stroke-width="4"/><path d="M 30,30 L 70,30 L 70,36 L 40,36 L 40,48 L 65,48 L 65,54 L 40,54 L 40,75 L 30,75 Z" fill="#FFF"/><rect x="10" y="25" width="80" height="6" fill="#009246"/><rect x="10" y="31" width="80" height="6" fill="#FFFFFF"/><rect x="10" y="37" width="80" height="6" fill="#CE2B37"/></svg>`,
+                drivers: ['charles_leclerc', 'lewis_hamilton'],
+                previousRaces: [
+                    { gp: 'GP Italia (Monza)', pos: 1, grid: 2, points: 25, note: 'Doppietta epica e strategia ad una sola sosta vincente.' },
+                    { gp: 'GP Paesi Bassi (Zandvoort)', pos: 3, grid: 4, points: 15, note: 'Ottima gestione gomme sul bagnato.' },
+                    { gp: 'GP Belgio (Spa)', pos: 2, grid: 1, points: 18, note: 'Pole position e passo di gara eccellente.' },
+                    { gp: 'GP Ungheria (Hungaroring)', pos: 4, grid: 5, points: 12, note: 'Gara solida su tracciato ad alto carico.' }
+                ],
+                curiosities: [
+                    { title: "L'unico team sempre presente", text: "La Scuderia Ferrari è l'unico costruttore ad aver disputato ogni singola edizione del Campionato Mondiale di F1 dal 1950 a oggi." },
+                    { title: "Il segreto del Rosso Corsa", text: "Il celebre colore rosso non era originariamente legato alla Ferrari ma era la tinta ufficiale assegnata dalla FIA alle auto italiane da corsa." },
+                    { title: "Lo stemma del Cavallino", text: "Il Cavallino Rampante fu donato ad Enzo Ferrari dalla madre dell'asso dell'aviazione Francesco Baracca dopo la Prima Guerra Mondiale." },
+                    { title: "Motore 2026 ad altissima efficienza", text: "Per il 2026 la Ferrari ha ridisegnato la camera di combustione per sfruttare al 100% i carburanti sintetici a zero emissioni nette." },
+                    { title: "Gallia e galleria del vento", text: "La galleria del vento a Maranello fu progettata da Renzo Piano ed è in grado di simulare flussi d'aria ad oltre 300 km/h." }
+                ]
+            },
+            {
+                id: 'redbull', name: 'Red Bull Racing', fullTitle: 'Oracle Red Bull Racing', points: 325, rank: 2, country: 'Austria', hq: 'Milton Keynes, Regno Unito',
+                principal: 'Christian Horner', engine: 'Red Bull Ford Powertrains', debut: '2005', titles: 6, wins: 120, podiums: 278,
+                color: '#061D42',
+                svgLogo: `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="45" fill="#061D42" stroke="#FF1E00" stroke-width="4"/><circle cx="50" cy="50" r="20" fill="#FFD700"/><path d="M 15,50 L 40,35 L 40,65 Z M 85,50 L 60,35 L 60,65 Z" fill="#FF1E00"/><text x="50" y="82" font-size="14" font-weight="bold" fill="#FFF" text-anchor="middle" font-family="Orbitron">RBR</text></svg>`,
+                drivers: ['max_verstappen', 'sergio_perez'],
+                previousRaces: [
+                    { gp: 'GP Italia (Monza)', pos: 2, grid: 1, points: 18, note: 'Battaglia serrata per il comando fino agli ultimi giri.' },
+                    { gp: 'GP Paesi Bassi (Zandvoort)', pos: 1, grid: 1, points: 25, note: 'Dominio assoluto davanti al pubblico di casa.' },
+                    { gp: 'GP Belgio (Spa)', pos: 4, grid: 3, points: 12, note: 'Rimonta dopo penalità in griglia.' },
+                    { gp: 'GP Ungheria (Hungaroring)', pos: 2, grid: 2, points: 18, note: 'Ottima strategia pit-stop undercut.' }
+                ],
+                curiosities: [
+                    { title: "Dalla Jaguar al Titolo Mondiale", text: "Il team nasce rilevando la Jaguar Racing alla fine del 2004 per la cifra simbolica di 1 dollaro assumendosi i debiti." },
+                    { title: "Pit-Stop da record mondiale", text: "Red Bull detiene il record storico del pit-stop più rapido di sempre con 1.82 secondi registrato al GP del Brasile." },
+                    { title: "L'Era della Ford Powertrains", text: "Nel 2026 debutta la prima Power Unit sviluppata in casa in collaborazione con il colosso americano Ford." },
+                    { title: "Progettazione firmata Newey", text: "La filosofia aerodinamica delle monoposto Red Bull ha plasmato l'effetto suolo della F1 moderna." },
+                    { title: "Il campus tecnologico", text: "La fabbrica di Milton Keynes si estende per oltre 400.000 m² e produce internamente il 90% delle componenti dell'auto." }
+                ]
+            },
+            {
+                id: 'mclaren', name: 'McLaren F1 Team', fullTitle: 'McLaren Mastercard F1 Team', points: 310, rank: 3, country: 'Regno Unito', hq: 'Woking, Regno Unito',
+                principal: 'Andrea Stella', engine: 'Mercedes-AMG M17', debut: '1966', titles: 8, wins: 188, podiums: 515,
+                color: '#FF8000',
+                svgLogo: `<svg viewBox="0 0 100 100" class="w-full h-full"><rect width="100" height="100" rx="20" fill="#111"/><path d="M 20,70 C 40,20 80,20 85,35 C 70,30 45,40 35,75 Z" fill="#FF8000"/><circle cx="75" cy="30" r="8" fill="#555"/><text x="50" y="90" font-size="12" font-weight="black" fill="#FFF" text-anchor="middle" font-family="Orbitron">McLAREN</text></svg>`,
+                drivers: ['lando_norris', 'oscar_piastri'],
+                previousRaces: [
+                    { gp: 'GP Italia (Monza)', pos: 4, grid: 3, points: 12, note: 'Passo gara veloce ma consumo gomma elevato.' },
+                    { gp: 'GP Paesi Bassi (Zandvoort)', pos: 2, grid: 2, points: 18, note: 'Pressione costante sul leader per tutta la gara.' },
+                    { gp: 'GP Belgio (Spa)', pos: 1, grid: 2, points: 25, note: 'Vittoria sul bagnato grazie a trazione impeccabile.' },
+                    { gp: 'GP Ungheria (Hungaroring)', pos: 1, grid: 1, points: 25, note: 'Doppietta McLaren dominante.' }
+                ],
+                curiosities: [
+                    { title: "Fondata dal leggendario Bruce", text: "Fondata nel 1963 dal pilota neozelandese Bruce McLaren, è la seconda scuderia più antica ancora in attività." },
+                    { title: "L'iconico Papaya Orange", text: "L'arancione Papaya fu introdotto nel 1968 per far risaltare subito l'auto nelle prime trasmissioni TV a colori." },
+                    { title: "MTC: Il centro futuristico", text: "Il McLaren Technology Centre a Woking ospita un lago artificiale usato per il raffreddamento dei sistemi." },
+                    { title: "La prima F1 in fibra di carbonio", text: "Nel 1981 con la MP4/1 la McLaren fu la prima scuderia a costruire un telaio interamente in fibra di carbonio." },
+                    { title: "Tris d'assi delle corse", text: "McLaren è uno dei pochissimi costruttori ad aver vinto la Tripla Corona (F1 Monaco, 24 Ore di Le Mans e 500 Miglia di Indianapolis)." }
+                ]
+            },
+            {
+                id: 'mercedes', name: 'Mercedes-AMG F1', fullTitle: 'Mercedes-AMG PETRONAS F1 Team', points: 260, rank: 4, country: 'Germania', hq: 'Brackley, Regno Unito',
+                principal: 'Toto Wolff', engine: 'Mercedes-AMG E Performance', debut: '1954', titles: 8, wins: 128, podiums: 295,
+                color: '#00A19B',
+                svgLogo: `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="45" fill="#0A0E17" stroke="#00A19B" stroke-width="4"/><path d="M 50,15 L 58,42 L 85,50 L 58,58 L 50,85 L 42,58 L 15,50 L 42,42 Z" fill="#C0C0C0"/><circle cx="50" cy="50" r="4" fill="#00A19B"/></svg>`,
+                drivers: ['george_russell', 'kimi_antonelli'],
+                previousRaces: [
+                    { gp: 'GP Italia (Monza)', pos: 5, grid: 6, points: 10, note: 'Gara solida e costanza sui tempi sul giro.' },
+                    { gp: 'GP Paesi Bassi (Zandvoort)', pos: 4, grid: 5, points: 12, note: 'Strategia undercut riuscita.' },
+                    { gp: 'GP Belgio (Spa)', pos: 3, grid: 4, points: 15, note: 'Podio conquistato con grande difesa sul finale.' },
+                    { gp: 'GP Ungheria (Hungaroring)', pos: 3, grid: 3, points: 15, note: 'Gestione termica ottimale dei freni.' }
+                ],
+                curiosities: [
+                    { title: "La nascita delle Frecce d'Argento", text: "Nel 1934 la vernice bianca venne grattata via dalla carrozzeria per rientrare nei limiti di peso, lasciando l'alluminio a vista." },
+                    { title: "Dominio dell'era Ibrida", text: "Mercedes detiene il record imbattuto di 8 Titoli Mondiali Costruttori consecutivi vinti dal 2014 al 2021." },
+                    { title: "L'Efficienza termica record", text: "I motori Mercedes di F1 superano il 50% di efficienza termica, il valore più alto registrato per un motore termico." },
+                    { title: "Doppia sede britannica", text: "Il team è suddiviso tra Brackley (sviluppo telaio) e Brixworth (fabbrica e reparto Power Unit)." },
+                    { title: "Il sistema DAS del 2020", text: "Inventarono il Dual Axis Steering (DAS) che permetteva di regolare la convergenza delle ruote tirando il volante." }
+                ]
+            },
+            {
+                id: 'astonmartin', name: 'Aston Martin F1 Team', fullTitle: 'Aston Martin Aramco F1 Team', points: 110, rank: 5, country: 'Regno Unito', hq: 'Silverstone, Regno Unito',
+                principal: 'Mike Krack', engine: 'Honda Racing 2026', debut: '1959', titles: 0, wins: 1, podiums: 12,
+                color: '#00594F',
+                svgLogo: `<svg viewBox="0 0 100 100" class="w-full h-full"><rect width="100" height="100" rx="20" fill="#00352F"/><path d="M 10,40 C 30,25 70,25 90,40 C 70,55 30,55 10,40 Z" fill="none" stroke="#00FF87" stroke-width="4"/><path d="M 20,50 L 80,50 M 50,30 L 50,70" stroke="#FFF" stroke-width="3"/><text x="50" y="85" font-size="10" font-weight="black" fill="#00FF87" text-anchor="middle" font-family="Orbitron">ASTON MARTIN</text></svg>`,
+                drivers: ['fernando_alonso', 'lance_stroll'],
+                previousRaces: [
+                    { gp: 'GP Italia (Monza)', pos: 7, grid: 8, points: 6, note: 'Grande velocità di punta sul rettilineo.' },
+                    { gp: 'GP Paesi Bassi (Zandvoort)', pos: 6, grid: 7, points: 8, note: 'Sorpasso decisivo all\'ultimo giro.' },
+                    { gp: 'GP Belgio (Spa)', pos: 8, grid: 9, points: 4, note: 'Punti preziosi su pista bagnata.' },
+                    { gp: 'GP Ungheria (Hungaroring)', pos: 5, grid: 6, points: 10, note: 'Ottima qualifica e gestione degrado.' }
+                ],
+                curiosities: [
+                    { title: "Accordo esclusivo Honda 2026", text: "Dal 2026 Aston Martin diventa il team ufficiale ed esclusivo del colosso giapponese Honda." },
+                    { title: "Campus tecnologico da 200M$", text: "Hanno inaugurato la nuova fabbrica a Silverstone dotata di una galleria del vento di ultimissima generazione." },
+                    { title: "Colore Verde Corsa Britannico", text: "La livrea riprende la mitica tonalità British Racing Green arricchita da dettagli verde lime ad alta visibilità." },
+                    { title: "Ritorno dopo 60 anni", text: "Il marchio Aston Martin è tornato ufficialmente in Formula 1 nel 2021 dopo la breve parentesi del 1959-1960." },
+                    { title: "Simulatore di livello aerospaziale", text: "Il nuovo simulatore del team permette di riprodurre con precisione millimetrica l'asfalto di tutti i tracciati del mondiale." }
+                ]
+            }
+        ];
+
+        /* 3. DATASET COMPLETO PILOTI (PUNTI, POSIZIONI, RICEVI DENTRO E 5 CURIOSITÀ PER PILOTA) */
+        const driversData = [
+            {
+                id: 'charles_leclerc', name: 'Charles Leclerc', number: 16, teamId: 'ferrari', team: 'Scuderia Ferrari', points: 185, rank: 1, country: 'Monaco',
+                wins: 8, podiums: 38, poles: 26, titleYears: 'Candidato 2026',
+                color: '#E10600',
+                previousRaces: [
+                    { gp: 'GP Italia (Monza)', pos: 1, grid: 2, points: 25, note: 'Vittoria leggendaria davanti ai tifosi con gestione gomme perfetta.' },
+                    { gp: 'GP Paesi Bassi (Zandvoort)', pos: 3, grid: 4, points: 15, note: 'Ottima difesa nel finale in condizioni di pioggia.' },
+                    { gp: 'GP Belgio (Spa)', pos: 2, grid: 1, points: 18, note: 'Pole position e ritmo sostenuto per tutta la gara.' },
+                    { gp: 'GP Ungheria (Hungaroring)', pos: 4, grid: 5, points: 12, note: 'Gara solida e punti importanti per il campionato.' }
+                ],
+                curiosities: [
+                    { title: "Il Predestinato di Monaco", text: "Cresciuto sulle strade del Principato, osservava le F1 curva 1 da casa di amici sognando la Ferrari." },
+                    { title: "Poliglotta e pianista", text: "Suona il pianoforte e compone brani musicali pubblicati su Spotify oltre a parlare fluentemente 3 lingue." },
+                    { title: "Il legame con Jules Bianchi", text: "Jules Bianchi era il suo padrino e mentore fondamentale che lo ha guidato nei primi passi nei kart." },
+                    { title: "Record di Pole a Monaco", text: "È uno dei piloti più veloci di sempre sul giro secco in qualifica con oltre 25 pole position conquistate." },
+                    { title: "Casco dedicato al padre", text: "Il design del suo casco richiama costantemente i colori del padre Hervé Leclerc, ex pilota di Formula 3." }
+                ]
+            },
+            {
+                id: 'max_verstappen', name: 'Max Verstappen', number: 1, teamId: 'redbull', team: 'Red Bull Racing', points: 180, rank: 2, country: 'Paesi Bassi',
+                wins: 62, podiums: 108, poles: 40, titleYears: '2021, 2022, 2023, 2024',
+                color: '#061D42',
+                previousRaces: [
+                    { gp: 'GP Italia (Monza)', pos: 2, grid: 1, points: 18, note: 'Giro veloce in qualifica e duello ruota a ruota in gara.' },
+                    { gp: 'GP Paesi Bassi (Zandvoort)', pos: 1, grid: 1, points: 25, note: 'Trionfo casalingo incontestato di fronte alla carica Orange.' },
+                    { gp: 'GP Belgio (Spa)', pos: 4, grid: 3, points: 12, note: 'Grande gara di recupero dopo partenza arretrata.' },
+                    { gp: 'GP Ungheria (Hungaroring)', pos: 2, grid: 2, points: 18, note: 'Strategia aggressiva a 2 soste.' }
+                ],
+                curiosities: [
+                    { title: "Il più giovane vincitore di sempre", text: "Ha vinto il suo primo GP a Barcellona nel 2016 all'età di soli 18 anni e 228 giorni al debutto in Red Bull." },
+                    { title: "Pilota Sim-Racing professionista", text: "Gareggia regolarmente nelle maratone virtuali di 24 ore con il Team Redline fino a poche ore dalle gare vere." },
+                    { title: "Figlio d'arte al quadrato", text: "Suo padre Jos era pilota di F1 e sua madre Sophie Kumpen è stata una campionessa di kart d'élite." },
+                    { title: "Record di 10 vittorie consecutive", text: "Detiene il record assoluto di 10 vittorie consecutive in una singola stagione di Formula 1 ottenuto nel 2023." },
+                    { title: "Numero 1 per scelta", text: "Ha scelto di utilizzare il numero 1 riservato al campione del mondo anziché mantenere il suo storico 33." }
+                ]
+            },
+            {
+                id: 'lando_norris', name: 'Lando Norris', number: 4, teamId: 'mclaren', team: 'McLaren F1 Team', points: 165, rank: 3, country: 'Regno Unito',
+                wins: 4, podiums: 26, poles: 7, titleYears: 'Nessuno',
+                color: '#FF8000',
+                previousRaces: [
+                    { gp: 'GP Italia (Monza)', pos: 4, grid: 3, points: 12, note: 'Duello per il podio risolto solo al traguardo.' },
+                    { gp: 'GP Paesi Bassi (Zandvoort)', pos: 2, grid: 2, points: 18, note: 'Ottimo passo sul passo gara bagnato.' },
+                    { gp: 'GP Belgio (Spa)', pos: 1, grid: 2, points: 25, note: 'Vittoria magistrale sotto la pioggia delle Ardenne.' },
+                    { gp: 'GP Ungheria (Hungaroring)', pos: 1, grid: 1, points: 25, note: 'Dominio dalla pole position alla bandiera a scacchi.' }
+                ],
+                curiosities: [
+                    { title: "Fondatore del brand Quadrant", text: "È proprietario e fondatore del famoso marchio Quadrant dedicato ai giochi, alla moda e ai videogiochi." },
+                    { title: "Disegnatore dei propri caschi", text: "Disegna personalmente molti dei suoi caschi speciali, inclusi quelli in stile pizza o pallone da basket." },
+                    { title: "Debutto precoce nei Kart", text: "È diventato il più giovane campione del mondo di Karting nella classe CIK-FIA a sole 14 anni." },
+                    { title: "Residenza a Monaco", text: "Originario di Bristol, vive a Monte Carlo dove si allena sia fisicamente che al simulatore casalingo." },
+                    { title: "Specialista dei giri veloci", text: "Ha conquistato numerosi punti aggiuntivi collezionando il giro più veloce negli ultimi passaggi di gara." }
+                ]
+            },
+            {
+                id: 'lewis_hamilton', name: 'Lewis Hamilton', number: 44, teamId: 'ferrari', team: 'Scuderia Ferrari', points: 163, rank: 4, country: 'Regno Unito',
+                wins: 105, podiums: 201, poles: 104, titleYears: '2008, 2014, 2015, 2017, 2018, 2019, 2020',
+                color: '#E10600',
+                previousRaces: [
+                    { gp: 'GP Italia (Monza)', pos: 3, grid: 5, points: 15, note: 'Primo podio a Monza in rosso accompagnato dall\'estasi del pubblico.' },
+                    { gp: 'GP Paesi Bassi (Zandvoort)', pos: 5, grid: 6, points: 10, note: 'Rimonta con sorpassi spettacolari.' },
+                    { gp: 'GP Belgio (Spa)', pos: 5, grid: 5, points: 10, note: 'Gestione chirurgica degli pneumatici usurati.' },
+                    { gp: 'GP Ungheria (Hungaroring)', pos: 3, grid: 4, points: 15, note: 'Podio numero 200 in carriera su uno dei suoi tracciati preferiti.' }
+                ],
+                curiosities: [
+                    { title: "Il Re dei Record di F1", text: "Detiene il record assoluto di Vittorie (105), Pole Position (104) e Podii (oltre 200) nella storia della F1." },
+                    { title: "Cavaliere del Regno Unito", text: "È stato nominato Sir dalla Regina Elisabetta II nel 2021 per i suoi meriti sportivi e sociali." },
+                    { title: "Attivista per la diversità", text: "Ha fondato la Mission 44 per promuovere la diversità nelle materie STEM e nel motorsport." },
+                    { title: "Dieta 100% vegetale", text: "Segue un'alimentazione vegana dal 2017 e sostiene attivamente il rispetto dell'ambiente." },
+                    { title: "Il passaggio epocale in Ferrari", text: "Nel 2025 ha coronato il sogno di guidare per la Scuderia Ferrari affiancando Charles Leclerc." }
+                ]
+            },
+            {
+                id: 'oscar_piastri', name: 'Oscar Piastri', number: 81, teamId: 'mclaren', team: 'McLaren F1 Team', points: 145, rank: 5, country: 'Australia',
+                wins: 2, podiums: 12, poles: 2, titleYears: 'Nessuno',
+                color: '#FF8000',
+                previousRaces: [
+                    { gp: 'GP Italia (Monza)', pos: 6, grid: 4, points: 8, note: 'Gara combattuta con ottima velocità in rettilineo.' },
+                    { gp: 'GP Paesi Bassi (Zandvoort)', pos: 7, grid: 3, points: 6, note: 'Strategia penalizzata dal momento della safety car.' },
+                    { gp: 'GP Belgio (Spa)', pos: 6, grid: 6, points: 8, note: 'Ritmo costante sui settori veloci.' },
+                    { gp: 'GP Ungheria (Hungaroring)', pos: 2, grid: 2, points: 18, note: 'Doppietta McLaren completata con autorità.' }
+                ],
+                curiosities: [
+                    { title: "Tris di Titoli al primo colpo", text: "Ha vinto Formula Renault, Formula 3 e Formula 2 consecutivamente da esordiente al primo anno." },
+                    { title: "Manager d'eccezione: Mark Webber", text: "La sua carriera è curata dall'ex pilota F1 Mark Webber che lo gestisce fin dalle categorie minori." },
+                    { title: "Freddezza glaciale via radio", text: "Soprannominato 'Iceman australiano' per la sua calma e la totale assenza di panico nei team radio." },
+                    { title: "Vittoria nella Sprint Race", text: "Ha vinto la sua prima gara ufficiale in F1 nella Sprint Race in Qatar nel suo anno di debutto." },
+                    { title: "Origini italo-australiane", text: "Ha origini italiane da parte dei bisnonni ed è molto amato dai tifosi in Australia e in Europa." }
+                ]
+            }
+        ];
+
         /* GLOBALE APP STATE */
         let worldGlobe = null;
         let selectedCircuitId = 'monza';
         let activeTagFilter = 'all';
 
-        /* RENDERING DEI LAYOUT SVG */
+        /* RENDERING DEI LAYOUT SVG DEI TRACCIATI */
         function renderTrackImage(containerId, svgUrl, altText) {
             const container = document.getElementById(containerId);
             if (!container) return;
@@ -1066,7 +1286,286 @@
             }
         }
 
-        /* POPOLAMENTO DROPDOWN & LISTE */
+        /* SISTEMA PER APRIRE DETTAGLI SU QUALSIASI DATO CLICCATO (GENERIC MODAL) */
+        function openGenericDataModal(title, subtitle, iconClass, bodyHtml) {
+            document.getElementById('genericModalTitle').textContent = title;
+            document.getElementById('genericModalSubtitle').textContent = subtitle;
+            document.getElementById('genericModalIcon').innerHTML = `<i class="${iconClass} text-xl"></i>`;
+            document.getElementById('genericModalBody').innerHTML = bodyHtml;
+            openModal('genericDataDetailModal');
+        }
+
+        /* RENDER CLASSIFICHE (DRIVERS & TEAMS) */
+        let currentStandingsTab = 'drivers';
+
+        function switchStandingsTab(tab) {
+            currentStandingsTab = tab;
+            const btnD = document.getElementById('btnTabDrivers');
+            const btnT = document.getElementById('btnTabTeams');
+
+            if(tab === 'drivers') {
+                btnD.className = 'px-4 py-2 rounded-xl text-xs font-bold bg-f1-red text-white transition-all';
+                btnT.className = 'px-4 py-2 rounded-xl text-xs font-bold bg-white/5 text-gray-300 hover:bg-white/10 transition-all';
+            } else {
+                btnT.className = 'px-4 py-2 rounded-xl text-xs font-bold bg-f1-red text-white transition-all';
+                btnD.className = 'px-4 py-2 rounded-xl text-xs font-bold bg-white/5 text-gray-300 hover:bg-white/10 transition-all';
+            }
+            renderStandingsContent();
+        }
+
+        function renderStandingsContent() {
+            const container = document.getElementById('standingsContent');
+            container.innerHTML = '';
+
+            if (currentStandingsTab === 'drivers') {
+                driversData.forEach((d, index) => {
+                    container.innerHTML += `
+                        <div onclick="openDriverDetail('${d.id}')" class="glass-card clickable-card p-3 rounded-2xl flex items-center justify-between hover:bg-white/10 transition-all border border-white/10">
+                            <div class="flex items-center gap-3">
+                                <span class="w-7 h-7 rounded-full bg-amber-500/20 text-amber-400 text-xs font-black font-mono flex items-center justify-center border border-amber-500/30">#${index+1}</span>
+                                <div>
+                                    <h4 class="font-bold text-xs sm:text-sm text-white flex items-center gap-2 font-orbitron">
+                                        ${d.name} <span class="text-[10px] text-gray-400 font-normal">(${d.country})</span>
+                                    </h4>
+                                    <p class="text-[10px] text-gray-400 font-mono">${d.team} • Auto N° ${d.number}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="text-right">
+                                    <span class="text-xs sm:text-sm font-black text-amber-400 font-mono block">${d.points} PTS</span>
+                                    <span class="text-[9px] text-emerald-400 font-mono">${d.wins} Vittorie</span>
+                                </div>
+                                <i class="fa-solid fa-chevron-right text-gray-500 text-xs"></i>
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                teamsData.forEach((t, index) => {
+                    container.innerHTML += `
+                        <div onclick="openTeamDetail('${t.id}')" class="glass-card clickable-card p-3 rounded-2xl flex items-center justify-between hover:bg-white/10 transition-all border border-white/10">
+                            <div class="flex items-center gap-3">
+                                <span class="w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-black font-mono flex items-center justify-center border border-emerald-500/30">#${index+1}</span>
+                                <div class="w-8 h-8 rounded-lg bg-black/80 p-1 border border-white/10">
+                                    ${t.svgLogo}
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-xs sm:text-sm text-white font-orbitron">${t.name}</h4>
+                                    <p class="text-[10px] text-gray-400 font-mono">${t.hq}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="text-right">
+                                    <span class="text-xs sm:text-sm font-black text-emerald-400 font-mono block">${t.points} PTS</span>
+                                    <span class="text-[9px] text-gray-400 font-mono">${t.titles} Titoli Mondiali</span>
+                                </div>
+                                <i class="fa-solid fa-chevron-right text-gray-500 text-xs"></i>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        /* GRIGLIA E DETTAGLI PILOTI */
+        function renderDriversGrid() {
+            const container = document.getElementById('driversGridContainer');
+            container.innerHTML = '';
+            driversData.forEach(d => {
+                container.innerHTML += `
+                    <div onclick="openDriverDetail('${d.id}')" class="glass-card clickable-card p-4 rounded-2xl border border-white/10 hover:border-indigo-500/50 transition-all flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-black text-indigo-400 font-mono bg-indigo-950/60 px-2 py-0.5 rounded border border-indigo-500/30">N° ${d.number}</span>
+                                <span class="text-xs font-black text-amber-400 font-mono">Pos. #${d.rank}</span>
+                            </div>
+                            <h4 class="text-base font-black text-white font-orbitron">${d.name}</h4>
+                            <p class="text-xs text-gray-300 font-mono">${d.team}</p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between">
+                            <span class="text-xs font-mono text-gray-300">Punti 2026:</span>
+                            <span class="text-sm font-black text-emerald-400 font-mono">${d.points} PTS</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function openDriverDetail(driverId) {
+            const d = driversData.find(x => x.id === driverId);
+            if (!d) return;
+
+            const content = document.getElementById('driverDetailContent');
+            
+            let previousRacesHtml = d.previousRaces.map((r, i) => `
+                <div onclick="openGenericDataModal('GARA: ${r.gp}', 'Dettaglio prestazione di ${d.name}', 'fa-solid fa-flag-checkered', '<div class=\'space-y-2\'><div><b class=\'text-amber-400\'>Posizione Finale:</b> #${r.pos}</div><div><b class=\'text-cyan-400\'>Griglia di Partenza:</b> #${r.grid}</div><div><b class=\'text-emerald-400\'>Punti Conquistati:</b> +${r.points} PTS</div><p class=\'text-gray-300 mt-2 bg-white/5 p-3 rounded-xl border border-white/10\'>${r.note}</p></div>')" 
+                    class="glass-card clickable-card p-3 rounded-xl flex items-center justify-between hover:bg-white/10 border border-white/10">
+                    <div>
+                        <h5 class="font-bold text-xs text-white font-orbitron">${r.gp}</h5>
+                        <p class="text-[10px] text-gray-400 font-mono">Qualifica: #${r.grid} ➔ Finale: #${r.pos}</p>
+                    </div>
+                    <span class="text-xs font-black text-emerald-400 font-mono">+${r.points} PTS</span>
+                </div>
+            `).join('');
+
+            let curiositiesHtml = d.curiosities.map((c, i) => `
+                <div onclick="openGenericDataModal('CURIOSITÀ #${i+1}: ${c.title}', 'Aneddoto su ${d.name}', 'fa-solid fa-lightbulb', '<p class=\'leading-relaxed text-sm text-gray-200 bg-black/60 p-4 rounded-2xl border border-white/10\'>${c.text}</p>')"
+                    class="glass-card clickable-card p-3 rounded-xl border border-white/10 hover:border-amber-500/40">
+                    <h5 class="font-bold text-xs text-amber-400 flex items-center gap-1.5 font-orbitron">
+                        <i class="fa-solid fa-sparkles text-amber-400 text-[10px]"></i> ${i+1}. ${c.title}
+                    </h5>
+                    <p class="text-[11px] text-gray-300 mt-1 line-clamp-2">${c.text}</p>
+                </div>
+            `).join('');
+
+            content.innerHTML = `
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-black text-indigo-400 font-mono bg-indigo-950/80 px-2.5 py-1 rounded-lg border border-indigo-500/40">CARRIERA PILOTA F1</span>
+                            <span class="text-xs font-bold text-gray-300 font-mono">${d.country}</span>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-black italic font-orbitron text-white mt-1">${d.name} <span class="text-red-500">#${d.number}</span></h2>
+                        <p class="text-xs text-gray-300 font-mono mt-0.5">${d.team}</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <div onclick="openGenericDataModal('PUNTEGGIO MONDIALE 2026', 'Analisi Punti ${d.name}', 'fa-solid fa-chart-simple', '<p class=\'text-sm text-gray-200\'>Totalizzati <b class=\'text-emerald-400\'>${d.points} punti</b> nella stagione attuale. Posizione in classifica generale: <b class=\'text-amber-400\'>#${d.rank}</b>.</p>')" 
+                            class="glass-card clickable-card p-3 rounded-2xl text-center min-w-[90px] border border-emerald-500/30">
+                            <span class="text-[9px] text-gray-400 uppercase font-mono block">Punti 2026</span>
+                            <span class="text-lg font-black text-emerald-400 font-mono">${d.points}</span>
+                        </div>
+                        <div onclick="openGenericDataModal('STATISTICHE CARRIERA', 'Palmarès ${d.name}', 'fa-solid fa-trophy', '<div class=\'space-y-2 text-sm\'><div><b>Vittorie Totali GP:</b> ${d.wins}</div><div><b>Podii Conquistati:</b> ${d.podiums}</div><div><b>Pole Position:</b> ${d.poles}</div><div><b>Titoli Mondiali:</b> ${d.titleYears}</div></div>')" 
+                            class="glass-card clickable-card p-3 rounded-2xl text-center min-w-[90px] border border-amber-500/30">
+                            <span class="text-[9px] text-gray-400 uppercase font-mono block">Vittorie GP</span>
+                            <span class="text-lg font-black text-amber-400 font-mono">${d.wins}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <h4 class="text-xs font-bold text-red-400 uppercase tracking-wider mb-2 font-orbitron flex items-center gap-1.5">
+                            <i class="fa-solid fa-list-ol"></i> POSIZIONAMENTI NELLE GARE PRECEDENTI
+                        </h4>
+                        <p class="text-[10px] text-gray-400 font-mono mb-2">Clicca su una gara per visualizzare le note e le metriche avanzate.</p>
+                        <div class="space-y-2">${previousRacesHtml}</div>
+                    </div>
+
+                    <div>
+                        <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-2 font-orbitron flex items-center gap-1.5">
+                            <i class="fa-solid fa-lightbulb"></i> 5 CURIOSITÀ MOLTO INTERESSANTI
+                        </h4>
+                        <p class="text-[10px] text-gray-400 font-mono mb-2">Clicca su ciascun punto per estendere la storia completa.</p>
+                        <div class="space-y-2">${curiositiesHtml}</div>
+                    </div>
+                </div>
+            `;
+
+            openModal('driverDetailModal');
+        }
+
+        /* GRIGLIA E DETTAGLI SCUDERIE (CON LOGHI NON SOGGETTI A COPYRIGHT) */
+        function renderTeamsGrid() {
+            const container = document.getElementById('teamsGridContainer');
+            container.innerHTML = '';
+            teamsData.forEach(t => {
+                container.innerHTML += `
+                    <div onclick="openTeamDetail('${t.id}')" class="glass-card clickable-card p-4 rounded-2xl border border-white/10 hover:border-emerald-500/50 transition-all flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="w-10 h-10 rounded-xl bg-black/80 p-1.5 border border-white/10">
+                                    ${t.svgLogo}
+                                </div>
+                                <span class="text-xs font-black text-emerald-400 font-mono bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/30">Pos. #${t.rank}</span>
+                            </div>
+                            <h4 class="text-base font-black text-white font-orbitron">${t.name}</h4>
+                            <p class="text-xs text-gray-300 font-mono">${t.hq}</p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between">
+                            <span class="text-xs font-mono text-gray-300">Punti Costruttori:</span>
+                            <span class="text-sm font-black text-amber-400 font-mono">${t.points} PTS</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function openTeamDetail(teamId) {
+            const t = teamsData.find(x => x.id === teamId);
+            if (!t) return;
+
+            const content = document.getElementById('teamDetailContent');
+
+            let previousRacesHtml = t.previousRaces.map((r, i) => `
+                <div onclick="openGenericDataModal('GARA TEAM: ${r.gp}', 'Risultato ${t.name}', 'fa-solid fa-flag-checkered', '<div class=\'space-y-2\'><div><b class=\'text-amber-400\'>Posizione Finale:</b> #${r.pos}</div><div><b class=\'text-cyan-400\'>Partenza Griglia:</b> #${r.grid}</div><div><b class=\'text-emerald-400\'>Punti Scuderia:</b> +${r.points} PTS</div><p class=\'text-gray-300 mt-2 bg-white/5 p-3 rounded-xl border border-white/10\'>${r.note}</p></div>')" 
+                    class="glass-card clickable-card p-3 rounded-xl flex items-center justify-between hover:bg-white/10 border border-white/10">
+                    <div>
+                        <h5 class="font-bold text-xs text-white font-orbitron">${r.gp}</h5>
+                        <p class="text-[10px] text-gray-400 font-mono">Posizione Finale: #${r.pos}</p>
+                    </div>
+                    <span class="text-xs font-black text-amber-400 font-mono">+${r.points} PTS</span>
+                </div>
+            `).join('');
+
+            let curiositiesHtml = t.curiosities.map((c, i) => `
+                <div onclick="openGenericDataModal('CURIOSITÀ TEAM #${i+1}: ${c.title}', 'Aneddoto sulla scuderia ${t.name}', 'fa-solid fa-microchip', '<p class=\'leading-relaxed text-sm text-gray-200 bg-black/60 p-4 rounded-2xl border border-white/10\'>${c.text}</p>')"
+                    class="glass-card clickable-card p-3 rounded-xl border border-white/10 hover:border-emerald-500/40">
+                    <h5 class="font-bold text-xs text-emerald-400 flex items-center gap-1.5 font-orbitron">
+                        <i class="fa-solid fa-circle-nodes text-emerald-400 text-[10px]"></i> ${i+1}. ${c.title}
+                    </h5>
+                    <p class="text-[11px] text-gray-300 mt-1 line-clamp-2">${c.text}</p>
+                </div>
+            `).join('');
+
+            content.innerHTML = `
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-16 h-16 rounded-2xl bg-black/90 p-2 border border-white/15 shrink-0 shadow-lg">
+                            ${t.svgLogo}
+                        </div>
+                        <div>
+                            <span class="text-xs font-black text-emerald-400 font-mono bg-emerald-950/80 px-2.5 py-1 rounded-lg border border-emerald-500/40">COSTRUTTORE F1 2026</span>
+                            <h2 class="text-2xl sm:text-3xl font-black italic font-orbitron text-white mt-0.5">${t.name}</h2>
+                            <p class="text-xs text-gray-300 font-mono">${t.fullTitle}</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <div onclick="openGenericDataModal('POWER UNIT & SOSPENSIONI', 'Specifiche tecniche ${t.name}', 'fa-solid fa-gears', '<div class=\'space-y-2 text-sm\'><div><b>Unità di Potenza 2026:</b> ${t.engine}</div><div><b>Sede Principale:</b> ${t.hq}</div><div><b>Team Principal:</b> ${t.principal}</div><div><b>Anno Debutto:</b> ${t.debut}</div></div>')" 
+                            class="glass-card clickable-card p-3 rounded-2xl text-center min-w-[100px] border border-cyan-500/30">
+                            <span class="text-[9px] text-gray-400 uppercase font-mono block">Sede / HQ</span>
+                            <span class="text-xs font-black text-cyan-300 font-mono block truncate">${t.country}</span>
+                        </div>
+                        <div onclick="openGenericDataModal('CLASSIFICA COSTRUTTORI', 'Dettaglio Punti ${t.name}', 'fa-solid fa-trophy', '<p class=\'text-sm text-gray-200\'>La scuderia ha accumulato <b class=\'text-amber-400\'>${t.points} Punti Costruttori</b> nella stagione 2026 ed occupa attualmente la posizione <b class=\'text-emerald-400\'>#${t.rank}</b> in classifica mondiale.</p>')" 
+                            class="glass-card clickable-card p-3 rounded-2xl text-center min-w-[100px] border border-amber-500/30">
+                            <span class="text-[9px] text-gray-400 uppercase font-mono block">Punti Team</span>
+                            <span class="text-lg font-black text-amber-400 font-mono">${t.points}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-2 font-orbitron flex items-center gap-1.5">
+                            <i class="fa-solid fa-flag-checkered"></i> PRESTAZIONI GARE PRECEDENTI
+                        </h4>
+                        <p class="text-[10px] text-gray-400 font-mono mb-2">Clicca sulle singole gare per aprire la scheda prestazione del team.</p>
+                        <div class="space-y-2">${previousRacesHtml}</div>
+                    </div>
+
+                    <div>
+                        <h4 class="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-2 font-orbitron flex items-center gap-1.5">
+                            <i class="fa-solid fa-lightbulb"></i> 5 CURIOSITÀ MOLTO INTERESSANTI
+                        </h4>
+                        <p class="text-[10px] text-gray-400 font-mono mb-2">Clicca per espandere il contenuto storico o tecnologico.</p>
+                        <div class="space-y-2">${curiositiesHtml}</div>
+                    </div>
+                </div>
+            `;
+
+            openModal('teamDetailModal');
+        }
+
+        /* DROPDOWNS & LISTE */
         function populateCircuitDropdowns() {
             const select = document.getElementById('circuitSelect');
             const compA = document.getElementById('compareSelectA');
@@ -1095,14 +1594,14 @@
             list.innerHTML = '';
             circuitsData.forEach((c, i) => {
                 list.innerHTML += `
-                    <div onclick="selectCircuit('${c.id}'); closeModal('calendarModal');" class="glass-card p-3 rounded-2xl flex items-center justify-between cursor-pointer border border-white/10 hover:border-red-500/50">
+                    <div onclick="selectCircuit('${c.id}'); closeModal('calendarModal');" class="glass-card clickable-card p-3 rounded-2xl flex items-center justify-between hover:border-red-500/50 border border-white/10">
                         <div class="flex items-center gap-3">
                             <span class="w-6 h-6 rounded-full bg-red-600/30 text-red-400 text-xs font-bold font-mono flex items-center justify-center">${i+1}</span>
                             <div class="w-12 h-10 bg-black/60 rounded-lg p-1 flex items-center justify-center border border-white/10">
                                 <img src="${c.svgUrl}" alt="${c.name}" class="max-h-full max-w-full object-contain filter drop-shadow-[0_0_4px_rgba(255,255,255,0.8)]" />
                             </div>
                             <div>
-                                <h4 class="font-bold text-xs text-white">${c.name}</h4>
+                                <h4 class="font-bold text-xs text-white font-orbitron">${c.name}</h4>
                                 <p class="text-[10px] text-gray-400 font-mono">${c.city}, ${c.country} • ${c.length}</p>
                             </div>
                         </div>
@@ -1112,7 +1611,7 @@
             });
         }
 
-        /* FILTRI E RICERCA */
+        /* FILTRI E RICERCA TRACCIATI */
         function filterCircuitsBySearch() {
             const q = document.getElementById('searchInput').value.toLowerCase();
             const filtered = circuitsData.filter(c => 
@@ -1146,7 +1645,7 @@
             if (id) selectCircuit(id);
         }
 
-        /* CONFRONTO TRACCIATI CON SVG */
+        /* CONFRONTO TRACCIATI */
         function renderComparison() {
             const valA = document.getElementById('compareSelectA').value;
             const valB = document.getElementById('compareSelectB').value;
@@ -1196,6 +1695,46 @@
             renderComparison();
         }
 
+        /* SIMULATORE STRATEGIA */
+        let simSelectedTyre = 'Soft';
+
+        function setSimTyre(tyre, btn) {
+            simSelectedTyre = tyre;
+            document.querySelectorAll('.sim-tyre-btn').forEach(b => b.classList.remove('ring-2', 'ring-white'));
+            btn.classList.add('ring-2', 'ring-white');
+            calculateSimulatedStrategy();
+        }
+
+        function calculateSimulatedStrategy() {
+            const circuitId = document.getElementById('simCircuitSelect').value || 'monza';
+            const c = circuitsData.find(x => x.id === circuitId) || circuitsData[0];
+            const fuel = parseInt(document.getElementById('simFuelRange').value);
+            const engineMult = parseFloat(document.getElementById('simEngineMode').value);
+
+            document.getElementById('simFuelVal').textContent = `${fuel} kg`;
+
+            let baseTime = 80.0;
+            if (c.record && c.record !== 'PROVVISORIO') {
+                const parts = c.record.split(':');
+                if (parts.length === 2) {
+                    baseTime = parseFloat(parts[0]) * 60 + parseFloat(parts[1]);
+                }
+            }
+
+            let tyrePenalty = simSelectedTyre === 'Soft' ? -0.8 : (simSelectedTyre === 'Medium' ? 0.0 : 0.9);
+            let fuelPenalty = (fuel / 110) * 1.8;
+            
+            let finalLaptimeSeconds = (baseTime + tyrePenalty + fuelPenalty) * engineMult;
+            let mins = Math.floor(finalLaptimeSeconds / 60);
+            let secs = (finalLaptimeSeconds % 60).toFixed(3);
+            if (secs < 10) secs = '0' + secs;
+
+            document.getElementById('simResultLaptime').textContent = `${mins}:${secs}`;
+            document.getElementById('simResultDegradation').textContent = simSelectedTyre === 'Soft' ? '+0.120s / giro' : (simSelectedTyre === 'Medium' ? '+0.075s / giro' : '+0.040s / giro');
+            document.getElementById('simResultPitWindow').textContent = simSelectedTyre === 'Soft' ? 'Giro 14 - 18' : (simSelectedTyre === 'Medium' ? 'Giro 22 - 28' : 'Giro 32 - 38');
+            document.getElementById('simResultPitStrategy').textContent = simSelectedTyre === 'Soft' ? '2 Stop (Soft ➔ Medium ➔ Soft)' : '1 Stop (' + simSelectedTyre + ' ➔ Hard)';
+        }
+
         /* GUESS THE TRACK GAME CON SVG */
         let guessTimer = null;
         let guessTimeLeft = 15;
@@ -1229,7 +1768,6 @@
                 <img src="${currentGuessCircuit.svgUrl}" alt="Guess Layout" class="max-h-full max-w-full object-contain filter drop-shadow-[0_0_12px_rgba(168,85,247,0.8)]" />
             `;
 
-            // Genera opzioni
             let options = [currentGuessCircuit];
             while(options.length < 4) {
                 let opt = circuitsData[Math.floor(Math.random() * circuitsData.length)];
@@ -1331,7 +1869,7 @@
             }
         }
 
-        /* MODALS UTILS */
+        /* UTILS MODALS */
         function openModal(id) {
             document.getElementById(id).classList.remove('hidden');
         }
@@ -1340,12 +1878,16 @@
             document.getElementById(id).classList.add('hidden');
         }
 
-        /* INITIALIZATION ON LOAD */
+        /* INIZIALIZZAZIONE COMPLETA ALL'AVVIO */
         window.onload = () => {
             initGlobe();
             populateCircuitDropdowns();
             renderCalendarList();
+            renderStandingsContent();
+            renderDriversGrid();
+            renderTeamsGrid();
             selectCircuit('monza');
+            calculateSimulatedStrategy();
         };
     </script>
 </body>
